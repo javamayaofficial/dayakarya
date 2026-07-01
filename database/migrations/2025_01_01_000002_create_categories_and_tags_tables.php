@@ -23,17 +23,10 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->timestamps();
         });
-
-        Schema::create('work_tag', function (Blueprint $table) {
-            $table->foreignId('work_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
-            $table->primary(['work_id', 'tag_id']);
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('work_tag');
         Schema::dropIfExists('tags');
         Schema::dropIfExists('categories');
     }
