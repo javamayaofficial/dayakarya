@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaymentResource\Pages;
 use App\Models\Payment;
+use App\Services\NotificationService;
 use App\Services\WalletService;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
@@ -158,6 +159,23 @@ class PaymentResource extends Resource
 
                         Notification::make()
                             ->title('Topup manual ditolak.')
+                            ->success()
+                            ->send();
+                    }),
+                Action::make('notify')
+                    ->label('Kirim Notif')
+                    ->icon('heroicon-o-paper-airplane')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalHeading('Kirim Ulang Notifikasi Topup')
+                    ->modalDescription('WhatsApp dan email topup akan dikirim ulang ke pengguna untuk transaksi yang sudah paid.')
+                    ->visible(fn (Payment $record): bool => $record->status === 'paid')
+                    ->action(function (Payment $record): void {
+                        $record->loadMissing('user');
+                        app(NotificationService::class)->topupSuccess($record->user, (int) $record->credit_amount);
+
+                        Notification::make()
+                            ->title('Notifikasi topup berhasil dikirim ulang.')
                             ->success()
                             ->send();
                     }),

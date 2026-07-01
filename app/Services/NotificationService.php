@@ -38,6 +38,11 @@ class NotificationService
     {
         $msg = "Halo {$user->name}! Top up berhasil. {$credit} Credit sudah masuk ke Wallet Dayakarya kamu. Selamat menikmati karya favoritmu!";
         $this->whatsapp($user, $msg);
+        $this->email(
+            $user,
+            'Top up Dayakarya berhasil',
+            "<p>Halo {$user->name},</p><p>Top up Anda berhasil diproses. <strong>{$credit} Credit</strong> sudah masuk ke Wallet Dayakarya.</p><p>Silakan lanjut menikmati karya favorit Anda di Dayakarya.</p>"
+        );
     }
 
     public function royaltyReceived(User $creator, int $amount, string $workTitle): void

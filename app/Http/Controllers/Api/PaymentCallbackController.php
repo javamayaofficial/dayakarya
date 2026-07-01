@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
-use App\Services\NotificationService;
 use App\Services\Payment\PaymentManager;
 use App\Services\WalletService;
 use Illuminate\Http\Request;
@@ -15,10 +14,7 @@ use Illuminate\Support\Facades\Log;
  */
 class PaymentCallbackController extends \App\Http\Controllers\Controller
 {
-    public function __construct(
-        protected WalletService $wallet,
-        protected NotificationService $notifier
-    ) {}
+    public function __construct(protected WalletService $wallet) {}
 
     public function duitku(Request $request)
     {
@@ -37,10 +33,8 @@ class PaymentCallbackController extends \App\Http\Controllers\Controller
             return response('Order not found', 404);
         }
 
-        // Tambahkan Credit (idempotent) + notifikasi hanya saat status benar-benar berubah
-        if ($this->wallet->creditTopup($payment)) {
-            $this->notifier->topupSuccess($payment->user, $payment->credit_amount);
-        }
+        // Tambahkan Credit (idempotent). Notifikasi dipicu dari WalletService
+        $this->wallet->creditTopup($payment);
 
         return response('OK', 200);
     }

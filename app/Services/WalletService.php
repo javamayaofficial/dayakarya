@@ -11,6 +11,7 @@ use App\Models\Unlock;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 /**
@@ -24,7 +25,7 @@ class WalletService
      */
     public function creditTopup(Payment $payment): bool
     {
-        return DB::transaction(function () use ($payment) {
+        $processed = DB::transaction(function () use ($payment) {
             // Kunci baris payment agar tidak diproses ganda oleh callback berulang
             $payment = Payment::whereKey($payment->id)->lockForUpdate()->first();
 
@@ -41,6 +42,20 @@ class WalletService
             $payment->update(['status' => 'paid', 'paid_at' => now()]);
             return true;
         });
+
+        if ($processed) {
+            try {
+                $payment->loadMissing('user');
+                app(NotificationService::class)->topupSuccess($payment->user, (int) $payment->credit_amount);
+            } catch (\Throwable $exception) {
+                Log::warning('Notifikasi topup gagal dikirim', [
+                    'payment_id' => $payment->id,
+                    'error' => $exception->getMessage(),
+                ]);
+            }
+        }
+
+        return $processed;
     }
 
     /**
