@@ -41,6 +41,7 @@ Route::prefix('v1')->group(function () {
         Route::post('chapters/{chapter}/unlock', [UnlockController::class, 'store']);
 
         // Karya (creator)
+        Route::get('creator/dashboard', [WorkController::class, 'creatorDashboard']);
         Route::post('works', [WorkController::class, 'store']);
 
         // Affiliate

@@ -3,6 +3,14 @@
 @section('body_class', 'page-wallet')
 
 @section('content')
+@php
+    $paymentProvider = \App\Support\IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment'));
+    $paymentLabel = match ($paymentProvider) {
+        'manual' => 'Lanjutkan Transfer Manual',
+        'qris_manual' => 'Lanjutkan Pembayaran QRIS',
+        default => 'Bayar dengan Duitku',
+    };
+@endphp
 <section class="section">
     <div class="container wallet-container">
         <div class="wallet-hero">
@@ -57,7 +65,7 @@
                     <strong id="total-rp">Rp10.000</strong>
                     <p>1 Credit = Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</p>
                 </div>
-                <button class="btn btn-gold btn-block" id="topup-button" onclick="doTopup()">Bayar dengan Duitku</button>
+                <button class="btn btn-gold btn-block" id="topup-button" onclick="doTopup()">{{ $paymentLabel }}</button>
                 <div id="topup-msg" style="margin-top:12px"></div>
             </div>
 
@@ -99,10 +107,24 @@
 @push('scripts')
 <script>
   const RATE = {{ (int) config('dayakarya.economy.credit_rate_rupiah') }};
+  const PAYMENT_PROVIDER = @json($paymentProvider);
+  const PAYMENT_LABEL = @json($paymentLabel);
   let selected = 100;
   const topupButton = document.querySelector('#topup-button');
   const topupMessage = document.querySelector('#topup-msg');
   const chips = document.querySelectorAll('#topup-options .chip');
+
+  function defaultTopupMessage() {
+    if (PAYMENT_PROVIDER === 'manual') {
+      return 'Transfer manual akan menampilkan rekening tujuan dan detail verifikasi setelah transaksi dibuat.';
+    }
+
+    if (PAYMENT_PROVIDER === 'qris_manual') {
+      return 'QRIS manual akan menampilkan instruksi pembayaran dan detail verifikasi setelah transaksi dibuat.';
+    }
+
+    return '';
+  }
 
   function renderTotal(){ document.querySelector('#total-rp').textContent = 'Rp' + (selected*RATE).toLocaleString('id-ID'); }
   chips.forEach(c => c.addEventListener('click', () => {
@@ -143,7 +165,8 @@
       document.querySelector('#credit-balance').textContent = (w.credit_balance||0).toLocaleString('id-ID');
       document.querySelector('#rupiah-balance').textContent = 'Rp'+(w.rupiah_balance||0).toLocaleString('id-ID');
       topupButton.disabled = false;
-      topupButton.textContent = 'Bayar dengan Duitku';
+      topupButton.textContent = PAYMENT_LABEL;
+      topupMessage.innerHTML = defaultTopupMessage() ? `<div class="alert alert-success">${defaultTopupMessage()}</div>` : '';
 
       const trx = await DK.get('/wallet/transactions');
       const items = trx.data ?? [];

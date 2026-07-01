@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Follow;
 use App\Models\Work;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,6 +44,38 @@ class WorkController extends \App\Http\Controllers\Controller
             'chapters' => $work->chapters()
                 ->where('status', 'published')
                 ->get(['id', 'title', 'order', 'is_premium', 'price_credit', 'duration_seconds']),
+        ]);
+    }
+
+    public function creatorDashboard(Request $request): JsonResponse
+    {
+        $this->authorizeCreator($request);
+
+        $user = $request->user();
+        $works = $user->works()
+            ->with('category:id,name')
+            ->latest()
+            ->get([
+                'id',
+                'title',
+                'slug',
+                'type',
+                'status',
+                'views',
+                'likes_count',
+                'published_at',
+                'cover',
+                'category_id',
+            ]);
+
+        return response()->json([
+            'stats' => [
+                'works' => $works->count(),
+                'views' => (int) $works->sum('views'),
+                'royalty_rupiah' => (int) $user->royalties()->sum('amount_rupiah'),
+                'followers' => Follow::query()->where('creator_id', $user->id)->count(),
+            ],
+            'works' => $works,
         ]);
     }
 

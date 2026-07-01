@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AffiliateLink;
+use App\Models\Payment;
 use App\Models\Work;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,7 @@ Route::view('/daftar', 'auth.register')->name('register');
 // Wallet & top up
 Route::view('/wallet', 'reader.wallet')->name('wallet');
 Route::view('/wallet/topup/selesai', 'reader.topup-done')->name('wallet.topup.done');
-Route::get('/wallet/topup/manual/{payment}', fn () => view('reader.topup-manual'))
+Route::get('/wallet/topup/manual/{payment}', fn (Payment $payment) => view('reader.topup-manual', compact('payment')))
     ->name('wallet.topup.manual');
 
 // Dashboard creator (shell)
