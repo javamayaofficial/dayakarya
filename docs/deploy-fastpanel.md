@@ -180,6 +180,7 @@ File workflow yang dipakai repo ini:
 
 - `.github/workflows/deploy-fastpanel.yml`
 - `scripts/deploy-fastpanel.sh`
+- `scripts/post-deploy-smoke-check.sh`
 
 Tambahkan **GitHub repository secrets** berikut:
 
@@ -196,6 +197,8 @@ RUN_MIGRATIONS=true
 RUN_STORAGE_LINK=true
 RESTART_QUEUE=true
 RUN_FILAMENT_ASSETS=true
+RUN_SMOKE_CHECKS=false
+APP_URL_PUBLIC=https://dayakarya.id
 ```
 
 Keterangan:
@@ -209,6 +212,8 @@ Keterangan:
 - `RUN_MIGRATIONS=false` bila Anda ingin migrasi dijalankan manual.
 - `RESTART_QUEUE=false` bila server tidak menjalankan queue worker persisten.
 - `RUN_FILAMENT_ASSETS=true` direkomendasikan agar aset panel admin selalu sinkron setelah deploy.
+- `RUN_SMOKE_CHECKS=true` bila Anda ingin deploy langsung memverifikasi route publik penting setelah selesai.
+- `APP_URL_PUBLIC` dipakai oleh smoke check untuk menentukan base URL yang diuji.
 
 Langkah setup SSH key:
 

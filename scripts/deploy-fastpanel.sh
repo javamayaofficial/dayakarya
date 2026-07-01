@@ -9,6 +9,8 @@ RUN_MIGRATIONS="${RUN_MIGRATIONS:-true}"
 RUN_STORAGE_LINK="${RUN_STORAGE_LINK:-true}"
 RESTART_QUEUE="${RESTART_QUEUE:-true}"
 RUN_FILAMENT_ASSETS="${RUN_FILAMENT_ASSETS:-true}"
+RUN_SMOKE_CHECKS="${RUN_SMOKE_CHECKS:-false}"
+APP_URL_PUBLIC="${APP_URL_PUBLIC:-${APP_URL:-}}"
 
 cd "$APP_DIR"
 
@@ -49,6 +51,13 @@ fi
 
 if [ "$RESTART_QUEUE" = "true" ]; then
   "${PHP_CMD[@]}" artisan queue:restart || true
+fi
+
+if [ "$RUN_SMOKE_CHECKS" = "true" ]; then
+  echo "==> Menjalankan smoke check pasca deploy"
+  export APP_URL_PUBLIC
+  chmod +x scripts/post-deploy-smoke-check.sh
+  bash scripts/post-deploy-smoke-check.sh
 fi
 
 echo "==> Deploy selesai"

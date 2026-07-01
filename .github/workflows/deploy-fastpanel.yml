@@ -34,6 +34,8 @@ jobs:
             export RUN_STORAGE_LINK="${{ secrets.RUN_STORAGE_LINK }}"
             export RESTART_QUEUE="${{ secrets.RESTART_QUEUE }}"
             export RUN_FILAMENT_ASSETS="${{ secrets.RUN_FILAMENT_ASSETS }}"
+            export RUN_SMOKE_CHECKS="${{ secrets.RUN_SMOKE_CHECKS }}"
+            export APP_URL_PUBLIC="${{ secrets.APP_URL_PUBLIC }}"
 
             cd "$APP_DIR"
             git pull --ff-only origin "$DEPLOY_BRANCH"

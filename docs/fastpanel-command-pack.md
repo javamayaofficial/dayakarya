@@ -142,6 +142,24 @@ php artisan migrate:status
 
 ---
 
+## 10A. Jalankan Smoke Check Manual
+
+Gunakan ini jika Anda ingin memverifikasi route utama setelah deploy:
+
+```bash
+cd /var/www/USERNAME/data/www/dayakarya.id
+APP_URL_PUBLIC=https://dayakarya.id bash scripts/post-deploy-smoke-check.sh
+```
+
+Jika ingin dijalankan otomatis setelah setiap deploy GitHub Actions, isi secret:
+
+```text
+RUN_SMOKE_CHECKS=true
+APP_URL_PUBLIC=https://dayakarya.id
+```
+
+---
+
 ## 11. Urutan Uji Browser Setelah Command Selesai
 
 1. Buka `https://dayakarya.id/masuk`
