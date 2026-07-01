@@ -105,6 +105,17 @@ MAILKETING_API_TOKEN=xxxxxxxx
 MAILKETING_FROM_EMAIL=noreply@dayakarya.id
 ```
 
+**Google Login (opsional, direkomendasikan):**
+```env
+GOOGLE_CLIENT_ID=xxxxxxxx
+GOOGLE_CLIENT_SECRET=xxxxxxxx
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+```
+Di Google Cloud Console, buat `OAuth Client ID` tipe `Web application`, lalu isi `Authorized redirect URI` sesuai domain aplikasi, misalnya:
+```text
+https://dayakarya.id/auth/google/callback
+```
+
 **Fallback pembayaran (opsional):** untuk menonaktifkan gateway online dan pakai transfer manual, set `PAYMENT_PROVIDER=manual` dan isi `MANUAL_BANK_*`.
 
 ---
@@ -153,6 +164,7 @@ Jika mengubah `.env` setelah ini, jalankan `php artisan config:clear`.
 - [ ] `php -v` menunjukkan 8.2+
 - [ ] `composer install` sukses (folder `vendor/` ada)
 - [ ] `.env` terisi database & integrasi
+- [ ] Google OAuth terisi bila fitur login Google ingin dipakai
 - [ ] `php artisan migrate --seed` sukses
 - [ ] Password admin sudah diganti
 - [ ] Document root mengarah ke `/public`

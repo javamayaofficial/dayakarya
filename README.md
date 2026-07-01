@@ -11,6 +11,7 @@ Dayakarya mempertemukan **kreator** (penulis, pendongeng, podcaster, guru, voice
 ## Fitur Utama
 
 - **Autentikasi & Role** — Login/Register/Lupa Password, role: Admin, Operator, Creator, Reader, Listener, Affiliate, Sponsor, CSR.
+- **Google Sign-In** — Login dan register cepat dengan akun Google, tetap bridge ke token frontend `dk_token`.
 - **Karya Multi-Format** — Cerpen, Novel Berseri, Podcast, Audio Story, Dongeng, Motivasi, Audiobook. Chapter/episode gratis atau premium, draft/jadwal/publish.
 - **Ekonomi** — Wallet (Credit & Rupiah), Top Up via **Duitku**, unlock premium, **royalti otomatis**, komisi affiliate, withdraw ke bank/e-wallet.
 - **Affiliate & Referral** — link unik per karya, tracking klik & konversi, komisi otomatis.
@@ -112,6 +113,15 @@ EMAIL_PROVIDER=mailketing
 MAILKETING_API_TOKEN=xxxx
 MAILKETING_FROM_EMAIL=noreply@dayakarya.id
 ```
+
+### Google OAuth (opsional)
+```env
+GOOGLE_CLIENT_ID=xxxx
+GOOGLE_CLIENT_SECRET=xxxx
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+```
+- **Redirect URI production:** `https://dayakarya.id/auth/google/callback`
+- **Alur:** klik tombol Google di `/masuk` atau `/daftar` -> callback Laravel -> token Sanctum disimpan ke `localStorage` sebagai `dk_token`.
 
 ### Ekonomi platform
 ```env

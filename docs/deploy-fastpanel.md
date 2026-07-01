@@ -80,7 +80,30 @@ FONNTE_TOKEN=...
 
 EMAIL_PROVIDER=mailketing
 MAILKETING_API_TOKEN=...
+
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GOOGLE_REDIRECT_URI=https://dayakarya.id/auth/google/callback
 ```
+
+---
+
+## Langkah 4A - Aktifkan Google Login
+
+Jika ingin memakai fitur login/register dengan Google, buat OAuth Client di Google Cloud Console:
+
+1. Buka `APIs & Services -> Credentials`.
+2. Buat `OAuth Client ID` tipe `Web application`.
+3. Isi `Authorized redirect URI` persis:
+
+```text
+https://dayakarya.id/auth/google/callback
+```
+
+4. Salin `Client ID` dan `Client Secret` ke `.env`.
+5. Setelah deploy, uji dari halaman `/masuk` dan `/daftar`.
+
+> Pastikan domain production yang dipakai user sama dengan nilai `APP_URL`, agar callback Google tidak mismatch.
 
 ---
 
@@ -233,6 +256,7 @@ Catatan penting:
 
 - Simpan `composer.lock` ke repo agar versi dependency yang terpasang saat deploy tetap konsisten.
 - Repo ini sekarang sudah menyertakan `config/permission.php` dan migration permission table, jadi fresh install tidak perlu lagi `vendor:publish` untuk Spatie Permission.
+- Setelah Google OAuth diaktifkan, pastikan migration terbaru untuk kolom `users.google_id` dan `users.auth_provider` ikut dijalankan pada deploy.
 
 ---
 
@@ -241,6 +265,13 @@ Catatan penting:
 Pastikan URL callback di dashboard Duitku:
 ```
 https://dayakarya.id/api/v1/payments/duitku/callback
+```
+
+## Set Redirect Google
+
+Pastikan `Authorized redirect URI` pada Google Cloud Console:
+```
+https://dayakarya.id/auth/google/callback
 ```
 
 ---
