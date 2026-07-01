@@ -15,6 +15,8 @@ class GoogleAuthController extends Controller
 {
     public function redirect(Request $request): RedirectResponse
     {
+        $request->session()->put('google_oauth_return_to', $this->resolveAuthEntryUrl($request));
+
         if ($response = $this->guardUnavailableGoogleAuth()) {
             return $response;
         }
@@ -174,7 +176,26 @@ class GoogleAuthController extends Controller
 
     private function redirectBackWithError(string $message): RedirectResponse
     {
-        return redirect()->back(fallback: route('login'))
+        $fallback = session()->pull('google_oauth_return_to', route('login'));
+
+        return redirect()->to($fallback)
             ->with('google_auth_error', $message);
+    }
+
+    private function resolveAuthEntryUrl(Request $request): string
+    {
+        $previousUrl = (string) url()->previous();
+        $registerUrl = route('register');
+        $loginUrl = route('login');
+
+        if ($previousUrl !== '' && str_starts_with($previousUrl, $registerUrl)) {
+            return $registerUrl;
+        }
+
+        if ($previousUrl !== '' && str_starts_with($previousUrl, $loginUrl)) {
+            return $loginUrl;
+        }
+
+        return $loginUrl;
     }
 }
