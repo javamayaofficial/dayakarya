@@ -34,6 +34,9 @@
                 </div>
 
                 <div id="msg"></div>
+                @if (session('google_auth_error'))
+                    <div class="alert alert-error">{{ session('google_auth_error') }}</div>
+                @endif
                 <div class="field">
                     <label>Email</label>
                     <input type="email" id="email" placeholder="nama@email.com" autocomplete="email">
@@ -43,6 +46,10 @@
                     <input type="password" id="password" placeholder="Kata sandi" autocomplete="current-password">
                 </div>
                 <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk ke Akun</button>
+                <a href="{{ route('auth.google.redirect') }}" class="btn btn-google btn-block auth-google-btn">
+                    <span class="btn-google-mark">G</span>
+                    <span>Masuk dengan Google</span>
+                </a>
                 <div class="auth-meta">
                     <span>Belum punya akun?</span>
                     <a href="/daftar">Buat akun gratis</a>

@@ -300,6 +300,30 @@ img { max-width: 100%; display: block; }
 .btn-block { width: 100%; }
 .btn-wa { background: #25d366; color: #06331b; }
 .btn-gap-top { margin-top: 16px; }
+.btn-google {
+  background: rgba(255,255,255,.94);
+  color: var(--ink);
+  border: 1.5px solid rgba(20,34,60,.10);
+  box-shadow: var(--shadow-sm);
+}
+.btn-google:hover {
+  background: #ffffff;
+}
+.btn-google-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 800;
+}
+.auth-google-btn {
+  margin-top: 10px;
+}
 
 /* ---- Section heading ---- */
 .section { padding: 22px 0; }

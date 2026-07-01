@@ -3,6 +3,7 @@
 use App\Models\AffiliateLink;
 use App\Models\Payment;
 use App\Models\Work;
+use App\Http\Controllers\Web\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,8 @@ Route::get('/r/{code}', function (string $code) {
 // Auth pages (shell; proses via API)
 Route::view('/masuk', 'auth.login')->name('login');
 Route::view('/daftar', 'auth.register')->name('register');
+Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 // Wallet & top up
 Route::view('/wallet', 'reader.wallet')->name('wallet');

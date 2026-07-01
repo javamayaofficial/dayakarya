@@ -320,6 +320,17 @@ function initInstallButtons() {
   updateInstallButtons();
 }
 
+function initOauthNotice() {
+  const message = sessionStorage.getItem('dk_oauth_notice');
+  if (!message) return;
+
+  sessionStorage.removeItem('dk_oauth_notice');
+  showAppStatus(message, {
+    tone: 'success',
+    duration: 3600,
+  });
+}
+
 // Daftarkan service worker (PWA)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
@@ -335,4 +346,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreditPill();
   DK.refreshCredit();
   initInstallButtons();
+  initOauthNotice();
 });

@@ -34,6 +34,9 @@
                 </div>
 
                 <div id="msg"></div>
+                @if (session('google_auth_error'))
+                    <div class="alert alert-error">{{ session('google_auth_error') }}</div>
+                @endif
                 <div class="field">
                     <label>Saya ingin menjadi</label>
                     <select id="role">
@@ -55,6 +58,10 @@
                 <div class="field"><label>Password</label><input type="password" id="password" placeholder="Minimal 8 karakter"></div>
                 <div class="field"><label>Ulangi password</label><input type="password" id="password_confirmation" placeholder="Ketik ulang"></div>
                 <button class="btn btn-gold btn-block" onclick="doRegister()">Buat Akun</button>
+                <a href="{{ route('auth.google.redirect') }}" class="btn btn-google btn-block auth-google-btn">
+                    <span class="btn-google-mark">G</span>
+                    <span>Daftar dengan Google</span>
+                </a>
                 <div class="auth-meta">
                     <span>Sudah punya akun?</span>
                     <a href="/masuk">Masuk sekarang</a>
