@@ -89,10 +89,21 @@ const DK = {
 
   async refreshCredit() {
     const val = document.querySelector('#credit-value');
-    if (!val || !this.token()) return;
+    const pill = document.querySelector('#credit-pill');
+    if (!val || !pill) return;
+
+    if (!this.token()) {
+      val.textContent = 'Masuk';
+      pill.setAttribute('href', '/masuk');
+      pill.dataset.authState = 'guest';
+      return;
+    }
+
     try {
       const w = await this.get('/wallet');
       val.textContent = (w.credit_balance ?? 0).toLocaleString('id-ID') + ' Credit';
+      pill.setAttribute('href', '/wallet');
+      pill.dataset.authState = 'member';
     } catch (_) {}
   },
 };
@@ -220,6 +231,31 @@ function initConnectivityStatus() {
   window.addEventListener('online', () => renderConnectivityStatus(true));
 }
 
+function initCreditPill() {
+  const pill = document.querySelector('#credit-pill');
+  if (!pill) return;
+
+  if (!DK.token()) {
+    pill.setAttribute('href', '/masuk');
+    pill.dataset.authState = 'guest';
+  }
+
+  if (pill.dataset.creditBound === 'true') return;
+  pill.dataset.creditBound = 'true';
+
+  pill.addEventListener('click', (event) => {
+    if (DK.token()) return;
+
+    event.preventDefault();
+    showAppStatus('Masuk dengan akun pengguna untuk melihat saldo credit dan membuka wallet.', {
+      duration: 3200,
+    });
+    window.setTimeout(() => {
+      window.location.href = '/masuk';
+    }, 260);
+  });
+}
+
 async function attemptInstall() {
   if (isStandaloneMode()) return 'installed';
   if (!deferredInstallPrompt) return 'unavailable';
@@ -296,5 +332,7 @@ if ('serviceWorker' in navigator) {
 
 document.addEventListener('DOMContentLoaded', () => {
   initConnectivityStatus();
+  initCreditPill();
+  DK.refreshCredit();
   initInstallButtons();
 });
