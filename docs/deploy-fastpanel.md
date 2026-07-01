@@ -157,6 +157,7 @@ SSH_HOST=ip-atau-host-server
 SSH_PORT=22
 SSH_USERNAME=user_ssh
 SSH_PRIVATE_KEY=isi_private_key_ssh
+SSH_HOST_FINGERPRINT=SHA256:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 APP_DIR=/var/www/USERNAME/data/www/dayakarya.id
 PHP_BIN=php
 COMPOSER_BIN=composer
@@ -168,6 +169,7 @@ RESTART_QUEUE=true
 Keterangan:
 
 - `SSH_PRIVATE_KEY` = private key yang pasangannya sudah ditaruh di `~/.ssh/authorized_keys` server.
+- `SSH_HOST_FINGERPRINT` = fingerprint host SSH server untuk verifikasi identitas server saat GitHub Actions konek.
 - `APP_DIR` = folder root proyek Laravel di server FastPanel.
 - `PHP_BIN` dan `COMPOSER_BIN` bisa dibiarkan default jika perintah `php` dan `composer` tersedia global.
 - `RUN_MIGRATIONS=false` bila Anda ingin migrasi dijalankan manual.
@@ -186,7 +188,16 @@ chmod 700 ~/.ssh
 nano ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
-3. Tempel isi **private key** ke secret `SSH_PRIVATE_KEY` di GitHub.
+3. Ambil fingerprint host SSH dari server:
+```bash
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub -E sha256
+```
+Contoh output:
+```text
+256 SHA256:AbCdEfGhIjKlMnOpQrStUvWxYz1234567890abcdef root@server (ED25519)
+```
+Salin bagian `SHA256:...` lalu simpan ke secret `SSH_HOST_FINGERPRINT`.
+4. Tempel isi **private key** ke secret `SSH_PRIVATE_KEY` di GitHub.
 
 Setelah secret terisi, workflow akan berjalan otomatis setiap ada push ke branch `main`.
 
