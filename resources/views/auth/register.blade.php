@@ -1,39 +1,68 @@
 @extends('layouts.app')
 @section('title', 'Daftar — Dayakarya')
+@section('body_class', 'page-auth')
 
 @section('content')
-<section class="section">
-    <div class="container" style="max-width:460px">
-        <div style="text-align:center;padding:14px 0 22px">
-            <h1 style="font-size:1.8rem">Gabung Dayakarya</h1>
-            <p style="color:var(--muted)">Gratis. Mulai berkarya atau menikmati karya hari ini.</p>
-        </div>
-        <div class="card">
-            <div id="msg"></div>
-            <div class="field">
-                <label>Saya ingin menjadi</label>
-                <select id="role">
-                    <option value="creator">Kreator (menulis / mendongeng / podcast)</option>
-                    <option value="reader">Pembaca</option>
-                    <option value="listener">Pendengar</option>
-                    <option value="affiliate">Affiliate (promosi & komisi)</option>
-                    <option value="sponsor">Sponsor</option>
-                    <option value="csr">Perusahaan / CSR</option>
-                </select>
+<section class="section auth-section">
+    <div class="container auth-container">
+        <div class="auth-shell">
+            <aside class="auth-aside">
+                <span class="section-kicker">Mulai dari fondasi yang tepat</span>
+                <h1>Bergabung ke Dayakarya untuk membangun karya, komunitas, dan pendapatan dengan lebih terarah.</h1>
+                <p>Baik Anda kreator, pembaca, pendengar, affiliate, sponsor, maupun CSR, Dayakarya disiapkan sebagai ekosistem yang terasa lebih matang dan siap tumbuh.</p>
+                <div class="auth-points">
+                    <div class="auth-point">
+                        <strong>Untuk kreator</strong>
+                        <span>Terbitkan karya, bangun citra yang lebih premium, dan monetisasi dengan alur yang lebih jelas.</span>
+                    </div>
+                    <div class="auth-point">
+                        <strong>Untuk penikmat karya</strong>
+                        <span>Temukan pengalaman membaca dan mendengar yang lebih nyaman, rapi, dan bernilai.</span>
+                    </div>
+                    <div class="auth-point">
+                        <strong>Untuk kolaborator</strong>
+                        <span>Affiliate, sponsor, dan program CSR bisa tumbuh di ruang yang sama tanpa kehilangan profesionalitas.</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="auth-card card">
+                <div class="auth-card-head">
+                    <span class="mini-label mini-label-dark">Buat Akun Dayakarya</span>
+                    <h2>Mulai gratis hari ini</h2>
+                    <p>Buat akun untuk mulai berkarya, menikmati karya, atau membangun kolaborasi yang lebih bernilai.</p>
+                </div>
+
+                <div id="msg"></div>
+                <div class="field">
+                    <label>Saya ingin menjadi</label>
+                    <select id="role">
+                        <option value="creator">Kreator (menulis / mendongeng / podcast)</option>
+                        <option value="reader">Pembaca</option>
+                        <option value="listener">Pendengar</option>
+                        <option value="affiliate">Affiliate (promosi & komisi)</option>
+                        <option value="sponsor">Sponsor</option>
+                        <option value="csr">Perusahaan / CSR</option>
+                    </select>
+                </div>
+                <div class="field"><label>Nama lengkap</label><input id="name" placeholder="Nama kamu"></div>
+                <div class="field"><label>Email</label><input type="email" id="email" placeholder="nama@email.com"></div>
+                <div class="field">
+                    <label>Nomor WhatsApp</label>
+                    <input id="phone" placeholder="08xxxxxxxxxx">
+                    <div class="hint">Untuk notifikasi royalti, top up, dan penarikan dana.</div>
+                </div>
+                <div class="field"><label>Password</label><input type="password" id="password" placeholder="Minimal 8 karakter"></div>
+                <div class="field"><label>Ulangi password</label><input type="password" id="password_confirmation" placeholder="Ketik ulang"></div>
+                <button class="btn btn-gold btn-block" onclick="doRegister()">Buat Akun</button>
+                <div class="auth-meta">
+                    <span>Sudah punya akun?</span>
+                    <a href="/masuk">Masuk</a>
+                </div>
+                <div class="auth-note">
+                    Pendaftaran gratis dan disiapkan untuk perjalanan kreator yang lebih serius serta berkelanjutan.
+                </div>
             </div>
-            <div class="field"><label>Nama lengkap</label><input id="name" placeholder="Nama kamu"></div>
-            <div class="field"><label>Email</label><input type="email" id="email" placeholder="nama@email.com"></div>
-            <div class="field">
-                <label>Nomor WhatsApp</label>
-                <input id="phone" placeholder="08xxxxxxxxxx">
-                <div class="hint">Untuk notifikasi royalti, top up, dan penarikan dana.</div>
-            </div>
-            <div class="field"><label>Password</label><input type="password" id="password" placeholder="Minimal 8 karakter"></div>
-            <div class="field"><label>Ulangi password</label><input type="password" id="password_confirmation" placeholder="Ketik ulang"></div>
-            <button class="btn btn-gold btn-block" onclick="doRegister()">Buat Akun</button>
-            <p style="text-align:center;margin-top:16px;color:var(--muted);font-size:.9rem">
-                Sudah punya akun? <a href="/masuk" style="color:var(--gold-deep);font-weight:600">Masuk</a>
-            </p>
         </div>
     </div>
 </section>

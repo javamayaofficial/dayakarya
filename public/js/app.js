@@ -38,14 +38,27 @@ const DK = {
 
   workCard(w) {
     const free = (w.chapters_free_count ?? 0) > 0 ? '<span class="free-tag">Gratis</span>' : '';
+    const creator = w.creator?.name ?? 'Kreator';
+    const views = (w.views ?? 0).toLocaleString('id-ID');
+    const coverStyle = w.cover
+      ? `background-image:url('${w.cover}');background-size:cover;background-position:center;`
+      : '';
     return `
-      <a class="work-card" href="/karya/${w.slug}">
-        <div class="work-cover" style="${w.cover ? `background-image:url('${w.cover}');background-size:cover` : ''}">
+      <a class="work-card work-card-premium" href="/karya/${w.slug}">
+        <div class="work-cover" style="${coverStyle}">
           <span class="type-tag">${this.typeLabel(w.type)}</span>${free}
+          <div class="cover-fade"></div>
+          <div class="cover-meta">
+            <span class="cover-pill">${creator}</span>
+          </div>
         </div>
         <div class="work-body">
           <h3>${w.title}</h3>
-          <div class="work-meta">✍️ ${w.creator?.name ?? 'Kreator'} · ${w.views ?? 0}x dibaca</div>
+          <div class="work-meta">✍️ ${creator} · ${views}x dibaca</div>
+          <div class="work-card-footer">
+            <span class="read-link">Lihat karya</span>
+            <span class="read-stat">${(w.chapters_free_count ?? 0) > 0 ? 'Ada bagian gratis' : 'Premium ready'}</span>
+          </div>
         </div>
       </a>`;
   },

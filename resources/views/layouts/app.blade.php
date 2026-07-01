@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="/css/app.css">
     @stack('head')
 </head>
-<body>
+<body class="@yield('body_class')">
 
     {{-- Top bar --}}
     <header class="topbar">
@@ -37,9 +37,18 @@
         @yield('content')
     </main>
 
-    <p class="foot container">
-        Dayakarya oleh Yayasan Pondok Daya Cipta Nusantara &middot; &copy; {{ date('Y') }}
-    </p>
+    <footer class="foot-wrap">
+        <div class="foot container">
+            <div class="foot-brand">
+                <span class="spine"></span>
+                <div>
+                    <strong>Dayakarya</strong>
+                    <p>Rumah kreator Indonesia untuk berkarya, berdampak, dan berpenghasilan.</p>
+                </div>
+            </div>
+            <p class="foot-copy">Dayakarya oleh Yayasan Pondok Daya Cipta Nusantara &middot; &copy; {{ date('Y') }}</p>
+        </div>
+    </footer>
 
     {{-- Bottom nav (rasa aplikasi) --}}
     <nav class="bottom-nav">

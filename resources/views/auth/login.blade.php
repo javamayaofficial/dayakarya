@@ -1,27 +1,56 @@
 @extends('layouts.app')
 @section('title', 'Masuk — Dayakarya')
+@section('body_class', 'page-auth')
 
 @section('content')
-<section class="section">
-    <div class="container" style="max-width:440px">
-        <div style="text-align:center;padding:14px 0 22px">
-            <h1 style="font-size:1.8rem">Selamat datang kembali</h1>
-            <p style="color:var(--muted)">Masuk untuk melanjutkan berkarya & menikmati konten.</p>
-        </div>
-        <div class="card">
-            <div id="msg"></div>
-            <div class="field">
-                <label>Email</label>
-                <input type="email" id="email" placeholder="nama@email.com" autocomplete="email">
+<section class="section auth-section">
+    <div class="container auth-container">
+        <div class="auth-shell">
+            <aside class="auth-aside">
+                <span class="section-kicker">Masuk ke ekosistem kreator</span>
+                <h1>Masuk dan lanjutkan karya yang ingin Anda tumbuhkan dengan lebih serius.</h1>
+                <p>Dayakarya dirancang untuk kreator dan penikmat karya yang ingin pengalaman lebih rapi, terasa premium, dan siap berkembang menjadi ekosistem bernilai.</p>
+                <div class="auth-points">
+                    <div class="auth-point">
+                        <strong>Akses wallet dan royalti</strong>
+                        <span>Pantau kredit, top up, dan histori monetisasi dalam satu alur yang rapi.</span>
+                    </div>
+                    <div class="auth-point">
+                        <strong>Lanjutkan pengalaman menikmati karya</strong>
+                        <span>Buka konten premium, simpan progres, dan jelajahi katalog dengan pengalaman yang lebih nyaman.</span>
+                    </div>
+                    <div class="auth-point">
+                        <strong>Siap untuk kreator yang ingin naik kelas</strong>
+                        <span>Bangun katalog, distribusi, dan pendapatan tanpa kehilangan kesan profesional.</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="auth-card card">
+                <div class="auth-card-head">
+                    <span class="mini-label mini-label-dark">Login Dayakarya</span>
+                    <h2>Selamat datang kembali</h2>
+                    <p>Masuk untuk melanjutkan berkarya, menikmati konten, dan mengelola akun Anda.</p>
+                </div>
+
+                <div id="msg"></div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="nama@email.com" autocomplete="email">
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Kata sandi" autocomplete="current-password">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk ke Akun</button>
+                <div class="auth-meta">
+                    <span>Belum punya akun?</span>
+                    <a href="/daftar">Daftar gratis</a>
+                </div>
+                <div class="auth-note">
+                    Dengan masuk, Anda melanjutkan pengalaman Dayakarya yang lebih rapi, aman, dan siap bertumbuh.
+                </div>
             </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="Kata sandi" autocomplete="current-password">
-            </div>
-            <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk</button>
-            <p style="text-align:center;margin-top:16px;color:var(--muted);font-size:.9rem">
-                Belum punya akun? <a href="/daftar" style="color:var(--gold-deep);font-weight:600">Daftar gratis</a>
-            </p>
         </div>
     </div>
 </section>

@@ -1,31 +1,96 @@
 @extends('layouts.app')
 @section('title', 'Wallet & Credit — Dayakarya')
+@section('body_class', 'page-wallet')
 
 @section('content')
 <section class="section">
-    <div class="container" style="max-width:480px">
-        <div class="section-head"><h2>Wallet</h2></div>
-
-        <div class="stat-grid">
-            <div class="stat gold"><div class="label">Saldo Credit</div><div class="value" id="credit-balance">—</div></div>
-            <div class="stat teal"><div class="label">Saldo Rupiah</div><div class="value" id="rupiah-balance">—</div></div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-            <h3 style="margin-bottom:12px">Top Up Credit</h3>
-            <div class="chips" id="topup-options">
-                <span class="chip" data-credit="50">50</span>
-                <span class="chip active" data-credit="100">100</span>
-                <span class="chip" data-credit="250">250</span>
-                <span class="chip" data-credit="500">500</span>
-                <span class="chip" data-credit="1000">1.000</span>
+    <div class="container wallet-container">
+        <div class="wallet-hero">
+            <div class="wallet-hero-copy">
+                <span class="section-kicker">Wallet Dayakarya</span>
+                <h1>Kelola credit, saldo rupiah, dan transaksi dalam satu pengalaman yang lebih rapi.</h1>
+                <p>Wallet Dayakarya dirancang agar pengguna merasa aman, paham alur transaksi, dan percaya pada sistem monetisasi yang sedang mereka gunakan.</p>
             </div>
-            <div class="hint" style="margin:10px 0">1 Credit = Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}. Total: <b id="total-rp">Rp10.000</b></div>
-            <button class="btn btn-gold btn-block" onclick="doTopup()">Bayar dengan Duitku</button>
-            <div id="topup-msg" style="margin-top:12px"></div>
+            <div class="wallet-hero-note">
+                <span class="mini-label">Financial Layer</span>
+                <h2>Transaksi bukan hanya berjalan, tapi juga terasa kredibel.</h2>
+                <p>Top up, histori, dan saldo disusun dengan tampilan yang lebih tenang dan lebih profesional agar perjalanan pengguna terasa matang.</p>
+            </div>
         </div>
 
-        <div class="section-head" style="margin-top:24px"><h2>Riwayat</h2></div>
+        <div class="wallet-balance-grid">
+            <div class="balance-card balance-card-credit">
+                <span class="label">Saldo Credit</span>
+                <strong class="value" id="credit-balance">—</strong>
+                <p>Gunakan credit untuk membuka karya premium dan menikmati pengalaman lebih lengkap.</p>
+            </div>
+            <div class="balance-card balance-card-rupiah">
+                <span class="label">Saldo Rupiah</span>
+                <strong class="value" id="rupiah-balance">—</strong>
+                <p>Pendapatan kreator dan aliran monetisasi dirangkum agar mudah dipantau.</p>
+            </div>
+            <div class="balance-card balance-card-soft">
+                <span class="label">Konversi Credit</span>
+                <strong class="value">Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</strong>
+                <p>Setiap 1 credit setara dengan nilai rupiah yang jelas dan konsisten di seluruh sistem.</p>
+            </div>
+        </div>
+
+        <div class="wallet-panel-grid">
+            <div class="wallet-panel card">
+                <div class="wallet-panel-head">
+                    <div>
+                        <span class="section-kicker">Top Up</span>
+                        <h2>Isi credit dengan cepat</h2>
+                    </div>
+                </div>
+                <p class="wallet-copy">Pilih nominal yang paling sesuai untuk mulai membuka karya premium dan menikmati pengalaman yang lebih penuh.</p>
+                <div class="chips chips-elevated" id="topup-options">
+                    <span class="chip" data-credit="50">50</span>
+                    <span class="chip active" data-credit="100">100</span>
+                    <span class="chip" data-credit="250">250</span>
+                    <span class="chip" data-credit="500">500</span>
+                    <span class="chip" data-credit="1000">1.000</span>
+                </div>
+                <div class="wallet-total-box">
+                    <span>Total Pembayaran</span>
+                    <strong id="total-rp">Rp10.000</strong>
+                    <p>1 Credit = Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</p>
+                </div>
+                <button class="btn btn-gold btn-block" onclick="doTopup()">Bayar dengan Duitku</button>
+                <div id="topup-msg" style="margin-top:12px"></div>
+            </div>
+
+            <div class="wallet-panel wallet-panel-info card">
+                <div class="wallet-panel-head">
+                    <div>
+                        <span class="section-kicker">Kepercayaan Sistem</span>
+                        <h2>Transaksi dibuat agar mudah dipahami</h2>
+                    </div>
+                </div>
+                <div class="wallet-info-list">
+                    <div class="wallet-info-item">
+                        <strong>Nilai credit jelas</strong>
+                        <span>Tidak ada angka yang ambigu. Konversi dan total selalu tampil di depan.</span>
+                    </div>
+                    <div class="wallet-info-item">
+                        <strong>Histori mudah ditinjau</strong>
+                        <span>Setiap aktivitas dompet ditampilkan agar pengguna merasa lebih aman dan terkontrol.</span>
+                    </div>
+                    <div class="wallet-info-item">
+                        <strong>Siap untuk monetisasi kreator</strong>
+                        <span>Wallet ini dirancang untuk mendukung pembaca, pendengar, dan kreator dalam satu ekosistem.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-head section-head-premium" style="margin-top:24px">
+            <div>
+                <span class="section-kicker">Riwayat Transaksi</span>
+                <h2>Setiap pergerakan saldo ditampilkan dengan lebih rapi</h2>
+            </div>
+        </div>
         <div id="trx-list"><div class="state"><div class="emoji">🧾</div><p>Memuat riwayat…</p></div></div>
     </div>
 </section>
@@ -51,9 +116,9 @@
     const trx = await DK.get('/wallet/transactions');
     const items = trx.data ?? [];
     document.querySelector('#trx-list').innerHTML = items.length ? items.map(t => `
-      <div class="chapter-row"><div><div style="font-weight:600">${t.description||t.type}</div>
+      <div class="chapter-row wallet-trx-row"><div><div style="font-weight:700">${t.description||t.type}</div>
       <div class="work-meta">${new Date(t.created_at).toLocaleDateString('id-ID')}</div></div>
-      <div style="font-weight:700;color:${t.amount<0?'var(--danger)':'var(--teal-deep)'}">${t.amount>0?'+':''}${(+t.amount).toLocaleString('id-ID')}</div></div>
+      <div class="wallet-trx-amount" style="color:${t.amount<0?'var(--danger)':'var(--teal-deep)'}">${t.amount>0?'+':''}${(+t.amount).toLocaleString('id-ID')}</div></div>
     `).join('') : `<div class="state"><div class="emoji">🌱</div><h3>Belum ada transaksi</h3><p>Top up untuk mulai membuka karya premium.</p></div>`;
   }
 
