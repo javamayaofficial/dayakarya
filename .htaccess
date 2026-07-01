@@ -5,7 +5,7 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     RewriteRule ^(css|js|img)/(.*)$ public/$1/$2 [L]
-    RewriteRule ^(offline\.html|sw\.js|favicon\.ico|robots\.txt)$ public/$1 [L]
+    RewriteRule ^(sw\.js|favicon\.ico|robots\.txt)$ public/$1 [L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
