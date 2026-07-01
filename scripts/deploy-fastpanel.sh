@@ -39,6 +39,7 @@ ln -sfn public/js js
 ln -sfn public/img img
 ln -sfn public/sw.js sw.js
 rm -f manifest.json
+cp public/offline.html offline.html
 
 if [ "$RUN_FILAMENT_ASSETS" = "true" ]; then
   "${PHP_CMD[@]}" artisan filament:assets
