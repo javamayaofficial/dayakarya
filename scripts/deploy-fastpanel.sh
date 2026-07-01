@@ -32,6 +32,12 @@ if [ "$RUN_STORAGE_LINK" = "true" ]; then
   "${PHP_CMD[@]}" artisan storage:link || true
 fi
 
+ln -sfn public/css css
+ln -sfn public/js js
+ln -sfn public/img img
+ln -sfn public/manifest.json manifest.json
+ln -sfn public/sw.js sw.js
+
 if [ "$RUN_FILAMENT_ASSETS" = "true" ]; then
   "${PHP_CMD[@]}" artisan filament:assets
 fi

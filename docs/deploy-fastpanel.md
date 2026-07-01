@@ -94,13 +94,21 @@ chmod -R 775 storage bootstrap/cache
 
 ---
 
-## Langkah 6 — Arahkan Document Root ke `/public`
+## Langkah 6 — Konfigurasi FastPanel untuk Root Proxy
 
-1. Di FastPanel: **Sites → dayakarya.id → Settings**.
-2. Ubah **Document Root** menjadi folder `.../dayakarya.id/public`.
-3. Simpan.
+Gunakan konfigurasi berikut di FastPanel agar request masuk lewat root proyek, lalu diteruskan ke `public/` oleh file proxy yang ada di repo:
 
-> Ini wajib. Laravel hanya boleh diakses lewat folder `public`, bukan root proyek.
+1. **Static content -> Subdirectory**: kosong
+2. **Backend -> Working subdirectory**: kosong
+3. **Backend -> Application file**: `index.php`
+
+Repo ini sudah menyertakan:
+
+- root `index.php` sebagai proxy ke `public/index.php`
+- root `.htaccess` untuk rewrite request ke `public/`
+- symlink asset root yang akan dibuat ulang otomatis saat deploy
+
+> Jangan arahkan lagi ke folder `public` lewat pengaturan subdirectory FastPanel, karena kombinasi itu sebelumnya memicu `403/500` dan redirect loop pada server ini.
 
 ---
 
