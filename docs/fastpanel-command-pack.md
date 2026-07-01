@@ -158,6 +158,14 @@ RUN_SMOKE_CHECKS=true
 APP_URL_PUBLIC=https://dayakarya.id
 ```
 
+Smoke check ini sekarang memverifikasi:
+
+- route publik utama
+- halaman legal
+- asset PWA
+- tombol Google login/register
+- API publik `/api/v1/leaderboard`
+
 ---
 
 ## 11. Urutan Uji Browser Setelah Command Selesai

@@ -214,6 +214,7 @@ Keterangan:
 - `RUN_FILAMENT_ASSETS=true` direkomendasikan agar aset panel admin selalu sinkron setelah deploy.
 - `RUN_SMOKE_CHECKS=true` bila Anda ingin deploy langsung memverifikasi route publik penting setelah selesai.
 - `APP_URL_PUBLIC` dipakai oleh smoke check untuk menentukan base URL yang diuji.
+- Smoke check saat ini mencakup halaman publik utama, legal page, asset PWA, tombol Google auth, dan API publik leaderboard.
 
 Langkah setup SSH key:
 
