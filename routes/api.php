@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AffiliateController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\PaymentCallbackController;
 use App\Http\Controllers\Api\UnlockController;
 use App\Http\Controllers\Api\WalletController;
@@ -21,6 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::post('auth/login', [AuthController::class, 'login']);
 
+    Route::get('leaderboard', [LeaderboardController::class, 'index']);
     Route::get('works', [WorkController::class, 'index']);
     Route::get('works/{work}', [WorkController::class, 'show']);
 

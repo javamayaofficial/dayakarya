@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'reader.home')->name('home');
 Route::view('/explore', 'reader.explore')->name('explore');
+Route::view('/leaderboard', 'reader.leaderboard')->name('leaderboard');
 
 Route::get('/karya/{work:slug}', function (Work $work) {
     abort_unless($work->status === 'published', 404);
