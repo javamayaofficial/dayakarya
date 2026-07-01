@@ -52,7 +52,7 @@ php artisan migrate --force
 
 Target yang harus berhasil:
 
-- package `laravel/socialite` ikut terpasang
+- kredensial Google OAuth di `.env` sudah terisi lengkap
 - migration `add_google_auth_columns_to_users_table` sudah jalan
 - kolom `users.google_id` dan `users.auth_provider` tersedia
 
@@ -130,7 +130,7 @@ Jika user lama sudah ada, data minimal yang harus ter-update adalah:
 
 **Tombol Google muncul, tetapi error 500 saat callback**
 
-- Penyebab: `laravel/socialite` belum terpasang di server atau config belum terbaca.
+- Penyebab: kredensial Google belum lengkap, callback URI tidak cocok, atau server belum memuat config terbaru.
 - Solusi: jalankan deploy ulang, lalu `php artisan optimize:clear` dan `php artisan config:cache`.
 
 **User berhasil dibuat, tetapi wallet masih guest**

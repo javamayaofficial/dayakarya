@@ -88,7 +88,7 @@ php artisan view:cache
 Target minimum pada langkah ini:
 
 - commit terbaru sudah masuk ke server
-- `laravel/socialite` ikut terpasang
+- kredensial Google OAuth di `.env` sudah terisi lengkap
 - migration Google auth sudah jalan
 
 ---
