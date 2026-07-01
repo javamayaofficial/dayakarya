@@ -22,14 +22,14 @@ class WalletService
     /**
      * Tambah Credit setelah pembayaran top up berhasil (idempotent).
      */
-    public function creditTopup(Payment $payment): void
+    public function creditTopup(Payment $payment): bool
     {
-        DB::transaction(function () use ($payment) {
+        return DB::transaction(function () use ($payment) {
             // Kunci baris payment agar tidak diproses ganda oleh callback berulang
             $payment = Payment::whereKey($payment->id)->lockForUpdate()->first();
 
             if ($payment->status === 'paid') {
-                return; // sudah diproses, hentikan (idempotent)
+                return false; // sudah diproses, hentikan (idempotent)
             }
 
             $wallet = $this->walletFor($payment->user);
@@ -39,6 +39,7 @@ class WalletService
                 'Top up ' . number_format($payment->credit_amount) . ' Credit');
 
             $payment->update(['status' => 'paid', 'paid_at' => now()]);
+            return true;
         });
     }
 

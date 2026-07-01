@@ -24,6 +24,7 @@ class UnlockController extends \App\Http\Controllers\Controller
     public function store(Request $request, Chapter $chapter): JsonResponse
     {
         $user = $request->user();
+        $link = null;
 
         if (! $chapter->is_premium) {
             return response()->json(['message' => 'Chapter ini gratis, tidak perlu Credit.'], 422);
@@ -32,10 +33,12 @@ class UnlockController extends \App\Http\Controllers\Controller
         // Deteksi affiliate dari kode ref (opsional)
         $affiliate = null;
         if ($ref = $request->input('ref')) {
-            $link = AffiliateLink::where('code', $ref)->first();
+            $link = AffiliateLink::where('code', $ref)
+                ->where('work_id', $chapter->work_id)
+                ->first();
+
             if ($link) {
                 $affiliate = User::find($link->affiliate_id);
-                $link->increment('conversions');
             }
         }
 
@@ -43,6 +46,10 @@ class UnlockController extends \App\Http\Controllers\Controller
             $unlock = $this->wallet->unlockChapter($user, $chapter, $affiliate);
         } catch (\RuntimeException $e) {
             return response()->json(['message' => $e->getMessage()], 422);
+        }
+
+        if ($link) {
+            $link->increment('conversions');
         }
 
         // Notifikasi royalti ke kreator
@@ -54,7 +61,7 @@ class UnlockController extends \App\Http\Controllers\Controller
         return response()->json([
             'message'  => 'Chapter berhasil dibuka. Selamat menikmati!',
             'unlock_id'=> $unlock->id,
-            'content'  => $chapter->isAudio() ?? false ? null : $chapter->content,
+            'content'  => $chapter->work->isAudio() ? null : $chapter->content,
             'audio_url'=> $chapter->audio_url,
         ], 201);
     }

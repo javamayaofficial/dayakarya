@@ -33,10 +33,14 @@ class WithdrawalController extends \App\Http\Controllers\Controller
         ]);
 
         $user = $request->user();
+        $pendingAmount = $user->withdrawals()
+            ->where('status', 'pending')
+            ->sum('amount');
+        $availableBalance = max(0, $user->wallet->rupiah_balance - $pendingAmount);
 
-        if ($user->wallet->rupiah_balance < $data['amount']) {
+        if ($availableBalance < $data['amount']) {
             return response()->json([
-                'message' => 'Saldo rupiah kamu belum mencukupi untuk penarikan ini.',
+                'message' => 'Saldo rupiah tersedia kamu belum mencukupi untuk penarikan ini.',
             ], 422);
         }
 

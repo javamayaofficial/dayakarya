@@ -37,9 +37,10 @@ class PaymentCallbackController extends \App\Http\Controllers\Controller
             return response('Order not found', 404);
         }
 
-        // Tambahkan Credit (idempotent) + notifikasi
-        $this->wallet->creditTopup($payment);
-        $this->notifier->topupSuccess($payment->user, $payment->credit_amount);
+        // Tambahkan Credit (idempotent) + notifikasi hanya saat status benar-benar berubah
+        if ($this->wallet->creditTopup($payment)) {
+            $this->notifier->topupSuccess($payment->user, $payment->credit_amount);
+        }
 
         return response('OK', 200);
     }
