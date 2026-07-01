@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'reader.home')->name('home');
 Route::view('/explore', 'reader.explore')->name('explore');
 Route::view('/leaderboard', 'reader.leaderboard')->name('leaderboard');
+Route::get('/manifest.webmanifest', function () {
+    $manifest = file_get_contents(public_path('manifest.json'));
+    abort_unless($manifest !== false, 404);
+
+    return response($manifest, 200, [
+        'Content-Type' => 'application/manifest+json; charset=utf-8',
+        'Cache-Control' => 'public, max-age=3600',
+    ]);
+})->name('pwa.manifest');
+Route::get('/manifest.json', fn () => redirect()->route('pwa.manifest', status: 302));
 
 Route::get('/karya/{work:slug}', function (Work $work) {
     abort_unless($work->status === 'published', 404);

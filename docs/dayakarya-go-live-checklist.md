@@ -127,7 +127,7 @@ Dokumen pendukung:
 
 ## 10. PWA dan Mobile Readiness
 
-- [ ] `manifest.json` dapat diakses
+- [ ] `manifest.webmanifest` dapat diakses
 - [ ] `sw.js` dapat diakses
 - [ ] `offline.html` dapat diakses langsung tanpa Laravel routing
 - [ ] Ikon PWA tampil normal

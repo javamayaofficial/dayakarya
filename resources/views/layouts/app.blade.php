@@ -15,7 +15,7 @@
     <meta name="description" content="@yield('desc', 'Platform kreator Indonesia untuk menulis, mendongeng, dan berpenghasilan dari karya digital.')">
 
     {{-- PWA --}}
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{ route('pwa.manifest') }}">
     <link rel="icon" type="image/svg+xml" href="/img/icon.svg">
     <link rel="icon" sizes="192x192" href="/img/icon-192.png">
     <link rel="apple-touch-icon" sizes="192x192" href="/img/icon-192.png">

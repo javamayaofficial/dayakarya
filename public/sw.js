@@ -14,7 +14,7 @@ const APP_SHELL = [
   '/explore',
   '/css/app.css',
   '/js/app.js',
-  '/manifest.json',
+  '/manifest.webmanifest',
   '/img/icon.svg',
   '/img/icon-192.png',
   '/img/icon-512.png',
