@@ -274,6 +274,10 @@ Pastikan `Authorized redirect URI` pada Google Cloud Console:
 https://dayakarya.id/auth/google/callback
 ```
 
+Setelah deploy selesai, lakukan verifikasi production memakai panduan:
+
+- `docs/google-oauth-production-checklist.md`
+
 ---
 
 ## Selesai
