@@ -38,6 +38,7 @@ Route::prefix('v1')->group(function () {
         Route::get('wallet', [WalletController::class, 'show']);
         Route::get('wallet/transactions', [WalletController::class, 'transactions']);
         Route::post('topup', [WalletController::class, 'topup']);
+        Route::post('payments/{payment}/proof', [WalletController::class, 'uploadProof']);
 
         // Unlock premium
         Route::post('chapters/{chapter}/unlock', [UnlockController::class, 'store']);

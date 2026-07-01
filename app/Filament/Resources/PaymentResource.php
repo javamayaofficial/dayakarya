@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PaymentResource\Pages;
 use App\Models\Payment;
 use App\Services\WalletService;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -51,7 +53,17 @@ class PaymentResource extends Resource
                 'failed' => 'Failed',
                 'expired' => 'Expired',
             ])->required(),
-            Textarea::make('proof')->label('Bukti Transfer')->rows(2),
+            FileUpload::make('proof')
+                ->label('Bukti Transfer')
+                ->disk('public')
+                ->directory('payment-proofs')
+                ->image()
+                ->imagePreviewHeight('220')
+                ->openable()
+                ->downloadable(),
+            Placeholder::make('proof_note')
+                ->label('Catatan Bukti')
+                ->content('Bukti transfer yang diunggah pengguna akan tampil di sini. Admin tetap bisa mengganti file jika diperlukan.'),
             Textarea::make('meta')
                 ->label('Meta / Instruksi')
                 ->rows(8)
@@ -64,6 +76,10 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('proof')
+                    ->label('Bukti')
+                    ->disk('public')
+                    ->square(),
                 Tables\Columns\TextColumn::make('order_id')->label('Order ID')->searchable()->copyable(),
                 Tables\Columns\TextColumn::make('user.name')->label('Pengguna')->searchable(),
                 Tables\Columns\TextColumn::make('provider')

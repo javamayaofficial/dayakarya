@@ -8,6 +8,7 @@ use App\Support\IntegrationSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -98,5 +99,45 @@ class WalletController extends \App\Http\Controllers\Controller
             'payment_url' => $result['payment_url'] ?? null,
             'instructions'=> $result['raw'] ?? null, // untuk manual/QRIS
         ], 201);
+    }
+
+    public function uploadProof(Request $request, Payment $payment): JsonResponse
+    {
+        abort_unless($payment->user_id === $request->user()->id, 404);
+
+        if (! in_array($payment->provider, ['manual', 'qris_manual'], true)) {
+            return response()->json([
+                'message' => 'Bukti transfer hanya tersedia untuk pembayaran manual.',
+            ], 422);
+        }
+
+        if ($payment->status !== 'awaiting_confirmation') {
+            return response()->json([
+                'message' => 'Transaksi ini tidak lagi menunggu verifikasi bukti transfer.',
+            ], 422);
+        }
+
+        $data = $request->validate([
+            'proof' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+        ]);
+
+        if ($payment->proof) {
+            Storage::disk('public')->delete($payment->proof);
+        }
+
+        $extension = $data['proof']->getClientOriginalExtension() ?: 'jpg';
+        $path = $data['proof']->storeAs(
+            'payment-proofs',
+            strtolower($payment->order_id) . '-' . time() . '.' . strtolower($extension),
+            'public'
+        );
+
+        $payment->update(['proof' => $path]);
+
+        return response()->json([
+            'message' => 'Bukti transfer berhasil diunggah. Tim admin akan memverifikasi pembayaran Anda.',
+            'proof' => $path,
+            'proof_url' => Storage::disk('public')->url($path),
+        ]);
     }
 }

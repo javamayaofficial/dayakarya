@@ -9,6 +9,7 @@
     $bankHolder = \App\Support\IntegrationSettings::get('payment.manual.holder', config('dayakarya.manual_payment.holder'));
     $supportNumber = preg_replace('/\D+/', '', \App\Support\IntegrationSettings::get('support.whatsapp_number', config('dayakarya.support.whatsapp_number')));
     $qrisImage = \App\Support\IntegrationSettings::get('payment.manual.qris_image_url', config('dayakarya.manual_payment.qris_image'));
+    $existingProofUrl = $payment->proof ? \Illuminate\Support\Facades\Storage::disk('public')->url($payment->proof) : null;
     $prefilledMessage = rawurlencode(
         'Halo admin, saya sudah transfer top up Credit Dayakarya. '
         . 'Order ID: ' . $payment->order_id
@@ -39,8 +40,105 @@
                 </div>
             @endif
             <div class="support-copy">Saat mengirim bukti pembayaran, sertakan order ID agar verifikasi admin lebih cepat dan akurat.</div>
+            <div class="proof-panel bank-card">
+                <div>
+                    <strong>Unggah Bukti Transfer</strong>
+                    <span>Upload screenshot atau foto bukti transfer agar admin bisa memverifikasi tanpa menunggu kiriman manual di chat.</span>
+                </div>
+                @if ($payment->status === 'paid')
+                    <div class="alert alert-success">Pembayaran ini sudah diverifikasi. Credit Anda telah diproses ke wallet Dayakarya.</div>
+                @elseif ($payment->status === 'failed')
+                    <div class="alert alert-error">Pembayaran ini ditandai gagal. Bila Anda sudah transfer, hubungi admin dengan menyertakan order ID.</div>
+                @else
+                    <div id="proof-feedback" class="alert {{ $existingProofUrl ? 'alert-success' : 'alert-error' }} {{ $existingProofUrl ? '' : 'is-hidden' }}">
+                        {{ $existingProofUrl ? 'Bukti transfer sudah terunggah. Anda tetap bisa mengganti dengan file yang lebih jelas selama status masih menunggu verifikasi.' : '' }}
+                    </div>
+                    <form id="proof-upload-form" class="proof-upload-form">
+                        <label class="proof-upload-field" for="proof-file">
+                            <span>Pilih file bukti transfer</span>
+                            <input id="proof-file" name="proof" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+                        </label>
+                        <button type="submit" class="btn btn-dark" id="proof-submit">Upload Bukti</button>
+                    </form>
+                    <div class="support-copy">Format yang diterima: JPG, PNG, atau WEBP. Maksimal 4 MB.</div>
+                @endif
+                <div id="proof-preview-wrap" class="proof-preview-wrap {{ $existingProofUrl ? '' : 'is-hidden' }}">
+                    <img id="proof-preview" src="{{ $existingProofUrl }}" alt="Preview bukti transfer" class="proof-preview-image">
+                </div>
+            </div>
             <a href="https://wa.me/{{ $supportNumber }}?text={{ $prefilledMessage }}" class="btn btn-wa btn-block btn-gap-top">Kirim Bukti via WhatsApp</a>
         </div>
     </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('#proof-upload-form');
+  if (!form) return;
+
+  const fileInput = document.querySelector('#proof-file');
+  const submitButton = document.querySelector('#proof-submit');
+  const feedback = document.querySelector('#proof-feedback');
+  const previewWrap = document.querySelector('#proof-preview-wrap');
+  const preview = document.querySelector('#proof-preview');
+
+  const setFeedback = (message, tone = 'success') => {
+    feedback.textContent = message;
+    feedback.classList.remove('is-hidden', 'alert-success', 'alert-error');
+    feedback.classList.add(tone === 'success' ? 'alert-success' : 'alert-error');
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const token = localStorage.getItem('dk_token');
+    if (!token) {
+      setFeedback('Masuk dulu dengan akun pengguna Anda, lalu ulangi upload bukti transfer.', 'error');
+      return;
+    }
+
+    if (!fileInput.files.length) {
+      setFeedback('Pilih file bukti transfer terlebih dahulu.', 'error');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('proof', fileInput.files[0]);
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Mengunggah...';
+
+    try {
+      const response = await fetch('/api/v1/payments/{{ $payment->id }}/proof', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setFeedback(data.message || 'Upload bukti transfer belum berhasil. Silakan coba lagi.', 'error');
+        return;
+      }
+
+      if (data.proof_url) {
+        preview.src = data.proof_url;
+        previewWrap.classList.remove('is-hidden');
+      }
+
+      fileInput.value = '';
+      setFeedback(data.message || 'Bukti transfer berhasil diunggah.');
+    } catch (_) {
+      setFeedback('Koneksi terputus saat upload bukti transfer. Silakan coba lagi.', 'error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Upload Bukti';
+    }
+  });
+});
+</script>
+@endpush
