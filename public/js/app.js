@@ -98,7 +98,203 @@ const DK = {
 };
 window.DK = DK;
 
+let deferredInstallPrompt = null;
+
+function ensureAppStatus() {
+  let status = document.querySelector('[data-app-status]');
+  if (status) return status;
+
+  status = document.createElement('div');
+  status.className = 'app-status';
+  status.dataset.appStatus = 'true';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  document.body.appendChild(status);
+  return status;
+}
+
+function hideAppStatus() {
+  const status = document.querySelector('[data-app-status]');
+  if (!status) return;
+  clearTimeout(hideAppStatus.timer);
+  status.classList.remove('is-visible');
+}
+
+function showAppStatus(message, { tone = 'default', duration = 2400, sticky = false } = {}) {
+  const status = ensureAppStatus();
+  clearTimeout(hideAppStatus.timer);
+
+  status.classList.remove('is-offline', 'is-online', 'is-success');
+  if (tone === 'offline') status.classList.add('is-offline');
+  if (tone === 'online') status.classList.add('is-online');
+  if (tone === 'success') status.classList.add('is-success');
+
+  status.textContent = message;
+  status.classList.add('is-visible');
+
+  if (!sticky) {
+    hideAppStatus.timer = window.setTimeout(() => {
+      status.classList.remove('is-visible');
+    }, duration);
+  }
+}
+
+function isStandaloneMode() {
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function getInstallFallbackMessage() {
+  const ua = navigator.userAgent || '';
+  if (isStandaloneMode()) {
+    return 'Dayakarya sudah terpasang di perangkat ini.';
+  }
+
+  if (/iphone|ipad|ipod/i.test(ua)) {
+    return 'Di iPhone atau iPad, buka Share lalu pilih Add to Home Screen.';
+  }
+
+  if (/android/i.test(ua)) {
+    return 'Gunakan menu browser lalu pilih Install App atau Tambahkan ke layar utama.';
+  }
+
+  return 'Gunakan menu browser Anda lalu pilih Install App atau Add to Home Screen.';
+}
+
+function updateInstallButtons() {
+  const buttons = document.querySelectorAll('[data-install-app]');
+  const notes = document.querySelectorAll('[data-install-note]');
+  const installed = isStandaloneMode();
+  const label = installed
+    ? 'Sudah Terpasang'
+    : deferredInstallPrompt
+      ? 'Install App'
+      : /iphone|ipad|ipod/i.test(navigator.userAgent || '')
+        ? 'Simpan ke Home Screen'
+        : 'Pasang Dayakarya';
+  const note = installed
+    ? 'Dayakarya sudah aktif sebagai aplikasi di perangkat ini.'
+    : deferredInstallPrompt
+      ? 'Pasang Dayakarya ke homescreen untuk akses lebih cepat, lebih stabil, dan terasa seperti aplikasi.'
+      : 'Jika prompt otomatis belum muncul, Anda tetap bisa menambahkan Dayakarya ke layar utama dari menu browser.';
+
+  document.documentElement.classList.toggle('pwa-installable', Boolean(deferredInstallPrompt));
+
+  buttons.forEach((button) => {
+    const labelEl = button.querySelector('[data-install-label]');
+    if (labelEl) labelEl.textContent = label;
+    button.disabled = installed;
+  });
+
+  notes.forEach((item) => {
+    item.textContent = note;
+  });
+}
+
+function renderConnectivityStatus(forceVisible = false) {
+  const offline = !navigator.onLine;
+
+  document.body.classList.toggle('is-offline', offline);
+  if (offline) {
+    showAppStatus('Mode offline aktif. Halaman yang sudah tersimpan tetap bisa dibuka.', {
+      tone: 'offline',
+      sticky: true,
+    });
+    return;
+  }
+
+  if (forceVisible) {
+    showAppStatus('Koneksi kembali stabil.', {
+      tone: 'online',
+      duration: 2200,
+    });
+  } else {
+    hideAppStatus();
+  }
+}
+
+function initConnectivityStatus() {
+  if (!document.body) return;
+  if (!navigator.onLine) renderConnectivityStatus(true);
+
+  window.addEventListener('offline', () => renderConnectivityStatus(true));
+  window.addEventListener('online', () => renderConnectivityStatus(true));
+}
+
+async function attemptInstall() {
+  if (isStandaloneMode()) return 'installed';
+  if (!deferredInstallPrompt) return 'unavailable';
+
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  updateInstallButtons();
+
+  return choice.outcome === 'accepted' ? 'accepted' : 'dismissed';
+}
+
+async function promptInstall() {
+  return (await attemptInstall()) === 'accepted';
+}
+
+window.DK.promptInstall = promptInstall;
+window.DK.installApp = attemptInstall;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  updateInstallButtons();
+  window.dispatchEvent(new CustomEvent('dk:pwa-installable'));
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  updateInstallButtons();
+  showAppStatus('Dayakarya berhasil dipasang. Buka lagi dari homescreen kapan saja.', {
+    tone: 'success',
+    duration: 3200,
+  });
+});
+
+function initInstallButtons() {
+  const buttons = document.querySelectorAll('[data-install-app]');
+  if (!buttons.length) return;
+
+  buttons.forEach((button) => {
+    if (button.dataset.installBound === 'true') return;
+    button.dataset.installBound = 'true';
+    button.addEventListener('click', async () => {
+      const result = await attemptInstall();
+
+      if (result === 'accepted') return;
+      if (result === 'installed') {
+        showAppStatus('Dayakarya sudah terpasang di perangkat ini.', {
+          tone: 'success',
+        });
+        return;
+      }
+
+      if (result === 'unavailable') {
+        showAppStatus(getInstallFallbackMessage(), {
+          duration: 3600,
+        });
+      }
+    });
+  });
+
+  updateInstallButtons();
+}
+
 // Daftarkan service worker (PWA)
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      window.setTimeout(() => registration.update().catch(() => {}), 1200);
+    } catch (_) {}
+  });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  initConnectivityStatus();
+  initInstallButtons();
+});

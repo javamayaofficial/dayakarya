@@ -45,3 +45,6 @@ Route::view('/creator', 'creator.dashboard')->name('creator.dashboard');
 // Halaman statis (CMS)
 Route::view('/tentang', 'reader.page')->name('about');
 Route::view('/faq', 'reader.faq')->name('faq');
+Route::view('/privacy', 'reader.privacy')->name('privacy');
+Route::view('/terms', 'reader.terms')->name('terms');
+Route::view('/hapus-akun', 'reader.account-deletion')->name('account.deletion');

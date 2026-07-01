@@ -14,7 +14,12 @@
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
                     <a href="{{ route('explore') }}" class="btn btn-ghost">Jelajahi Karya</a>
+                    <button type="button" class="btn btn-install" data-install-app>
+                        <span class="btn-install-ic">↓</span>
+                        <span data-install-label>Install App</span>
+                    </button>
                 </div>
+                <p class="install-note" data-install-note>Pasang Dayakarya ke homescreen agar akses berikutnya terasa lebih cepat, lebih stabil, dan lebih rapi seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
                         <strong>Monetisasi yang tertata</strong>

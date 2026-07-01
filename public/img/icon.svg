@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="120" fill="#14223C"/>
+  <circle cx="384" cy="112" r="88" fill="url(#glow)" fill-opacity="0.72"/>
+  <circle cx="130" cy="430" r="120" fill="#1F3155" fill-opacity="0.9"/>
+  <rect x="156" y="92" width="58" height="328" rx="29" fill="url(#spine)"/>
+  <rect x="232" y="120" width="124" height="48" rx="24" fill="#F4ECDD" fill-opacity="0.96"/>
+  <rect x="232" y="196" width="124" height="48" rx="24" fill="#F4ECDD" fill-opacity="0.96"/>
+  <rect x="232" y="272" width="92" height="48" rx="24" fill="#F4ECDD" fill-opacity="0.96"/>
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(384 112) rotate(90) scale(88)">
+      <stop stop-color="#E0A133"/>
+      <stop offset="1" stop-color="#E0A133" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="spine" x1="185" y1="92" x2="185" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1C566"/>
+      <stop offset="1" stop-color="#B97E16"/>
+    </linearGradient>
+  </defs>
+</svg>
