@@ -276,6 +276,7 @@ https://dayakarya.id/auth/google/callback
 
 Setelah deploy selesai, lakukan verifikasi production memakai panduan:
 
+- `docs/fastpanel-google-oauth-runbook.md`
 - `docs/google-oauth-production-checklist.md`
 
 ---
