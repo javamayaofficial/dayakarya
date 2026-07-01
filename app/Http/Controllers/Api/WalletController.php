@@ -6,8 +6,10 @@ use App\Models\Payment;
 use App\Services\Payment\PaymentManager;
 use App\Support\IntegrationSettings;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Throwable;
 
 /**
  * Wallet & Top Up Credit. Provider utama: Duitku (config-driven).
@@ -52,7 +54,36 @@ class WalletController extends \App\Http\Controllers\Controller
             'status'        => 'pending',
         ]);
 
-        $result = PaymentManager::driver()->createTransaction($payment);
+        try {
+            $result = PaymentManager::driver()->createTransaction($payment);
+        } catch (RequestException $exception) {
+            $payment->update([
+                'status' => 'failed',
+                'meta' => [
+                    'error' => $exception->getMessage(),
+                    'response' => $exception->response?->json(),
+                ],
+            ]);
+
+            $gatewayMessage = data_get($exception->response?->json(), 'Message')
+                ?? data_get($exception->response?->json(), 'message')
+                ?? 'Gateway pembayaran belum bisa dipakai. Pastikan project Duitku sudah aktif dan kredensial production sesuai.';
+
+            return response()->json([
+                'message' => $gatewayMessage,
+            ], 422);
+        } catch (Throwable $exception) {
+            $payment->update([
+                'status' => 'failed',
+                'meta' => [
+                    'error' => $exception->getMessage(),
+                ],
+            ]);
+
+            return response()->json([
+                'message' => 'Transaksi belum berhasil dibuat. Silakan coba lagi dalam beberapa saat.',
+            ], 500);
+        }
 
         $payment->update([
             'reference'   => $result['reference'] ?? null,
