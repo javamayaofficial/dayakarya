@@ -164,6 +164,7 @@ COMPOSER_BIN=composer
 RUN_MIGRATIONS=true
 RUN_STORAGE_LINK=true
 RESTART_QUEUE=true
+RUN_FILAMENT_ASSETS=true
 ```
 
 Keterangan:
@@ -172,8 +173,11 @@ Keterangan:
 - `SSH_HOST_FINGERPRINT` = fingerprint host SSH server untuk verifikasi identitas server saat GitHub Actions konek.
 - `APP_DIR` = folder root proyek Laravel di server FastPanel.
 - `PHP_BIN` dan `COMPOSER_BIN` bisa dibiarkan default jika perintah `php` dan `composer` tersedia global.
+- `COMPOSER_BIN` boleh berisi command lengkap. Contoh untuk Composer lokal di server:
+  `php /var/www/dayakarya/data/www/dayakarya.id/composer`
 - `RUN_MIGRATIONS=false` bila Anda ingin migrasi dijalankan manual.
 - `RESTART_QUEUE=false` bila server tidak menjalankan queue worker persisten.
+- `RUN_FILAMENT_ASSETS=true` direkomendasikan agar aset panel admin selalu sinkron setelah deploy.
 
 Langkah setup SSH key:
 
@@ -207,11 +211,20 @@ Setelah secret terisi, workflow akan berjalan otomatis setiap ada push ke branch
 
 ```bash
 cd /var/www/USERNAME/data/www/dayakarya.id
-git pull origin main
-composer install --no-dev --optimize-autoloader
+git pull --ff-only origin main
+php /var/www/USERNAME/data/www/dayakarya.id/composer install --no-dev --optimize-autoloader
 php artisan migrate --force
-php artisan config:cache && php artisan route:cache && php artisan view:cache
+php artisan filament:assets
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
+
+Catatan penting:
+
+- Simpan `composer.lock` ke repo agar versi dependency yang terpasang saat deploy tetap konsisten.
+- Repo ini sekarang sudah menyertakan `config/permission.php` dan migration permission table, jadi fresh install tidak perlu lagi `vendor:publish` untuk Spatie Permission.
 
 ---
 

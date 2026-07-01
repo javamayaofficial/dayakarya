@@ -33,8 +33,9 @@ jobs:
             export RUN_MIGRATIONS="${{ secrets.RUN_MIGRATIONS }}"
             export RUN_STORAGE_LINK="${{ secrets.RUN_STORAGE_LINK }}"
             export RESTART_QUEUE="${{ secrets.RESTART_QUEUE }}"
+            export RUN_FILAMENT_ASSETS="${{ secrets.RUN_FILAMENT_ASSETS }}"
 
             cd "$APP_DIR"
-            git pull origin "$DEPLOY_BRANCH"
+            git pull --ff-only origin "$DEPLOY_BRANCH"
             chmod +x scripts/deploy-fastpanel.sh
             bash scripts/deploy-fastpanel.sh

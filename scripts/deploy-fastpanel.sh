@@ -8,29 +8,41 @@ COMPOSER_BIN="${COMPOSER_BIN:-composer}"
 RUN_MIGRATIONS="${RUN_MIGRATIONS:-true}"
 RUN_STORAGE_LINK="${RUN_STORAGE_LINK:-true}"
 RESTART_QUEUE="${RESTART_QUEUE:-true}"
+RUN_FILAMENT_ASSETS="${RUN_FILAMENT_ASSETS:-true}"
 
 cd "$APP_DIR"
 
 echo "==> Deploy branch: ${DEPLOY_BRANCH}"
 echo "==> App dir: ${APP_DIR}"
 
-"$COMPOSER_BIN" install --no-dev --optimize-autoloader --no-interaction
+if [ ! -f composer.lock ]; then
+  echo "!! WARNING: composer.lock tidak ditemukan. Dependency yang terpasang bisa berbeda antar deploy." >&2
+fi
+
+read -r -a PHP_CMD <<< "$PHP_BIN"
+read -r -a COMPOSER_CMD <<< "$COMPOSER_BIN"
+
+"${COMPOSER_CMD[@]}" install --no-dev --optimize-autoloader --no-interaction
 
 if [ "$RUN_MIGRATIONS" = "true" ]; then
-  "$PHP_BIN" artisan migrate --force
+  "${PHP_CMD[@]}" artisan migrate --force
 fi
 
 if [ "$RUN_STORAGE_LINK" = "true" ]; then
-  "$PHP_BIN" artisan storage:link || true
+  "${PHP_CMD[@]}" artisan storage:link || true
 fi
 
-"$PHP_BIN" artisan optimize:clear
-"$PHP_BIN" artisan config:cache
-"$PHP_BIN" artisan route:cache
-"$PHP_BIN" artisan view:cache
+if [ "$RUN_FILAMENT_ASSETS" = "true" ]; then
+  "${PHP_CMD[@]}" artisan filament:assets
+fi
+
+"${PHP_CMD[@]}" artisan optimize:clear
+"${PHP_CMD[@]}" artisan config:cache
+"${PHP_CMD[@]}" artisan route:cache
+"${PHP_CMD[@]}" artisan view:cache
 
 if [ "$RESTART_QUEUE" = "true" ]; then
-  "$PHP_BIN" artisan queue:restart || true
+  "${PHP_CMD[@]}" artisan queue:restart || true
 fi
 
 echo "==> Deploy selesai"
