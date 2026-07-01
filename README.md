@@ -162,6 +162,7 @@ Panduan **dipisah** agar tidak tercampur:
 - **[docs/deploy-cpanel.md](docs/deploy-cpanel.md)** — cPanel (shared hosting).
 - **[docs/deploy-vps-manual.md](docs/deploy-vps-manual.md)** — VPS manual via SSH.
 - **[docs/dayakarya-production-env-template.md](docs/dayakarya-production-env-template.md)** — template `.env` production siap tempel untuk server Dayakarya.
+- **[docs/dayakarya-go-live-checklist.md](docs/dayakarya-go-live-checklist.md)** — checklist final readiness production lintas fitur Dayakarya.
 - **[docs/fastpanel-google-oauth-runbook.md](docs/fastpanel-google-oauth-runbook.md)** — runbook cepat aktivasi Google login di server FastPanel.
 - **[docs/google-oauth-production-checklist.md](docs/google-oauth-production-checklist.md)** — checklist aktivasi dan smoke test Google login di production.
 
