@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Support\IntegrationSettings;
 use InvalidArgumentException;
 
 /**
@@ -12,7 +13,7 @@ class PaymentManager
 {
     public static function driver(?string $provider = null): PaymentGateway
     {
-        $provider ??= config('dayakarya.providers.payment', 'duitku');
+        $provider ??= IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment', 'duitku'));
 
         return match ($provider) {
             'duitku' => new DuitkuService(),

@@ -2,13 +2,14 @@
 
 namespace App\Services\Email;
 
+use App\Support\IntegrationSettings;
 use InvalidArgumentException;
 
 class EmailManager
 {
     public static function driver(?string $provider = null): EmailSender
     {
-        $provider ??= config('dayakarya.providers.email', 'mailketing');
+        $provider ??= IntegrationSettings::get('providers.email', config('dayakarya.providers.email', 'mailketing'));
 
         return match ($provider) {
             'mailketing' => new MailketingService(),

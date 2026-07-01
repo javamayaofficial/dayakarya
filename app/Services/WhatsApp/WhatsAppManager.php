@@ -2,13 +2,14 @@
 
 namespace App\Services\WhatsApp;
 
+use App\Support\IntegrationSettings;
 use InvalidArgumentException;
 
 class WhatsAppManager
 {
     public static function driver(?string $provider = null): WhatsAppSender
     {
-        $provider ??= config('dayakarya.providers.whatsapp', 'fonnte');
+        $provider ??= IntegrationSettings::get('providers.whatsapp', config('dayakarya.providers.whatsapp', 'fonnte'));
 
         return match ($provider) {
             'fonnte' => new FonnteService(),

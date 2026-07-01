@@ -3,6 +3,7 @@
 namespace App\Services\Payment;
 
 use App\Models\Payment;
+use App\Support\IntegrationSettings;
 
 /**
  * Fallback pembayaran: Transfer Manual / QRIS Manual.
@@ -16,10 +17,10 @@ class ManualPaymentService implements PaymentGateway
         $payment->update(['status' => 'awaiting_confirmation']);
 
         $instructions = [
-            'bank_name'    => env('MANUAL_BANK_NAME'),
-            'account'      => env('MANUAL_BANK_ACCOUNT'),
-            'holder'       => env('MANUAL_BANK_HOLDER'),
-            'qris_image'   => env('MANUAL_QRIS_IMAGE_URL'),
+            'bank_name'    => IntegrationSettings::get('payment.manual.bank_name', config('dayakarya.manual_payment.bank_name')),
+            'account'      => IntegrationSettings::get('payment.manual.account', config('dayakarya.manual_payment.account')),
+            'holder'       => IntegrationSettings::get('payment.manual.holder', config('dayakarya.manual_payment.holder')),
+            'qris_image'   => IntegrationSettings::get('payment.manual.qris_image_url', config('dayakarya.manual_payment.qris_image')),
             'amount'       => $payment->amount_rupiah,
             'note'         => 'Sertakan kode order: ' . $payment->order_id,
         ];

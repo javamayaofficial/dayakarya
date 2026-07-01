@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
 use App\Services\Payment\PaymentManager;
+use App\Support\IntegrationSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -45,7 +46,7 @@ class WalletController extends \App\Http\Controllers\Controller
         $payment = Payment::create([
             'user_id'       => $request->user()->id,
             'order_id'      => 'DK-' . strtoupper(Str::random(10)),
-            'provider'      => config('dayakarya.providers.payment'),
+            'provider'      => IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment')),
             'amount_rupiah' => $rupiah,
             'credit_amount' => $data['credit_amount'],
             'status'        => 'pending',
