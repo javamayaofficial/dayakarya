@@ -6,8 +6,8 @@
     <div class="container support-container support-container-narrow">
         <div class="support-panel state state-panel">
             <div class="emoji">🎉</div>
-            <h3>Pembayaran sedang diproses</h3>
-            <p>Credit akan otomatis masuk begitu pembayaran terkonfirmasi. Anda akan menerima notifikasi WhatsApp setelah transaksi tervalidasi.</p>
+            <h3>Pembayaran Anda sedang diproses</h3>
+            <p>Begitu pembayaran terkonfirmasi, credit akan masuk otomatis ke wallet Anda. Notifikasi WhatsApp akan dikirim setelah transaksi tervalidasi.</p>
             <a href="{{ route('wallet') }}" class="btn btn-primary">Kembali ke Wallet</a>
         </div>
     </div>

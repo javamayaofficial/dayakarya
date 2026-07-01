@@ -8,13 +8,13 @@
         <div class="wallet-hero">
             <div class="wallet-hero-copy">
                 <span class="section-kicker">Wallet Dayakarya</span>
-                <h1>Kelola credit, saldo rupiah, dan transaksi dalam satu pengalaman yang lebih rapi.</h1>
-                <p>Wallet Dayakarya dirancang agar pengguna merasa aman, paham alur transaksi, dan percaya pada sistem monetisasi yang sedang mereka gunakan.</p>
+                <h1>Kelola credit, saldo, dan transaksi di ruang yang terasa lebih aman, lebih jelas, dan lebih layak dipercaya.</h1>
+                <p>Wallet Dayakarya dirancang agar pengguna tidak sekadar bertransaksi, tetapi merasa tenang karena setiap nilai, alur, dan histori ditampilkan dengan lebih rapi.</p>
             </div>
             <div class="wallet-hero-note">
                 <span class="mini-label">Financial Layer</span>
-                <h2>Transaksi bukan hanya berjalan, tapi juga terasa kredibel.</h2>
-                <p>Top up, histori, dan saldo disusun dengan tampilan yang lebih tenang dan lebih profesional agar perjalanan pengguna terasa matang.</p>
+                <h2>Transaksi yang baik tidak hanya lancar, tetapi juga menumbuhkan rasa percaya.</h2>
+                <p>Top up, histori, dan saldo disusun dengan tampilan yang lebih tenang dan lebih profesional agar setiap interaksi finansial terasa matang.</p>
             </div>
         </div>
 
@@ -22,17 +22,17 @@
             <div class="balance-card balance-card-credit">
                 <span class="label">Saldo Credit</span>
                 <strong class="value" id="credit-balance">—</strong>
-                <p>Gunakan credit untuk membuka karya premium dan menikmati pengalaman lebih lengkap.</p>
+                <p>Gunakan credit untuk membuka karya premium dan membeli pengalaman yang terasa lebih utuh.</p>
             </div>
             <div class="balance-card balance-card-rupiah">
                 <span class="label">Saldo Rupiah</span>
                 <strong class="value" id="rupiah-balance">—</strong>
-                <p>Pendapatan kreator dan aliran monetisasi dirangkum agar mudah dipantau.</p>
+                <p>Pendapatan kreator dan aliran monetisasi dirangkum agar mudah dipantau dan terasa lebih transparan.</p>
             </div>
             <div class="balance-card balance-card-soft">
                 <span class="label">Konversi Credit</span>
                 <strong class="value">Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</strong>
-                <p>Setiap 1 credit setara dengan nilai rupiah yang jelas dan konsisten di seluruh sistem.</p>
+                <p>Setiap 1 credit memiliki nilai rupiah yang jelas, sehingga keputusan transaksi terasa lebih aman.</p>
             </div>
         </div>
 
@@ -41,10 +41,10 @@
                 <div class="wallet-panel-head">
                     <div>
                         <span class="section-kicker">Top Up</span>
-                        <h2>Isi credit dengan cepat</h2>
+                        <h2>Isi credit tanpa kehilangan rasa percaya</h2>
                     </div>
                 </div>
-                <p class="wallet-copy">Pilih nominal yang paling sesuai untuk mulai membuka karya premium dan menikmati pengalaman yang lebih penuh.</p>
+                <p class="wallet-copy">Pilih nominal yang paling sesuai untuk membuka karya premium, mendukung kreator, dan menikmati katalog dengan akses yang lebih dalam.</p>
                 <div class="chips chips-elevated" id="topup-options">
                     <span class="chip" data-credit="50">50</span>
                     <span class="chip active" data-credit="100">100</span>
@@ -65,21 +65,21 @@
                 <div class="wallet-panel-head">
                     <div>
                         <span class="section-kicker">Kepercayaan Sistem</span>
-                        <h2>Transaksi dibuat agar mudah dipahami</h2>
+                        <h2>Semua dibuat agar mudah dimengerti sebelum dibayar</h2>
                     </div>
                 </div>
                 <div class="wallet-info-list">
                     <div class="wallet-info-item">
-                        <strong>Nilai credit jelas</strong>
-                        <span>Tidak ada angka yang ambigu. Konversi dan total selalu tampil di depan.</span>
+                        <strong>Nilai credit selalu terang</strong>
+                        <span>Tidak ada angka yang ambigu. Konversi dan total selalu tampil di depan sebelum Anda membayar.</span>
                     </div>
                     <div class="wallet-info-item">
-                        <strong>Histori mudah ditinjau</strong>
-                        <span>Setiap aktivitas dompet ditampilkan agar pengguna merasa lebih aman dan terkontrol.</span>
+                        <strong>Histori mudah diaudit</strong>
+                        <span>Setiap aktivitas dompet ditampilkan agar pengguna merasa lebih aman, lebih sadar, dan lebih terkontrol.</span>
                     </div>
                     <div class="wallet-info-item">
-                        <strong>Siap untuk monetisasi kreator</strong>
-                        <span>Wallet ini dirancang untuk mendukung pembaca, pendengar, dan kreator dalam satu ekosistem.</span>
+                        <strong>Dibangun untuk monetisasi yang rapi</strong>
+                        <span>Wallet ini dirancang untuk mendukung pembaca, pendengar, dan kreator dalam satu ekosistem yang terasa profesional.</span>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
         <div class="section-head section-head-premium" style="margin-top:24px">
             <div>
                 <span class="section-kicker">Riwayat Transaksi</span>
-                <h2>Setiap pergerakan saldo ditampilkan dengan lebih rapi</h2>
+                <h2>Setiap pergerakan saldo tercatat agar rasa percaya tetap terjaga</h2>
             </div>
         </div>
         <div id="trx-list"><div class="state"><div class="emoji">🧾</div><p>Memuat riwayat…</p></div></div>

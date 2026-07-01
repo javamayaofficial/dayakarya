@@ -56,8 +56,8 @@ const DK = {
           <h3>${w.title}</h3>
           <div class="work-meta">✍️ ${creator} · ${views}x dibaca</div>
           <div class="work-card-footer">
-            <span class="read-link">Lihat karya</span>
-            <span class="read-stat">${(w.chapters_free_count ?? 0) > 0 ? 'Ada bagian gratis' : 'Premium ready'}</span>
+            <span class="read-link">Masuk ke karya</span>
+            <span class="read-stat">${(w.chapters_free_count ?? 0) > 0 ? 'Ada akses gratis' : 'Siap premium'}</span>
           </div>
         </div>
       </a>`;
@@ -74,16 +74,16 @@ const DK = {
       const items = json.data ?? [];
       if (!items.length) {
         el.innerHTML = `<div class="state" style="grid-column:1/-1">
-          <div class="emoji">🖋️</div><h3>Belum ada karya</h3>
-          <p>Jadilah yang pertama berbagi karya di sini.</p>
-          <a href="/daftar" class="btn btn-gold">Mulai Berkarya</a></div>`;
+          <div class="emoji">🖋️</div><h3>Belum ada karya unggulan</h3>
+          <p>Jadilah kreator pertama yang membangun katalog bernilai di sini.</p>
+          <a href="/daftar" class="btn btn-gold">Mulai Bangun Karya</a></div>`;
         return;
       }
       el.innerHTML = items.map(w => this.workCard(w)).join('');
     } catch (e) {
       el.innerHTML = `<div class="state" style="grid-column:1/-1">
-        <div class="emoji">⚠️</div><h3>Gagal memuat</h3>
-        <p>Periksa koneksimu, lalu coba lagi.</p></div>`;
+        <div class="emoji">⚠️</div><h3>Katalog belum berhasil dimuat</h3>
+        <p>Periksa koneksi Anda, lalu coba lagi dalam beberapa saat.</p></div>`;
     }
   },
 

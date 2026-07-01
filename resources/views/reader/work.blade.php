@@ -11,7 +11,7 @@
                 <span class="type-tag">{{ config('dayakarya.work_types')[$work->type] ?? $work->type }}</span>
             </div>
             <div class="work-hero-copy">
-                <span class="section-kicker">Karya Pilihan</span>
+                <span class="section-kicker">Karya Unggulan</span>
                 <h1>{{ $work->title }}</h1>
                 <div class="work-meta work-meta-rich">
                     <span>✍️ {{ $work->creator->name }}</span>
@@ -23,11 +23,11 @@
                 <p class="work-synopsis">{{ $work->synopsis }}</p>
                 <div class="work-hero-actions">
                     <button class="btn btn-ghost" onclick="DK.follow({{ $work->creator_id }})">+ Ikuti Kreator</button>
-                    <a href="#daftar-bagian" class="btn btn-primary">Lihat Daftar Bagian</a>
+                    <a href="#daftar-bagian" class="btn btn-primary">Mulai Menikmati</a>
                 </div>
                 <div class="work-badges">
-                    <span class="work-badge">Katalog premium-ready</span>
-                    <span class="work-badge">Cocok untuk pembaca serius</span>
+                    <span class="work-badge">Layak masuk katalog premium</span>
+                    <span class="work-badge">Dibuat untuk audiens yang lebih serius</span>
                 </div>
             </div>
         </div>
@@ -36,13 +36,13 @@
             <div class="work-context-grid">
                 <div class="context-card">
                     <span class="mini-label mini-label-dark">Tentang karya ini</span>
-                    <h2>Dirancang untuk dinikmati dengan pengalaman yang lebih rapi dan lebih fokus.</h2>
-                    <p>Karya di Dayakarya diposisikan bukan sekadar konten, tetapi sebagai aset digital yang layak dibangun, diapresiasi, dan dimonetisasi dengan baik.</p>
+                    <h2>Karya ini dipresentasikan untuk memberi rasa nilai, bukan sekadar menambah daftar bacaan.</h2>
+                    <p>Di Dayakarya, karya diposisikan sebagai aset digital yang layak dibangun, diapresiasi, dan pada waktunya dimonetisasi dengan cara yang lebih elegan.</p>
                 </div>
                 <div class="context-card context-card-soft">
                     <span class="mini-label mini-label-dark">Akses konten</span>
-                    <h3>Gratis dan premium disusun dalam satu alur yang jelas.</h3>
-                    <p>Bagian gratis membantu audiens mengenal karya, sementara bagian premium memberi ruang monetisasi tanpa merusak pengalaman membaca atau mendengar.</p>
+                    <h3>Bagian gratis membuka rasa penasaran. Bagian premium menjual pengalaman yang lebih utuh.</h3>
+                    <p>Alurnya dirancang agar audiens masuk dengan nyaman, lalu rela membayar untuk kelanjutan yang memang terasa layak dibuka.</p>
                 </div>
             </div>
         </div>
@@ -50,7 +50,7 @@
         <div class="section-head section-head-premium" id="daftar-bagian">
             <div>
                 <span class="section-kicker">Daftar Bagian</span>
-                <h2>Nikmati per bagian dengan pengalaman yang lebih tertata</h2>
+                <h2>Pilih bagian yang ingin Anda nikmati dengan alur yang lebih tertata</h2>
             </div>
         </div>
         @foreach($work->chapters->where('status','published') as $ch)

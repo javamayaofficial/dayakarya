@@ -7,15 +7,15 @@
     <div class="container">
         <div class="explore-shell">
             <div class="explore-copy">
-                <span class="section-kicker">Katalog Dayakarya</span>
-                <h1>Jelajahi karya yang terasa lebih bernilai, lebih rapi, dan lebih layak dinikmati.</h1>
-                <p>Temukan cerita, novel, podcast, dongeng, dan audiobook dalam pengalaman eksplorasi yang lebih tenang, lebih premium, dan lebih mudah dipercaya.</p>
+                <span class="section-kicker">Kurasi Katalog Dayakarya</span>
+                <h1>Temukan karya yang bukan hanya menarik dibuka, tetapi juga layak dihabiskan waktu dan perhatian Anda.</h1>
+                <p>Jelajahi cerita, novel, podcast, dongeng, dan audiobook dalam katalog yang dikurasi untuk terasa lebih tenang, lebih berkelas, dan lebih pantas dinikmati.</p>
             </div>
             <div class="explore-highlight">
                 <div class="highlight-card">
-                    <span class="mini-label">Kurasi Dayakarya</span>
-                    <h2>Katalog disusun untuk memberi kesan kualitas, bukan sekadar daftar konten.</h2>
-                    <p>Gunakan pencarian, filter kategori, dan susunan karya untuk menemukan yang paling sesuai dengan selera Anda.</p>
+                    <span class="mini-label">Pilihan Berkualitas</span>
+                    <h2>Di sini, karya tidak hanya ditampilkan. Karya dipresentasikan dengan rasa nilai.</h2>
+                    <p>Gunakan pencarian, filter kategori, dan susunan katalog untuk menemukan karya yang paling sesuai dengan selera dan standar Anda.</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="section-head section-head-premium">
                 <div>
                     <span class="section-kicker">Temukan Karya</span>
-                    <h2>Jelajah premium untuk pembaca dan pendengar</h2>
+                    <h2>Ruang jelajah untuk pembaca dan pendengar yang lebih selektif</h2>
                 </div>
             </div>
             <div class="search-shell">
@@ -51,16 +51,16 @@
 
         <div class="explore-meta">
             <div class="meta-card">
-                <strong>Eksplorasi lebih terarah</strong>
-                <span>Filter kategori dan pencarian dibuat untuk membantu Anda menemukan karya yang paling relevan.</span>
+                <strong>Pencarian yang lebih terarah</strong>
+                <span>Filter kategori dan pencarian dibuat agar Anda lebih cepat menemukan karya yang paling relevan.</span>
             </div>
             <div class="meta-card">
-                <strong>Kualitas presentasi lebih baik</strong>
-                <span>Setiap karya ditampilkan dengan gaya yang lebih editorial agar terasa lebih bernilai.</span>
+                <strong>Presentasi yang lebih meyakinkan</strong>
+                <span>Setiap karya ditampilkan dengan gaya editorial agar kesan nilainya terasa lebih tinggi.</span>
             </div>
             <div class="meta-card">
-                <strong>Siap untuk premium content</strong>
-                <span>Struktur katalog mendukung pengalaman gratis maupun premium tanpa terasa kasar.</span>
+                <strong>Layak untuk konten premium</strong>
+                <span>Katalog mendukung pengalaman gratis maupun premium tanpa terasa kasar atau murahan.</span>
             </div>
         </div>
 

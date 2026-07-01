@@ -6,12 +6,12 @@
     <div class="container support-container">
         <div class="support-hero">
             <span class="section-kicker">Tentang Dayakarya</span>
-            <h1>Ekosistem kreator Indonesia yang dirancang untuk terasa lebih matang, lebih bernilai, dan lebih siap tumbuh.</h1>
-            <p>Dayakarya mempertemukan kreator, penikmat karya, affiliate, sponsor, dan mitra CSR dalam satu rumah digital yang membangun karya sebagai aset, bukan sekadar konten lewat.</p>
+            <h1>Dayakarya dibangun untuk membuat karya digital tampil lebih bernilai dan lebih pantas dihargai.</h1>
+            <p>Di sini, kreator, penikmat karya, affiliate, sponsor, dan mitra CSR dipertemukan dalam satu rumah digital yang memandang karya sebagai aset yang bisa tumbuh, bukan sekadar konten yang cepat lewat.</p>
         </div>
         <div class="support-panel card">
-            <h2 class="support-title">Rumah untuk karya yang ingin dibangun dengan serius</h2>
-            <p class="support-copy">Dayakarya dikembangkan oleh Yayasan Pondok Daya Cipta Nusantara untuk menghadirkan pengalaman berkarya, menikmati karya, dan memonetisasi karya digital dalam satu ekosistem yang lebih rapi, lebih kredibel, dan lebih berkelanjutan.</p>
+            <h2 class="support-title">Rumah untuk kreator yang ingin karyanya tampak lebih layak dibayar</h2>
+            <p class="support-copy">Dayakarya dikembangkan oleh Yayasan Pondok Daya Cipta Nusantara untuk menghadirkan pengalaman berkarya, menikmati karya, dan memonetisasi karya digital dalam ekosistem yang lebih rapi, lebih kredibel, dan lebih siap dibawa tumbuh jangka panjang.</p>
         </div>
     </div>
 </section>

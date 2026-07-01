@@ -7,21 +7,21 @@
     <div class="container auth-container">
         <div class="auth-shell">
             <aside class="auth-aside">
-                <span class="section-kicker">Masuk ke ekosistem kreator</span>
-                <h1>Masuk dan lanjutkan karya yang ingin Anda tumbuhkan dengan lebih serius.</h1>
-                <p>Dayakarya dirancang untuk kreator dan penikmat karya yang ingin pengalaman lebih rapi, terasa premium, dan siap berkembang menjadi ekosistem bernilai.</p>
+                <span class="section-kicker">Akses Ruang Dayakarya</span>
+                <h1>Masuk ke ruang yang membuat karya, audiens, dan monetisasi terasa lebih bernilai.</h1>
+                <p>Dayakarya dirancang untuk kreator dan penikmat karya yang menginginkan pengalaman lebih elegan, lebih terstruktur, dan lebih layak dipercaya sejak interaksi pertama.</p>
                 <div class="auth-points">
                     <div class="auth-point">
-                        <strong>Akses wallet dan royalti</strong>
-                        <span>Pantau kredit, top up, dan histori monetisasi dalam satu alur yang rapi.</span>
+                        <strong>Kontrol wallet dan royalti</strong>
+                        <span>Pantau credit, top up, dan histori pendapatan dalam satu alur yang terasa rapi dan profesional.</span>
                     </div>
                     <div class="auth-point">
-                        <strong>Lanjutkan pengalaman menikmati karya</strong>
-                        <span>Buka konten premium, simpan progres, dan jelajahi katalog dengan pengalaman yang lebih nyaman.</span>
+                        <strong>Nikmati karya dengan kelas yang lebih baik</strong>
+                        <span>Buka konten premium, lanjutkan progres, dan jelajahi katalog dengan pengalaman yang lebih nyaman dan bernilai.</span>
                     </div>
                     <div class="auth-point">
-                        <strong>Siap untuk kreator yang ingin naik kelas</strong>
-                        <span>Bangun katalog, distribusi, dan pendapatan tanpa kehilangan kesan profesional.</span>
+                        <strong>Layak untuk kreator yang ingin naik kelas</strong>
+                        <span>Bangun katalog, distribusi, dan pendapatan tanpa kehilangan citra yang meyakinkan.</span>
                     </div>
                 </div>
             </aside>
@@ -30,7 +30,7 @@
                 <div class="auth-card-head">
                     <span class="mini-label mini-label-dark">Login Dayakarya</span>
                     <h2>Selamat datang kembali</h2>
-                    <p>Masuk untuk melanjutkan berkarya, menikmati konten, dan mengelola akun Anda.</p>
+                    <p>Masuk untuk melanjutkan pengalaman berkarya, menikmati katalog premium, dan mengelola akun dengan lebih tenang.</p>
                 </div>
 
                 <div id="msg"></div>
@@ -45,10 +45,10 @@
                 <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk ke Akun</button>
                 <div class="auth-meta">
                     <span>Belum punya akun?</span>
-                    <a href="/daftar">Daftar gratis</a>
+                    <a href="/daftar">Buat akun gratis</a>
                 </div>
                 <div class="auth-note">
-                    Dengan masuk, Anda melanjutkan pengalaman Dayakarya yang lebih rapi, aman, dan siap bertumbuh.
+                    Dengan masuk, Anda kembali ke ekosistem yang dibangun untuk membuat karya terasa lebih layak dinikmati dan dihargai.
                 </div>
             </div>
         </div>
