@@ -14,16 +14,24 @@ class GoogleAuthController extends Controller
 {
     public function redirect(): RedirectResponse
     {
+        if ($response = $this->guardUnavailableGoogleAuth()) {
+            return $response;
+        }
+
         return Socialite::driver('google')
             ->redirect();
     }
 
     public function callback()
     {
+        if ($response = $this->guardUnavailableGoogleAuth()) {
+            return $response;
+        }
+
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (Throwable) {
-            return redirect()->route('login')->with('google_auth_error', 'Login Google belum berhasil. Silakan coba lagi.');
+            return $this->redirectBackWithError('Login Google belum berhasil. Silakan coba lagi.');
         }
 
         $user = User::query()
@@ -67,5 +75,28 @@ class GoogleAuthController extends Controller
                 ? 'Akun Google berhasil terhubung. Anda sedang dialihkan ke Dayakarya.'
                 : 'Akun Google berhasil terhubung. Nomor WhatsApp bisa Anda lengkapi nanti saat mulai memakai fitur finansial.',
         ]);
+    }
+
+    private function guardUnavailableGoogleAuth(): ?RedirectResponse
+    {
+        if (! class_exists(\Laravel\Socialite\Facades\Socialite::class)) {
+            return $this->redirectBackWithError('Login Google sedang belum aktif di server. Tim kami sedang menyiapkannya.');
+        }
+
+        $googleConfig = config('services.google', []);
+        $clientId = trim((string) ($googleConfig['client_id'] ?? ''));
+        $clientSecret = trim((string) ($googleConfig['client_secret'] ?? ''));
+
+        if ($clientId === '' || $clientSecret === '') {
+            return $this->redirectBackWithError('Login Google belum selesai dikonfigurasi. Silakan gunakan email dan password terlebih dahulu.');
+        }
+
+        return null;
+    }
+
+    private function redirectBackWithError(string $message): RedirectResponse
+    {
+        return redirect()->back(fallback: route('login'))
+            ->with('google_auth_error', $message);
     }
 }
