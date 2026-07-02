@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Work extends Model
@@ -36,6 +37,19 @@ class Work extends Model
     public function isVideo(): bool
     {
         return in_array($this->type, config('dayakarya.video_types', []));
+    }
+
+    public function getCoverAttribute(?string $value): ?string
+    {
+        if (! $value) {
+            return null;
+        }
+
+        if (Str::startsWith($value, ['http://', 'https://', '/storage/'])) {
+            return $value;
+        }
+
+        return Storage::disk('public')->url($value);
     }
 
     // ---- Relasi ----
