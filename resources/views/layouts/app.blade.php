@@ -27,7 +27,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/app.css">
+    @php
+        $cssVersion = file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : null;
+        $jsVersion = file_exists(public_path('js/app.js')) ? filemtime(public_path('js/app.js')) : null;
+    @endphp
+    <link rel="stylesheet" href="/css/app.css{{ $cssVersion ? '?v=' . $cssVersion : '' }}">
     @stack('head')
 </head>
 <body class="@yield('body_class')">
@@ -86,7 +90,7 @@
         </a>
     </nav>
 
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js{{ $jsVersion ? '?v=' . $jsVersion : '' }}"></script>
     @stack('scripts')
 </body>
 </html>
