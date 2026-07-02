@@ -8,8 +8,8 @@
     <div class="container">
         <div class="hero-shell">
             <div class="hero-copy">
-                <span class="eyebrow">Bikin Karya Jadi Cuan</span>
-                <h1>Karya kamu jangan cuma dibaca. Harus bisa jadi <em>cuan</em> juga.</h1>
+                <span class="eyebrow">Dari Skill Jadi Cuan</span>
+                <h1>Ubah skill dan hobimu jadi <em>cuan</em>.</h1>
                 <p>Di Dayakarya, karya kamu bisa dibaca, dibayar, dan terus berkembang.</p>
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
@@ -22,20 +22,20 @@
                 <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
-                        <strong>Mulai jual tanpa ribet</strong>
+                        <strong>Mulai cuan tanpa ribet</strong>
                         <span>Akses berbayar, top up, dan royalti sudah siap dalam satu alur.</span>
                     </div>
                     <div class="proof-item">
-                        <strong>Lebih gampang tumbuh</strong>
-                        <span>Pembaca, affiliate, dan peluang kerja sama bisa jalan di tempat yang sama.</span>
+                        <strong>Skill bisa terus berkembang</strong>
+                        <span>Karya, pembaca, affiliate, dan peluang kerja sama bisa tumbuh di tempat yang sama.</span>
                     </div>
                 </div>
             </div>
             <div class="hero-showcase">
                 <div class="hero-card hero-card-primary">
                     <span class="mini-label">Untuk Kreator</span>
-                    <h2>Karya yang bagus itu sayang kalau cuma lewat tanpa jadi penghasilan.</h2>
-                    <p>Taruh di tempat yang bikin orang lebih gampang baca, percaya, dan beli.</p>
+                    <h2>Yang kamu bisa dan yang kamu suka, sekarang bisa jadi penghasilan juga.</h2>
+                    <p>Taruh di tempat yang bikin orang lebih gampang lihat, percaya, dan beli.</p>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-tile">
