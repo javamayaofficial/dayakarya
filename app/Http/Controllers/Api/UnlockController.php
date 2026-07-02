@@ -61,8 +61,9 @@ class UnlockController extends \App\Http\Controllers\Controller
         return response()->json([
             'message'  => 'Chapter berhasil dibuka. Selamat menikmati!',
             'unlock_id'=> $unlock->id,
-            'content'  => $chapter->work->isAudio() ? null : $chapter->content,
+            'content'  => ($chapter->work->isAudio() || $chapter->work->isVideo()) ? null : $chapter->content,
             'audio_url'=> $chapter->audio_url,
+            'video_url'=> $chapter->video_url,
         ], 201);
     }
 }

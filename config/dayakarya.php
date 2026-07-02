@@ -46,6 +46,7 @@ return [
         'novel'      => 'Novel Berseri',
         'podcast'    => 'Podcast',
         'audio_story'=> 'Audio Story',
+        'video_series' => 'Video Series',
         'dongeng'    => 'Dongeng',
         'motivasi'   => 'Cerita Motivasi',
         'audiobook'  => 'Audiobook',
@@ -53,4 +54,7 @@ return [
 
     // Tipe berbasis audio (butuh upload audio, bukan teks)
     'audio_types' => ['podcast', 'audio_story', 'dongeng', 'audiobook'],
+
+    // Tipe berbasis video (butuh upload atau tautan video)
+    'video_types' => ['video_series'],
 ];

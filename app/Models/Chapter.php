@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Chapter extends Model
 {
     protected $fillable = [
-        'work_id', 'title', 'order', 'content', 'audio_url',
+        'work_id', 'title', 'order', 'content', 'audio_url', 'video_url',
         'duration_seconds', 'is_premium', 'price_credit',
         'status', 'scheduled_at', 'published_at',
     ];

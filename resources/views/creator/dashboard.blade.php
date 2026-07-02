@@ -9,7 +9,7 @@
             <div class="creator-hero-copy">
                 <span class="section-kicker">Area Member</span>
                 <h1>Satu tempat untuk nikmati karya, bikin karya, dan mulai cari cuan.</h1>
-                <p>Kalau mau nulis atau podcast, mulainya dari sini. Kalau lagi cari bacaan dan audio yang bagus, semuanya juga ada di sini.</p>
+                <p>Kalau mau nulis, podcast, atau bikin video series, mulainya dari sini. Kalau lagi cari bacaan, audio, atau tontonan yang bagus, semuanya juga ada di sini.</p>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
@@ -90,6 +90,7 @@
                                 <option value="novel">Novel Berseri</option>
                                 <option value="podcast">Podcast</option>
                                 <option value="audio_story">Audio Story</option>
+                                <option value="video_series">Video Series</option>
                                 <option value="dongeng">Dongeng</option>
                                 <option value="motivasi">Cerita Motivasi</option>
                                 <option value="audiobook">Audiobook</option>
@@ -221,6 +222,10 @@
       audio_story: {
         title: 'Mode dengar cerita',
         text: 'Cocok untuk cerita audio yang imersif. Fokus ke alur yang gampang diikuti dan durasi yang tidak melelahkan telinga.',
+      },
+      video_series: {
+        title: 'Mode nonton',
+        text: 'Cocok untuk serial video yang lagi tren. Pastikan judulnya kuat, tiap episode jelas, dan tontonan utamanya tetap jadi fokus utama layar.',
       },
       dongeng: {
         title: 'Mode dongeng',

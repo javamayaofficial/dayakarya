@@ -43,7 +43,7 @@ const DK = {
   typeLabel(t) {
     return ({
       cerpen: 'Cerpen', novel: 'Novel', podcast: 'Podcast',
-      audio_story: 'Audio', dongeng: 'Dongeng', motivasi: 'Motivasi', audiobook: 'Audiobook',
+      audio_story: 'Audio', video_series: 'Video Series', dongeng: 'Dongeng', motivasi: 'Motivasi', audiobook: 'Audiobook',
     })[t] || t;
   },
 

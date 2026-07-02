@@ -8,6 +8,7 @@
     $chapters = $work->chapters;
     $chapterCount = $chapters->count();
     $isAudioWork = $work->isAudio();
+    $isVideoWork = $work->isVideo();
     $selectedStatusLabel = $selectedChapter?->is_premium ? 'Perlu dibuka dengan Credit' : 'Bisa langsung dinikmati';
 @endphp
 <section class="section">
@@ -29,10 +30,10 @@
                 <p class="work-synopsis">{{ $work->synopsis }}</p>
                 <div class="work-hero-actions">
                     <button class="btn btn-ghost" onclick="DK.follow({{ $work->creator_id }})">+ Ikuti Kreator</button>
-                    <a href="#fokus-karya" class="btn btn-primary">{{ $isAudioWork ? 'Mulai Dengar' : 'Mulai Nikmati' }}</a>
+                    <a href="#fokus-karya" class="btn btn-primary">{{ $isVideoWork ? 'Mulai Nonton' : ($isAudioWork ? 'Mulai Dengar' : 'Mulai Nikmati') }}</a>
                 </div>
                 <div class="work-badges">
-                    <span class="work-badge">{{ $isAudioWork ? 'Mode dengar yang lebih fokus' : 'Mode baca yang lebih fokus' }}</span>
+                    <span class="work-badge">{{ $isVideoWork ? 'Mode nonton yang lebih fokus' : ($isAudioWork ? 'Mode dengar yang lebih fokus' : 'Mode baca yang lebih fokus') }}</span>
                     <span class="work-badge">Pilih bagian, lalu nikmati tanpa terdistraksi</span>
                 </div>
             </div>
@@ -42,8 +43,8 @@
             <div class="work-context-grid">
                 <div class="context-card">
                     <span class="mini-label mini-label-dark">Cara Menikmati</span>
-                    <h2>{{ $isAudioWork ? 'Pilih episode yang ingin didengar, lalu biarkan fokusmu tetap di karya ini.' : 'Pilih bagian yang ingin dibaca, lalu nikmati isinya dengan tampilan yang lebih tenang.' }}</h2>
-                    <p>{{ $isAudioWork ? 'Urutan episode, status akses, dan player disusun supaya pendengar tidak bingung pindah-pindah.' : 'Urutan bagian, status akses, dan ruang baca disusun supaya pembaca tidak terdistraksi dari isi cerita.' }}</p>
+                    <h2>{{ $isVideoWork ? 'Pilih episode yang ingin ditonton, lalu biarkan layar ini fokus ke video yang sedang kamu pilih.' : ($isAudioWork ? 'Pilih episode yang ingin didengar, lalu biarkan fokusmu tetap di karya ini.' : 'Pilih bagian yang ingin dibaca, lalu nikmati isinya dengan tampilan yang lebih tenang.') }}</h2>
+                    <p>{{ $isVideoWork ? 'Urutan episode, status akses, dan player video disusun supaya penonton tidak bingung pindah-pindah.' : ($isAudioWork ? 'Urutan episode, status akses, dan player disusun supaya pendengar tidak bingung pindah-pindah.' : 'Urutan bagian, status akses, dan ruang baca disusun supaya pembaca tidak terdistraksi dari isi cerita.') }}</p>
                 </div>
                 <div class="context-card context-card-soft">
                     <span class="mini-label mini-label-dark">Status Karya</span>
@@ -59,7 +60,7 @@
                     <div class="section-head section-head-premium">
                         <div>
                             <span class="section-kicker">Daftar Bagian</span>
-                            <h2>{{ $isAudioWork ? 'Pilih episode yang ingin didengar' : 'Pilih bagian yang ingin dibaca' }}</h2>
+                            <h2>{{ $isVideoWork ? 'Pilih episode yang ingin ditonton' : ($isAudioWork ? 'Pilih episode yang ingin didengar' : 'Pilih bagian yang ingin dibaca') }}</h2>
                         </div>
                     </div>
                     <div class="work-playlist-list">
@@ -75,7 +76,7 @@
                                             @else
                                                 <span class="free">Gratis</span>
                                             @endif
-                                            @if($isAudioWork && $ch->duration_seconds)
+                                            @if(($isAudioWork || $isVideoWork) && $ch->duration_seconds)
                                                 <span>{{ gmdate('i:s', (int) $ch->duration_seconds) }}</span>
                                             @endif
                                         </div>
@@ -95,14 +96,14 @@
                                     <a
                                         class="btn btn-ghost chapter-open-btn"
                                         href="{{ route('work.show', ['work' => $work, 'bagian' => $ch->id]) }}#fokus-karya"
-                                    >{{ $isAudioWork ? 'Dengar' : 'Baca' }}</a>
+                                    >{{ $isVideoWork ? 'Tonton' : ($isAudioWork ? 'Dengar' : 'Baca') }}</a>
                                 @endif
                             </div>
                         @endforeach
                     </div>
                 </aside>
 
-                <div class="work-reader card" data-mode="{{ $isAudioWork ? 'audio' : 'text' }}">
+                <div class="work-reader card" data-mode="{{ $isVideoWork ? 'video' : ($isAudioWork ? 'audio' : 'text') }}">
                     <div class="work-reader-head">
                         <div>
                             <span class="section-kicker">Sedang Dipilih</span>
@@ -123,7 +124,7 @@
                     >
                         <span class="mini-label mini-label-dark">Butuh Akses</span>
                         <h3>Bagian ini bisa langsung kamu buka saat siap lanjut.</h3>
-                        <p>Setelah dibuka, isi karya akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.</p>
+                        <p>Setelah dibuka, {{ $isVideoWork ? 'video' : ($isAudioWork ? 'audio' : 'isi karya') }} akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.</p>
                         <button
                             type="button"
                             class="btn btn-gold"
@@ -149,13 +150,25 @@
                     </div>
 
                     <div
+                        class="work-video-player"
+                        id="chapter-video-shell"
+                        @if(! $isVideoWork || $selectedChapter->is_premium) hidden @endif
+                    >
+                        @if($selectedChapter->video_url)
+                            <video id="chapter-video" controls playsinline preload="metadata" src="{{ $selectedChapter->video_url }}"></video>
+                        @else
+                            <div class="work-soft-note">Video untuk episode ini belum tersedia.</div>
+                        @endif
+                    </div>
+
+                    <div
                         class="work-reader-output"
                         id="chapter-text-output"
-                        @if($isAudioWork || $selectedChapter->is_premium) hidden @endif
+                        @if($isAudioWork || $isVideoWork || $selectedChapter->is_premium) hidden @endif
                     >{!! nl2br(e($selectedChapter->content ?: 'Isi bagian ini belum tersedia.')) !!}</div>
 
                     <div class="work-reader-footer">
-                        <span>{{ $isAudioWork ? 'Kalau sudah selesai, kamu bisa pindah ke episode berikutnya dari daftar di samping.' : 'Kalau sudah selesai, kamu bisa lanjut ke bagian berikutnya dari daftar di samping.' }}</span>
+                        <span>{{ $isVideoWork ? 'Kalau sudah selesai, kamu bisa lanjut ke episode berikutnya dari daftar di samping.' : ($isAudioWork ? 'Kalau sudah selesai, kamu bisa pindah ke episode berikutnya dari daftar di samping.' : 'Kalau sudah selesai, kamu bisa lanjut ke bagian berikutnya dari daftar di samping.') }}</span>
                     </div>
                 </div>
             </div>
@@ -208,6 +221,7 @@
     const lockState = document.querySelector('#chapter-lock-state');
     const textOutput = document.querySelector('#chapter-text-output');
     const audioShell = document.querySelector('#chapter-audio-shell');
+    const videoShell = document.querySelector('#chapter-video-shell');
     const feedback = document.querySelector('#chapter-focus-feedback');
 
     if (titleNode) titleNode.textContent = title;
@@ -222,6 +236,25 @@
           ? `<audio id="chapter-audio" controls preload="metadata" src="${escapeWorkHtml(payload.audio_url)}"></audio>`
           : '<div class="work-soft-note">Audio untuk bagian ini belum tersedia.</div>';
       }
+      if (videoShell) {
+        videoShell.hidden = true;
+        videoShell.innerHTML = '';
+      }
+      if (textOutput) {
+        textOutput.hidden = true;
+        textOutput.innerHTML = '';
+      }
+    } else if (mode === 'video') {
+      if (videoShell) {
+        videoShell.hidden = false;
+        videoShell.innerHTML = payload.video_url
+          ? `<video id="chapter-video" controls playsinline preload="metadata" src="${escapeWorkHtml(payload.video_url)}"></video>`
+          : '<div class="work-soft-note">Video untuk episode ini belum tersedia.</div>';
+      }
+      if (audioShell) {
+        audioShell.hidden = true;
+        audioShell.innerHTML = '';
+      }
       if (textOutput) {
         textOutput.hidden = true;
         textOutput.innerHTML = '';
@@ -234,6 +267,10 @@
       if (audioShell) {
         audioShell.hidden = true;
         audioShell.innerHTML = '';
+      }
+      if (videoShell) {
+        videoShell.hidden = true;
+        videoShell.innerHTML = '';
       }
     }
 

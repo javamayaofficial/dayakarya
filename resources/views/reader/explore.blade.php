@@ -8,8 +8,8 @@
         <div class="explore-shell">
             <div class="explore-copy">
                 <span class="section-kicker">Jelajahi Karya</span>
-                <h1>Cari karya yang enak dibaca, didengar, dan layak kamu ikuti.</h1>
-                <p>Cerita, podcast, dongeng, dan audiobook dikumpulkan di katalog yang rapi.</p>
+                <h1>Cari karya yang enak dibaca, didengar, ditonton, dan layak kamu ikuti.</h1>
+                <p>Cerita, podcast, video series, dongeng, dan audiobook dikumpulkan di katalog yang rapi.</p>
             </div>
             <div class="explore-highlight">
                 <div class="highlight-card">
@@ -28,14 +28,14 @@
             <div class="section-head section-head-premium">
                 <div>
                     <span class="section-kicker">Temukan Karya</span>
-                        <h2>Lagi cari bacaan atau audio yang pas?</h2>
+                    <h2>Lagi cari bacaan, audio, atau video yang pas?</h2>
                 </div>
             </div>
             <div class="search-shell">
                 <label class="search-label" for="search">Cari karya</label>
                 <div class="search-input-wrap">
                     <span class="search-ic">⌕</span>
-                    <input type="search" id="search" placeholder="Cari cerpen, novel, podcast, dongeng…">
+                    <input type="search" id="search" placeholder="Cari cerpen, novel, podcast, video series…">
                 </div>
             </div>
             <div class="chips chips-elevated" id="type-chips">
@@ -44,6 +44,7 @@
                 <span class="chip" data-type="novel">Novel</span>
                 <span class="chip" data-type="podcast">Podcast</span>
                 <span class="chip" data-type="audio_story">Audio Story</span>
+                <span class="chip" data-type="video_series">Video Series</span>
                 <span class="chip" data-type="dongeng">Dongeng</span>
                 <span class="chip" data-type="audiobook">Audiobook</span>
             </div>

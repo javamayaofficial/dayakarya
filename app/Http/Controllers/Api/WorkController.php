@@ -43,7 +43,7 @@ class WorkController extends \App\Http\Controllers\Controller
             'work' => $work->load('creator:id,name,avatar', 'category:id,name', 'tags:id,name'),
             'chapters' => $work->chapters()
                 ->where('status', 'published')
-                ->get(['id', 'title', 'order', 'is_premium', 'price_credit', 'duration_seconds']),
+                ->get(['id', 'title', 'order', 'is_premium', 'price_credit', 'duration_seconds', 'audio_url', 'video_url']),
         ]);
     }
 
@@ -85,7 +85,7 @@ class WorkController extends \App\Http\Controllers\Controller
 
         $data = $request->validate([
             'title'       => ['required', 'string', 'max:150'],
-            'type'        => ['required', 'in:cerpen,novel,podcast,audio_story,dongeng,motivasi,audiobook'],
+            'type'        => ['required', 'in:cerpen,novel,podcast,audio_story,video_series,dongeng,motivasi,audiobook'],
             'category_id' => ['nullable', 'exists:categories,id'],
             'synopsis'    => ['nullable', 'string'],
         ]);

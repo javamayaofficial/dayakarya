@@ -33,6 +33,11 @@ class Work extends Model
         return in_array($this->type, config('dayakarya.audio_types', []));
     }
 
+    public function isVideo(): bool
+    {
+        return in_array($this->type, config('dayakarya.video_types', []));
+    }
+
     // ---- Relasi ----
     public function creator(): BelongsTo
     {
