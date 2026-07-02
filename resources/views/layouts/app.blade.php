@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="foot-links">
-                <a href="{{ route('leaderboard') }}">Leaderboard</a>
+                <a href="{{ route('leaderboard') }}" data-auth-only hidden>Leaderboard</a>
                 <a href="{{ route('privacy') }}">Kebijakan Privasi</a>
                 <a href="{{ route('terms') }}">Syarat Layanan</a>
                 <a href="{{ route('account.deletion') }}">Penghapusan Akun</a>
@@ -84,7 +84,7 @@
         <a href="{{ route('explore') }}" class="{{ request()->routeIs('explore') ? 'active' : '' }}">
             <span class="ic">🔍</span> Jelajah
         </a>
-        <a href="{{ route('creator.dashboard') }}" class="fab" title="Buat Karya">
+        <a href="{{ route('creator.dashboard') }}" class="fab" title="Buat Karya" data-auth-only hidden>
             <span class="ic">＋</span>
         </a>
         <a href="{{ route('wallet') }}" class="{{ request()->routeIs('wallet') ? 'active' : '' }}">

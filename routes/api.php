@@ -22,7 +22,6 @@ Route::prefix('v1')->group(function () {
     Route::post('auth/register', [AuthController::class, 'register']);
     Route::post('auth/login', [AuthController::class, 'login']);
 
-    Route::get('leaderboard', [LeaderboardController::class, 'index']);
     Route::get('works', [WorkController::class, 'index']);
     Route::get('works/{work}', [WorkController::class, 'show']);
 
@@ -33,6 +32,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('auth/me', [AuthController::class, 'me']);
         Route::post('auth/logout', [AuthController::class, 'logout']);
+        Route::get('leaderboard', [LeaderboardController::class, 'index']);
 
         // Wallet & Credit
         Route::get('wallet', [WalletController::class, 'show']);

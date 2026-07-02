@@ -83,6 +83,22 @@
 
 @push('scripts')
 <script>
+  async function ensureLeaderboardSession() {
+    if (!DK.token()) {
+      location.href = '/masuk';
+      return null;
+    }
+
+    const me = await DK.get('/auth/me');
+    if (!me?.user?.id) {
+      DK.clearToken();
+      location.href = '/masuk';
+      return null;
+    }
+
+    return me;
+  }
+
   function escapeLeaderboardHtml(value) {
     return String(value ?? '')
       .replaceAll('&', '&amp;')
@@ -168,6 +184,9 @@
   }
 
   async function loadLeaderboard() {
+    const session = await ensureLeaderboardSession();
+    if (!session) return;
+
     try {
       const data = await DK.get('/leaderboard');
       const summaryItems = document.querySelectorAll('#leaderboard-summary .stat');

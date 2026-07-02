@@ -349,6 +349,23 @@ async function initLogoutButton() {
   });
 }
 
+async function initAuthOnlyVisibility() {
+  const authOnlyItems = document.querySelectorAll('[data-auth-only]');
+  if (!authOnlyItems.length) return;
+
+  if (!DK.token()) {
+    authOnlyItems.forEach((item) => { item.hidden = true; });
+    return;
+  }
+
+  const session = await resolveInternalArea();
+  const visible = Boolean(session.authenticated);
+
+  authOnlyItems.forEach((item) => {
+    item.hidden = !visible;
+  });
+}
+
 async function attemptInstall() {
   if (isStandaloneMode()) return 'installed';
   if (!deferredInstallPrompt) return 'unavailable';
@@ -438,6 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initConnectivityStatus();
   initCreditPill();
   DK.refreshCredit();
+  initAuthOnlyVisibility();
   initAccountNav();
   initLogoutButton();
   initInstallButtons();
