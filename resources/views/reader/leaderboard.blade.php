@@ -8,13 +8,13 @@
         <div class="leaderboard-hero">
             <div class="leaderboard-hero-copy">
                 <span class="section-kicker">Leaderboard Dayakarya</span>
-                <h1>Karya yang paling dilihat, kreator yang paling bertumbuh, dan momentum yang paling layak diperhatikan.</h1>
-                <p>Leaderboard Dayakarya dirancang untuk menampilkan performa yang benar-benar terasa hidup: siapa yang sedang naik, karya mana yang paling kuat menarik perhatian, dan siapa yang membangun katalog dengan nilai paling meyakinkan.</p>
+                <h1>Lihat karya dan kreator yang paling diperhatikan.</h1>
+                <p>Leaderboard menampilkan siapa yang sedang naik dan siapa yang paling kuat menarik audiens.</p>
             </div>
             <div class="leaderboard-hero-note">
                 <span class="mini-label">Signal of Growth</span>
-                <h2>Bukan sekadar ranking, tetapi bukti sosial yang membantu audiens dan kreator melihat siapa yang benar-benar bergerak.</h2>
-                <p>Skor leaderboard saat ini dibangun dari kombinasi pembacaan, apresiasi, pengikut, jumlah karya, dan royalti agar hasilnya terasa lebih bermakna daripada sekadar angka tunggal.</p>
+                <h2>Bukan sekadar ranking, tetapi signal pertumbuhan.</h2>
+                <p>Skor dibangun dari views, apresiasi, pengikut, karya, dan royalti.</p>
             </div>
         </div>
 
@@ -22,22 +22,22 @@
             <div class="stat stat-feature">
                 <div class="label">Karya Published</div>
                 <div class="value">—</div>
-                <p>Jumlah karya yang sudah tampil dan masuk ke radar ranking Dayakarya.</p>
+                <p>Karya yang sudah masuk radar ranking.</p>
             </div>
             <div class="stat gold stat-feature">
                 <div class="label">Kreator Aktif</div>
                 <div class="value">—</div>
-                <p>Kreator dengan karya tayang yang saat ini ikut membentuk kompetisi sehat di katalog.</p>
+                <p>Kreator aktif yang ikut membentuk persaingan katalog.</p>
             </div>
             <div class="stat teal stat-feature">
                 <div class="label">Total Views</div>
                 <div class="value">—</div>
-                <p>Akumulasi perhatian audiens terhadap karya-karya yang sudah dipublikasikan.</p>
+                <p>Total perhatian audiens pada karya yang tayang.</p>
             </div>
             <div class="stat stat-feature">
                 <div class="label">Total Royalti</div>
                 <div class="value">—</div>
-                <p>Nilai yang sudah mengalir ke kreator sebagai bukti monetisasi mulai bekerja.</p>
+                <p>Nilai yang sudah mengalir ke kreator.</p>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
         <div class="section-head section-head-premium leaderboard-head">
             <div>
                 <span class="section-kicker">Top Karya</span>
-                <h2>Karya yang paling kuat menarik perhatian audiens</h2>
+                <h2>Karya yang paling kuat menarik perhatian</h2>
             </div>
         </div>
         <div class="leaderboard-list leaderboard-list-works" id="leaderboard-works">
@@ -68,7 +68,7 @@
         <div class="section-head section-head-premium leaderboard-head">
             <div>
                 <span class="section-kicker">Top Kreator</span>
-                <h2>Kreator yang paling konsisten membangun nilai, audiens, dan monetisasi</h2>
+                <h2>Kreator yang paling konsisten membangun nilai</h2>
             </div>
         </div>
         <div class="leaderboard-list leaderboard-list-creators" id="leaderboard-creators">

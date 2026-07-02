@@ -21,8 +21,8 @@
     <div class="container support-container support-container-narrow">
         <div class="support-panel card">
             <span class="section-kicker">Transfer Manual</span>
-            <h1 class="support-title">Selesaikan pembayaran dengan langkah yang jelas dan mudah diverifikasi.</h1>
-            <div class="alert alert-success">Transfer ke rekening berikut, lalu kirimkan bukti pembayaran. Tim admin akan memverifikasi agar credit dapat diproses dengan aman dan akurat.</div>
+            <h1 class="support-title">Selesaikan pembayaran dengan langkah yang jelas.</h1>
+            <div class="alert alert-success">Transfer ke rekening berikut, lalu kirim bukti pembayaran. Admin akan memverifikasi credit Anda.</div>
             <div class="bank-card">
                 <div><strong>Order ID</strong><span>{{ $payment->order_id }}</span></div>
                 <div><strong>Total Transfer</strong><span>Rp{{ number_format($payment->amount_rupiah, 0, ',', '.') }}</span></div>
@@ -35,23 +35,23 @@
             </div>
             @if ($qrisImage)
                 <div class="bank-card">
-                    <div><strong>QRIS</strong><span>Gunakan QRIS berikut jika metode pembayaran Anda memakai scan QR.</span></div>
+                    <div><strong>QRIS</strong><span>Gunakan QRIS berikut jika Anda membayar via scan.</span></div>
                     <div><a href="{{ $qrisImage }}" target="_blank" rel="noopener">Buka gambar QRIS</a></div>
                 </div>
             @endif
-            <div class="support-copy">Saat mengirim bukti pembayaran, sertakan order ID agar verifikasi admin lebih cepat dan akurat.</div>
+            <div class="support-copy">Sertakan order ID agar verifikasi lebih cepat.</div>
             <div class="proof-panel bank-card">
                 <div>
                     <strong>Unggah Bukti Transfer</strong>
-                    <span>Upload screenshot atau foto bukti transfer agar admin bisa memverifikasi tanpa menunggu kiriman manual di chat.</span>
+                    <span>Upload screenshot atau foto bukti transfer untuk verifikasi admin.</span>
                 </div>
                 @if ($payment->status === 'paid')
-                    <div class="alert alert-success">Pembayaran ini sudah diverifikasi. Credit Anda telah diproses ke wallet Dayakarya.</div>
+                    <div class="alert alert-success">Pembayaran sudah diverifikasi. Credit Anda sudah masuk ke wallet.</div>
                 @elseif ($payment->status === 'failed')
-                    <div class="alert alert-error">Pembayaran ini ditandai gagal. Bila Anda sudah transfer, hubungi admin dengan menyertakan order ID.</div>
+                    <div class="alert alert-error">Pembayaran ini ditandai gagal. Jika Anda sudah transfer, hubungi admin dengan order ID.</div>
                 @else
                     <div id="proof-feedback" class="alert {{ $existingProofUrl ? 'alert-success' : 'alert-error' }} {{ $existingProofUrl ? '' : 'is-hidden' }}">
-                        {{ $existingProofUrl ? 'Bukti transfer sudah terunggah. Anda tetap bisa mengganti dengan file yang lebih jelas selama status masih menunggu verifikasi.' : '' }}
+                        {{ $existingProofUrl ? 'Bukti transfer sudah terunggah. Anda masih bisa menggantinya selama status menunggu verifikasi.' : '' }}
                     </div>
                     <form id="proof-upload-form" class="proof-upload-form">
                         <label class="proof-upload-field" for="proof-file">
@@ -60,7 +60,7 @@
                         </label>
                         <button type="submit" class="btn btn-dark" id="proof-submit">Upload Bukti</button>
                     </form>
-                    <div class="support-copy">Format yang diterima: JPG, PNG, atau WEBP. Maksimal 4 MB.</div>
+                    <div class="support-copy">Format: JPG, PNG, atau WEBP. Maksimal 4 MB.</div>
                 @endif
                 <div id="proof-preview-wrap" class="proof-preview-wrap {{ $existingProofUrl ? '' : 'is-hidden' }}">
                     <img id="proof-preview" src="{{ $existingProofUrl }}" alt="Preview bukti transfer" class="proof-preview-image">

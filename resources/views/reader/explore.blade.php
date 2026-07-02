@@ -8,14 +8,14 @@
         <div class="explore-shell">
             <div class="explore-copy">
                 <span class="section-kicker">Kurasi Katalog Dayakarya</span>
-                <h1>Temukan karya yang bukan hanya menarik dibuka, tetapi juga layak dihabiskan waktu dan perhatian Anda.</h1>
-                <p>Jelajahi cerita, novel, podcast, dongeng, dan audiobook dalam katalog yang dikurasi untuk terasa lebih tenang, lebih berkelas, dan lebih pantas dinikmati.</p>
+                <h1>Temukan karya yang layak mendapat waktu Anda.</h1>
+                <p>Jelajahi cerita, podcast, dongeng, dan audiobook dalam katalog yang rapi.</p>
             </div>
             <div class="explore-highlight">
                 <div class="highlight-card">
                     <span class="mini-label">Pilihan Berkualitas</span>
-                    <h2>Di sini, karya tidak hanya ditampilkan. Karya dipresentasikan dengan rasa nilai.</h2>
-                    <p>Gunakan pencarian, filter kategori, dan susunan katalog untuk menemukan karya yang paling sesuai dengan selera dan standar Anda.</p>
+                    <h2>Karya tidak sekadar ditampilkan. Karya dipresentasikan dengan nilai.</h2>
+                    <p>Pakai pencarian dan filter untuk menemukan yang paling sesuai.</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="section-head section-head-premium">
                 <div>
                     <span class="section-kicker">Temukan Karya</span>
-                    <h2>Ruang jelajah untuk pembaca dan pendengar yang lebih selektif</h2>
+                    <h2>Ruang jelajah untuk selera yang lebih selektif</h2>
                 </div>
             </div>
             <div class="search-shell">
@@ -51,16 +51,16 @@
 
         <div class="explore-meta">
             <div class="meta-card">
-                <strong>Pencarian yang lebih terarah</strong>
-                <span>Filter kategori dan pencarian dibuat agar Anda lebih cepat menemukan karya yang paling relevan.</span>
+                <strong>Pencarian yang terarah</strong>
+                <span>Temukan karya relevan lebih cepat.</span>
             </div>
             <div class="meta-card">
-                <strong>Presentasi yang lebih meyakinkan</strong>
-                <span>Setiap karya ditampilkan dengan gaya editorial agar kesan nilainya terasa lebih tinggi.</span>
+                <strong>Presentasi yang meyakinkan</strong>
+                <span>Setiap karya tampil dengan rasa editorial.</span>
             </div>
             <div class="meta-card">
-                <strong>Layak untuk konten premium</strong>
-                <span>Katalog mendukung pengalaman gratis maupun premium tanpa terasa kasar atau murahan.</span>
+                <strong>Siap untuk konten premium</strong>
+                <span>Pengalaman gratis dan premium terasa tetap halus.</span>
             </div>
         </div>
 

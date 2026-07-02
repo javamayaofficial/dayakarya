@@ -8,20 +8,20 @@
         <div class="auth-shell">
             <aside class="auth-aside">
                 <span class="section-kicker">Akses Ruang Dayakarya</span>
-                <h1>Masuk ke ruang yang membuat karya, audiens, dan monetisasi terasa lebih bernilai.</h1>
-                <p>Dayakarya dirancang untuk kreator dan penikmat karya yang menginginkan pengalaman lebih elegan, lebih terstruktur, dan lebih layak dipercaya sejak interaksi pertama.</p>
+                <h1>Masuk ke ruang karya yang terasa bernilai.</h1>
+                <p>Dayakarya menghadirkan akses yang rapi untuk karya, audiens, dan monetisasi.</p>
                 <div class="auth-points">
                     <div class="auth-point">
-                        <strong>Kontrol wallet dan royalti</strong>
-                        <span>Pantau credit, top up, dan histori pendapatan dalam satu alur yang terasa rapi dan profesional.</span>
+                        <strong>Wallet dan royalti</strong>
+                        <span>Pantau credit, top up, dan histori dalam satu alur.</span>
                     </div>
                     <div class="auth-point">
-                        <strong>Nikmati karya dengan kelas yang lebih baik</strong>
-                        <span>Buka konten premium, lanjutkan progres, dan jelajahi katalog dengan pengalaman yang lebih nyaman dan bernilai.</span>
+                        <strong>Nikmati karya premium</strong>
+                        <span>Buka konten premium dan jelajahi katalog dengan nyaman.</span>
                     </div>
                     <div class="auth-point">
-                        <strong>Layak untuk kreator yang ingin naik kelas</strong>
-                        <span>Bangun katalog, distribusi, dan pendapatan tanpa kehilangan citra yang meyakinkan.</span>
+                        <strong>Untuk kreator yang ingin naik kelas</strong>
+                        <span>Bangun katalog dan pendapatan dengan citra yang rapi.</span>
                     </div>
                 </div>
             </aside>
@@ -30,7 +30,7 @@
                 <div class="auth-card-head">
                     <span class="mini-label mini-label-dark">Login Dayakarya</span>
                     <h2>Selamat datang kembali</h2>
-                    <p>Masuk untuk melanjutkan pengalaman berkarya, menikmati katalog premium, dan mengelola akun dengan lebih tenang.</p>
+                    <p>Masuk untuk lanjut membaca, berkarya, dan mengelola akun.</p>
                 </div>
 
                 <div id="msg"></div>
@@ -55,7 +55,7 @@
                     <a href="/daftar">Buat akun gratis</a>
                 </div>
                 <div class="auth-note">
-                    Dengan masuk, Anda kembali ke ekosistem yang dibangun untuk membuat karya terasa lebih layak dinikmati dan dihargai.
+                    Masuk untuk kembali ke Dayakarya.
                 </div>
             </div>
         </div>

@@ -7,21 +7,21 @@
     <div class="container auth-container">
         <div class="auth-shell">
             <aside class="auth-aside">
-                <span class="section-kicker">Mulai Dengan Standar yang Lebih Tinggi</span>
-                <h1>Bergabung ke Dayakarya untuk membangun karya, audiens, dan pendapatan dengan citra yang lebih kuat.</h1>
-                <p>Baik Anda kreator, penikmat karya, affiliate, sponsor, maupun CSR, Dayakarya disiapkan sebagai ekosistem yang membantu setiap peran tampil lebih rapi, lebih serius, dan lebih siap bertumbuh.</p>
+                <span class="section-kicker">Mulai dengan standar yang lebih tinggi</span>
+                <h1>Bergabung ke Dayakarya untuk membangun karya dan audiens dengan citra yang rapi.</h1>
+                <p>Untuk kreator, penikmat karya, affiliate, sponsor, dan mitra yang ingin tampil lebih kredibel.</p>
                 <div class="auth-points">
                     <div class="auth-point">
                         <strong>Untuk kreator yang ingin dihargai lebih tinggi</strong>
-                        <span>Terbitkan karya dengan presentasi yang lebih premium dan monetisasi yang terasa lebih pantas dibayar.</span>
+                        <span>Terbitkan karya dengan presentasi premium dan monetisasi yang rapi.</span>
                     </div>
                     <div class="auth-point">
                         <strong>Untuk penikmat karya yang lebih selektif</strong>
-                        <span>Nikmati pengalaman membaca dan mendengar yang lebih nyaman, tertata, dan terasa lebih bernilai.</span>
+                        <span>Nikmati pengalaman membaca dan mendengar yang lebih nyaman.</span>
                     </div>
                     <div class="auth-point">
                         <strong>Untuk kolaborator yang butuh kredibilitas</strong>
-                        <span>Affiliate, sponsor, dan program CSR bisa tumbuh dalam satu ruang tanpa kehilangan kesan profesional.</span>
+                        <span>Affiliate, sponsor, dan CSR bertemu dalam satu ruang yang profesional.</span>
                     </div>
                 </div>
             </aside>
@@ -30,7 +30,7 @@
                 <div class="auth-card-head">
                     <span class="mini-label mini-label-dark">Buat Akun Dayakarya</span>
                     <h2>Mulai gratis hari ini</h2>
-                    <p>Buat akun untuk mulai menerbitkan karya, menikmati katalog, atau membangun kolaborasi di ruang yang lebih bernilai.</p>
+                    <p>Buat akun untuk mulai berkarya, menikmati katalog, atau membangun kolaborasi.</p>
                 </div>
 
                 <div id="msg"></div>
@@ -53,7 +53,7 @@
                 <div class="field">
                     <label>Nomor WhatsApp</label>
                     <input id="phone" placeholder="08xxxxxxxxxx">
-                    <div class="hint">Untuk notifikasi royalti, top up, dan penarikan dana.</div>
+                    <div class="hint">Untuk notifikasi royalti, top up, dan penarikan.</div>
                 </div>
                 <div class="field"><label>Password</label><input type="password" id="password" placeholder="Minimal 8 karakter"></div>
                 <div class="field"><label>Ulangi password</label><input type="password" id="password_confirmation" placeholder="Ketik ulang"></div>
@@ -67,7 +67,7 @@
                     <a href="/masuk">Masuk sekarang</a>
                 </div>
                 <div class="auth-note">
-                    Pendaftaran gratis, tetapi fondasinya disiapkan untuk perjalanan kreator yang ingin tumbuh dengan lebih serius dan lebih berkelas.
+                    Pendaftaran gratis. Standarnya tetap premium.
                 </div>
             </div>
         </div>

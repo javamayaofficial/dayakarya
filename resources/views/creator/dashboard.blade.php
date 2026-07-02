@@ -8,8 +8,8 @@
         <div class="creator-hero">
             <div class="creator-hero-copy">
                 <span class="section-kicker">Creator Cockpit</span>
-                <h1>Bangun katalog yang lebih bernilai, baca angkanya dengan tenang, dan arahkan monetisasi dengan lebih percaya diri.</h1>
-                <p>Dashboard kreator Dayakarya dirancang untuk memberi kontrol, kejelasan, dan ruang kerja yang terasa lebih profesional saat Anda membangun karya digital yang pantas dibayar.</p>
+                <h1>Bangun katalog yang bernilai dan baca angkanya dengan tenang.</h1>
+                <p>Dashboard ini memberi kontrol yang rapi untuk karya dan monetisasi.</p>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
@@ -17,8 +17,8 @@
             </div>
             <div class="creator-hero-note">
                 <span class="mini-label">Monetization Ready</span>
-                <h2>Creator dashboard bukan sekadar statistik, tetapi meja kendali untuk karya yang ingin tumbuh serius.</h2>
-                <p>Dari jumlah karya, pembacaan, royalti, hingga pengikut, semua disusun agar kreator bisa mengambil keputusan yang lebih tajam dan lebih bernilai.</p>
+                <h2>Bukan sekadar statistik, tetapi meja kendali kreator.</h2>
+                <p>Karya, pembacaan, royalti, dan pengikut tersaji dalam satu panel.</p>
             </div>
         </div>
 
@@ -26,22 +26,22 @@
             <div class="stat stat-feature">
                 <div class="label">Total Karya</div>
                 <div class="value" id="s-works">—</div>
-                <p>Jumlah karya aktif yang sedang membentuk katalog, reputasi, dan posisi Anda di Dayakarya.</p>
+                <p>Jumlah karya aktif dalam katalog Anda.</p>
             </div>
             <div class="stat gold stat-feature">
                 <div class="label">Total Dibaca</div>
                 <div class="value" id="s-views">—</div>
-                <p>Indikator awal seberapa kuat distribusi dan daya tarik karya Anda di mata audiens.</p>
+                <p>Gambaran awal daya tarik karya Anda.</p>
             </div>
             <div class="stat teal stat-feature">
                 <div class="label">Royalti (Rupiah)</div>
                 <div class="value" id="s-royalty">—</div>
-                <p>Ringkasan nilai ekonomi yang sudah berhasil Anda tarik dari katalog yang dibangun.</p>
+                <p>Ringkasan nilai yang sudah masuk ke akun Anda.</p>
             </div>
             <div class="stat stat-feature">
                 <div class="label">Pengikut</div>
                 <div class="value" id="s-followers">—</div>
-                <p>Basis audiens yang berpotensi menjadi pembaca loyal, pendengar setia, dan pendukung jangka panjang.</p>
+                <p>Basis audiens yang mengikuti perkembangan Anda.</p>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
                     <div class="section-head section-head-premium">
                         <div>
                             <span class="section-kicker">Quick Create</span>
-                            <h2>Terbitkan draft baru tanpa meninggalkan dashboard</h2>
+                            <h2>Terbitkan draft baru tanpa keluar dari dashboard</h2>
                         </div>
                     </div>
                     <div id="creator-msg"></div>
@@ -90,7 +90,7 @@
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">🖋️</div>
                         <h3>Belum ada karya</h3>
-                        <p>Mulai terbitkan cerpen, novel, atau podcast pertama Anda dengan standar presentasi yang lebih layak dijual.</p>
+                        <p>Mulai terbitkan karya pertama Anda dengan presentasi yang rapi.</p>
                         <a href="#creator-quick-create" class="btn btn-gold">Buat Karya Pertama</a>
                     </div>
                 </div>
@@ -99,13 +99,13 @@
             <aside class="creator-side">
                 <div class="creator-side-card">
                     <span class="section-kicker">Prioritas Berikutnya</span>
-                    <h3>Naikkan nilai katalog, bukan sekadar menambah stok konten.</h3>
-                    <p>Fokus pada konsistensi terbit, kualitas presentasi, dan alur premium untuk membangun kepercayaan sekaligus daya beli audiens.</p>
+                    <h3>Naikkan nilai katalog, bukan sekadar stok konten.</h3>
+                    <p>Fokus pada konsistensi, presentasi, dan alur premium.</p>
                 </div>
                 <div class="creator-side-card creator-side-card-soft">
                     <span class="section-kicker">Monetisasi</span>
-                    <h3>Royalti, wallet, dan affiliate bekerja paling baik saat katalog Anda terasa bernilai.</h3>
-                    <p>Gunakan dashboard ini sebagai pusat keputusan: karya mana yang perlu dipromosikan, dipremiumkan, atau diperkuat distribusinya.</p>
+                    <h3>Royalti, wallet, dan affiliate bekerja lebih baik saat katalog terasa bernilai.</h3>
+                    <p>Gunakan dashboard ini untuk menentukan apa yang perlu dipromosikan.</p>
                 </div>
             </aside>
         </div>
@@ -157,7 +157,7 @@
       <div class="state" style="grid-column:1/-1">
         <div class="emoji">🖋️</div>
         <h3>Belum ada karya</h3>
-        <p>Mulai terbitkan cerpen, novel, atau podcast pertama Anda dengan standar presentasi yang lebih layak dijual.</p>
+        <p>Mulai terbitkan karya pertama Anda dengan presentasi yang rapi.</p>
         <a href="#creator-quick-create" class="btn btn-gold">Buat Karya Pertama</a>
       </div>`;
   }
