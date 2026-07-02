@@ -1,7 +1,7 @@
 {
     "name": "yayasan-daya-cipta/dayakarya",
     "type": "project",
-    "description": "Dayakarya - Platform SaaS Creator Economy Indonesia. Dikembangkan oleh Yayasan Pondok Daya Cipta Nusantara.",
+    "description": "Dayakarya - Platform SaaS Creator Economy Indonesia. Dikembangkan oleh PT Java Maya Studio.",
     "keywords": ["laravel", "creator-economy", "marketplace", "indonesia"],
     "license": "proprietary",
     "require": {

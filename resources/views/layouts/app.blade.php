@@ -76,7 +76,7 @@
                 <a href="{{ route('terms') }}">Syarat Layanan</a>
                 <a href="{{ route('account.deletion') }}">Penghapusan Akun</a>
             </div>
-            <p class="foot-copy">Dayakarya oleh Yayasan Pondok Daya Cipta Nusantara &middot; &copy; {{ date('Y') }}</p>
+            <p class="foot-copy">Dayakarya oleh PT Java Maya Studio &middot; &copy; {{ date('Y') }}</p>
         </div>
     </footer>
 

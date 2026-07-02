@@ -11,7 +11,7 @@
         </div>
         <div class="support-panel card">
             <h2 class="support-title">Rumah untuk karya yang ingin tampil lebih pantas dibayar</h2>
-            <p class="support-copy">Dayakarya dikembangkan oleh Yayasan Pondok Daya Cipta Nusantara untuk menghadirkan pengalaman berkarya dan monetisasi yang lebih kredibel.</p>
+            <p class="support-copy">Dayakarya dikembangkan oleh PT Java Maya Studio untuk menghadirkan pengalaman berkarya dan monetisasi yang lebih kredibel.</p>
         </div>
     </div>
 </section>

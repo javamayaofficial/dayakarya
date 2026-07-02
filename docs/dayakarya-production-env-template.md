@@ -61,7 +61,7 @@ DUITKU_RETURN_URL="${APP_URL}/wallet/topup/selesai"
 
 MANUAL_BANK_NAME="BCA"
 MANUAL_BANK_ACCOUNT="isi_nomor_rekening_manual"
-MANUAL_BANK_HOLDER="Yayasan Pondok Daya Cipta Nusantara"
+MANUAL_BANK_HOLDER="PT Java Maya Studio"
 MANUAL_QRIS_IMAGE_URL=
 SUPPORT_WHATSAPP_NUMBER="628xxxxxxxxxx"
 SUPPORT_EMAIL="admin@dayakarya.id"
