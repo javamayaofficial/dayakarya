@@ -41,6 +41,19 @@
 
 @push('scripts')
 <script>
+  async function redirectAuthenticatedSession() {
+    if (!DK.token()) return;
+
+    const me = await DK.get('/auth/me');
+    if (!me?.user?.id) {
+      DK.clearToken();
+      return;
+    }
+
+    const roles = Array.isArray(me.roles) ? me.roles : [];
+    location.href = roles.includes('creator') ? '/creator' : '/wallet';
+  }
+
   async function doLogin() {
     const msg = document.querySelector('#msg');
     const { ok, data } = await DK.post('/auth/login', {
@@ -50,11 +63,15 @@
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Berhasil masuk. Mengalihkan…</div>';
-      setTimeout(() => location.href = '/', 700);
+      const roles = Array.isArray(data.roles) ? data.roles : [];
+      const redirectTo = roles.includes('creator') ? '/creator' : '/wallet';
+      setTimeout(() => location.href = redirectTo, 700);
     } else {
       const err = data.errors?.email?.[0] || data.message || 'Gagal masuk.';
       msg.innerHTML = `<div class="alert alert-error">${err}</div>`;
     }
   }
+
+  redirectAuthenticatedSession();
 </script>
 @endpush

@@ -85,8 +85,15 @@
         <a href="{{ route('wallet') }}" class="{{ request()->routeIs('wallet') ? 'active' : '' }}">
             <span class="ic">◈</span> Wallet
         </a>
-        <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">
-            <span class="ic">◔</span> Akun
+        <a
+            href="{{ route('login') }}"
+            id="account-nav"
+            data-guest-href="{{ route('login') }}"
+            data-creator-href="{{ route('creator.dashboard') }}"
+            data-member-href="{{ route('wallet') }}"
+            class="{{ request()->routeIs('login') || request()->routeIs('creator.dashboard') ? 'active' : '' }}"
+        >
+            <span class="ic">◔</span> <span data-account-label>Akun</span>
         </a>
     </nav>
 

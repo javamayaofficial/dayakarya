@@ -77,6 +77,19 @@
 
 @push('scripts')
 <script>
+  async function redirectAuthenticatedSession() {
+    if (!DK.token()) return;
+
+    const me = await DK.get('/auth/me');
+    if (!me?.user?.id) {
+      DK.clearToken();
+      return;
+    }
+
+    const roles = Array.isArray(me.roles) ? me.roles : [];
+    location.href = roles.includes('creator') ? '/creator' : '/wallet';
+  }
+
   async function doRegister() {
     const msg = document.querySelector('#msg');
     const body = ['role','name','email','phone','password','password_confirmation']
@@ -85,11 +98,14 @@
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Akun dibuat! Mengalihkan…</div>';
-      setTimeout(() => location.href = '/', 800);
+      const redirectTo = body.role === 'creator' ? '/creator' : '/wallet';
+      setTimeout(() => location.href = redirectTo, 800);
     } else {
       const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Gagal mendaftar.');
       msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
     }
   }
+
+  redirectAuthenticatedSession();
 </script>
 @endpush

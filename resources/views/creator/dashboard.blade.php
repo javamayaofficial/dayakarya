@@ -13,6 +13,7 @@
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
+                    <button type="button" class="btn btn-ghost" id="creator-logout" onclick="logoutCreator()">Keluar</button>
                 </div>
             </div>
             <div class="creator-hero-note">
@@ -115,7 +116,27 @@
 
 @push('scripts')
 <script>
-  if (!DK.token()) location.href = '/masuk';
+  async function ensureCreatorSession() {
+    if (!DK.token()) {
+      location.href = '/masuk';
+      return null;
+    }
+
+    const me = await DK.get('/auth/me');
+    if (!me?.user?.id) {
+      DK.clearToken();
+      location.href = '/masuk';
+      return null;
+    }
+
+    const roles = Array.isArray(me.roles) ? me.roles : [];
+    if (!roles.includes('creator')) {
+      location.href = '/wallet';
+      return null;
+    }
+
+    return me;
+  }
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -163,6 +184,9 @@
   }
 
   async function loadCreatorDashboard() {
+    const session = await ensureCreatorSession();
+    if (!session) return;
+
     try {
       const data = await DK.get('/creator/dashboard');
       document.querySelector('#s-works').textContent = (data.stats?.works ?? 0).toLocaleString('id-ID');
@@ -186,6 +210,17 @@
           <p>Data karya dan statistik belum bisa ditampilkan saat ini. Coba muat ulang halaman atau masuk kembali ke akun Anda.</p>
         </div>`;
     }
+  }
+
+  async function logoutCreator() {
+    const button = document.querySelector('#creator-logout');
+    const msg = document.querySelector('#creator-msg');
+
+    button.disabled = true;
+    msg.innerHTML = '<div class="alert alert-success">Sedang keluar dari akun…</div>';
+
+    await DK.logout();
+    location.href = '/masuk';
   }
 
   async function createWork() {

@@ -29,6 +29,17 @@ const DK = {
     return { ok: res.ok, status: res.status, data: await res.json() };
   },
 
+  async logout() {
+    if (this.token()) {
+      try {
+        await this.post('/auth/logout');
+      } catch (_) {}
+    }
+
+    this.clearToken();
+    return true;
+  },
+
   typeLabel(t) {
     return ({
       cerpen: 'Cerpen', novel: 'Novel', podcast: 'Podcast',
@@ -256,6 +267,56 @@ function initCreditPill() {
   });
 }
 
+async function resolveInternalArea() {
+  if (!DK.token()) {
+    return { authenticated: false, href: '/masuk', label: 'Akun' };
+  }
+
+  const me = await DK.get('/auth/me');
+  if (!me?.user?.id) {
+    DK.clearToken();
+    return { authenticated: false, href: '/masuk', label: 'Akun' };
+  }
+
+  const roles = Array.isArray(me.roles) ? me.roles : [];
+  const isCreator = roles.includes('creator');
+
+  return {
+    authenticated: true,
+    href: isCreator ? '/creator' : '/wallet',
+    label: isCreator ? 'Akun' : 'Akun',
+    roles,
+    user: me.user,
+  };
+}
+
+async function initAccountNav() {
+  const accountNav = document.querySelector('#account-nav');
+  if (!accountNav) return;
+
+  const accountLabel = accountNav.querySelector('[data-account-label]');
+  const guestHref = accountNav.dataset.guestHref || '/masuk';
+  const creatorHref = accountNav.dataset.creatorHref || '/creator';
+  const memberHref = accountNav.dataset.memberHref || '/wallet';
+
+  if (!DK.token()) {
+    accountNav.setAttribute('href', guestHref);
+    if (accountLabel) accountLabel.textContent = 'Akun';
+    return;
+  }
+
+  const session = await resolveInternalArea();
+  if (!session.authenticated) {
+    accountNav.setAttribute('href', guestHref);
+    if (accountLabel) accountLabel.textContent = 'Akun';
+    return;
+  }
+
+  const targetHref = session.roles?.includes('creator') ? creatorHref : memberHref;
+  accountNav.setAttribute('href', targetHref);
+  if (accountLabel) accountLabel.textContent = 'Akun';
+}
+
 async function attemptInstall() {
   if (isStandaloneMode()) return 'installed';
   if (!deferredInstallPrompt) return 'unavailable';
@@ -345,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initConnectivityStatus();
   initCreditPill();
   DK.refreshCredit();
+  initAccountNav();
   initInstallButtons();
   initOauthNotice();
 });

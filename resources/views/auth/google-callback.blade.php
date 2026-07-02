@@ -22,7 +22,7 @@
                     <div class="state">
                         <div class="emoji">🔐</div>
                         <h3>Menyiapkan sesi Dayakarya</h3>
-                        <p>Jika proses ini tidak berjalan otomatis, gunakan tombol di bawah untuk melanjutkan ke beranda.</p>
+                        <p>Jika proses ini tidak berjalan otomatis, gunakan tombol di bawah untuk lanjut ke area akun Anda.</p>
                         <a href="{{ $redirectTo }}" class="btn btn-primary">Lanjut ke Dayakarya</a>
                     </div>
                 </div>

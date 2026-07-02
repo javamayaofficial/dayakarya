@@ -107,7 +107,9 @@ class GoogleAuthController extends Controller
 
         return response()->view('auth.google-callback', [
             'token' => $token,
-            'redirectTo' => route('home'),
+            'redirectTo' => $user->hasRole('creator')
+                ? route('creator.dashboard')
+                : route('wallet'),
             'notice' => $user->phone
                 ? 'Akun Google berhasil terhubung. Anda sedang dialihkan ke Dayakarya.'
                 : 'Akun Google berhasil terhubung. Nomor WhatsApp bisa Anda lengkapi nanti saat mulai memakai fitur finansial.',
