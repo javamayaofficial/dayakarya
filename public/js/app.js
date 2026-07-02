@@ -290,31 +290,181 @@ async function resolveInternalArea() {
   };
 }
 
+function setNavItem(item, { href, icon, label, hidden = false, fab = false, matchPrefix = '' }) {
+  if (!item) return;
+
+  item.hidden = hidden;
+  if (href) item.setAttribute('href', href);
+  item.dataset.matchPrefix = matchPrefix;
+  item.classList.toggle('fab', fab);
+
+  const iconEl = item.querySelector('[data-nav-icon]');
+  const labelEl = item.querySelector('[data-nav-label]');
+
+  if (iconEl && icon) iconEl.textContent = icon;
+  if (labelEl) {
+    labelEl.textContent = label;
+    labelEl.hidden = fab;
+  }
+}
+
+function applyBottomNavActiveState() {
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.bottom-nav a').forEach((item) => {
+    item.classList.remove('active');
+
+    const matchPrefix = item.dataset.matchPrefix;
+    if (!matchPrefix || item.hidden) return;
+
+    if (matchPrefix === '/') {
+      if (currentPath === '/') item.classList.add('active');
+      return;
+    }
+
+    if (currentPath === matchPrefix || currentPath.startsWith(matchPrefix + '/')) {
+      item.classList.add('active');
+    }
+  });
+}
+
+function initGuestNavigation() {
+  const brandLink = document.querySelector('#brand-link');
+  const primaryNav = document.querySelector('#primary-nav');
+  const secondaryNav = document.querySelector('#secondary-nav');
+  const middleNav = document.querySelector('#middle-nav');
+  const walletNav = document.querySelector('#wallet-nav');
+  const accountNav = document.querySelector('#account-nav');
+  const accountLabel = accountNav?.querySelector('[data-account-label]');
+  const accountIcon = accountNav?.querySelector('[data-nav-icon]');
+
+  if (brandLink) {
+    brandLink.setAttribute('href', brandLink.dataset.guestHref || '/');
+  }
+
+  setNavItem(primaryNav, {
+    href: primaryNav?.dataset.guestHref || '/',
+    icon: '⌂',
+    label: 'Beranda',
+    matchPrefix: '/',
+  });
+
+  setNavItem(secondaryNav, {
+    href: secondaryNav?.dataset.guestHref || '/explore',
+    icon: '🔍',
+    label: 'Jelajah',
+    matchPrefix: '/explore',
+  });
+
+  setNavItem(middleNav, {
+    href: '/creator',
+    icon: '＋',
+    label: 'Buat',
+    hidden: true,
+    fab: true,
+    matchPrefix: '/creator',
+  });
+
+  if (walletNav) {
+    walletNav.dataset.matchPrefix = '/wallet';
+  }
+
+  if (accountNav) {
+    accountNav.setAttribute('href', accountNav.dataset.guestHref || '/masuk');
+    accountNav.dataset.action = 'link';
+    accountNav.dataset.matchPrefix = '/masuk';
+  }
+  if (accountLabel) accountLabel.textContent = 'Akun';
+  if (accountIcon) accountIcon.textContent = '◔';
+
+  applyBottomNavActiveState();
+}
+
+function initMemberNavigation(session) {
+  const isCreator = Boolean(session.roles?.includes('creator'));
+  const dashboardHref = isCreator ? '/creator' : '/wallet';
+  const brandLink = document.querySelector('#brand-link');
+  const primaryNav = document.querySelector('#primary-nav');
+  const secondaryNav = document.querySelector('#secondary-nav');
+  const middleNav = document.querySelector('#middle-nav');
+  const walletNav = document.querySelector('#wallet-nav');
+  const accountNav = document.querySelector('#account-nav');
+  const accountLabel = accountNav?.querySelector('[data-account-label]');
+  const accountIcon = accountNav?.querySelector('[data-nav-icon]');
+
+  if (brandLink) {
+    brandLink.setAttribute('href', dashboardHref);
+  }
+
+  setNavItem(primaryNav, {
+    href: dashboardHref,
+    icon: '◫',
+    label: 'Dashboard',
+    matchPrefix: isCreator ? '/creator' : '/wallet',
+  });
+
+  setNavItem(secondaryNav, {
+    href: '/leaderboard',
+    icon: '🏆',
+    label: 'Leaderboard',
+    matchPrefix: '/leaderboard',
+  });
+
+  setNavItem(middleNav, {
+    href: '/explore',
+    icon: '🛍',
+    label: 'Market',
+    hidden: false,
+    fab: false,
+    matchPrefix: '/explore',
+  });
+
+  if (walletNav) {
+    walletNav.dataset.matchPrefix = '/wallet';
+  }
+
+  if (accountNav) {
+    accountNav.setAttribute('href', '#logout');
+    accountNav.dataset.action = 'logout';
+    accountNav.dataset.matchPrefix = '';
+  }
+  if (accountLabel) accountLabel.textContent = 'Keluar';
+  if (accountIcon) accountIcon.textContent = '⇥';
+
+  applyBottomNavActiveState();
+}
+
 async function initAccountNav() {
   const accountNav = document.querySelector('#account-nav');
   if (!accountNav) return;
 
-  const accountLabel = accountNav.querySelector('[data-account-label]');
-  const guestHref = accountNav.dataset.guestHref || '/masuk';
-  const creatorHref = accountNav.dataset.creatorHref || '/creator';
-  const memberHref = accountNav.dataset.memberHref || '/wallet';
-
   if (!DK.token()) {
-    accountNav.setAttribute('href', guestHref);
-    if (accountLabel) accountLabel.textContent = 'Akun';
+    initGuestNavigation();
     return;
   }
 
   const session = await resolveInternalArea();
   if (!session.authenticated) {
-    accountNav.setAttribute('href', guestHref);
-    if (accountLabel) accountLabel.textContent = 'Akun';
+    initGuestNavigation();
     return;
   }
 
-  const targetHref = session.roles?.includes('creator') ? creatorHref : memberHref;
-  accountNav.setAttribute('href', targetHref);
-  if (accountLabel) accountLabel.textContent = 'Akun';
+  initMemberNavigation(session);
+
+  if (accountNav.dataset.bound === 'true') return;
+  accountNav.dataset.bound = 'true';
+
+  accountNav.addEventListener('click', async (event) => {
+    if (accountNav.dataset.action !== 'logout') return;
+
+    event.preventDefault();
+    showAppStatus('Sedang keluar dari akun...', {
+      tone: 'success',
+      duration: 1800,
+    });
+
+    await DK.logout();
+    window.location.href = '/masuk';
+  });
 }
 
 async function initLogoutButton() {

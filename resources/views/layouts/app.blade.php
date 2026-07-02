@@ -39,7 +39,7 @@
     {{-- Top bar --}}
     <header class="topbar">
         <div class="container row">
-            <a href="{{ route('home') }}" class="brand">
+            <a href="{{ route('home') }}" class="brand" id="brand-link" data-guest-href="{{ route('home') }}" data-member-href="{{ route('creator.dashboard') }}">
                 <span class="spine"></span> Dayakarya
             </a>
             <div class="topbar-actions">
@@ -78,16 +78,38 @@
 
     {{-- Bottom nav (rasa aplikasi) --}}
     <nav class="bottom-nav">
-        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
-            <span class="ic">⌂</span> Beranda
+        <a
+            href="{{ route('home') }}"
+            id="primary-nav"
+            data-guest-href="{{ route('home') }}"
+            data-member-href="{{ route('creator.dashboard') }}"
+            class="{{ request()->routeIs('home') ? 'active' : '' }}"
+        >
+            <span class="ic" data-nav-icon>⌂</span>
+            <span data-nav-label>Beranda</span>
         </a>
-        <a href="{{ route('explore') }}" class="{{ request()->routeIs('explore') ? 'active' : '' }}">
-            <span class="ic">🔍</span> Jelajah
+        <a
+            href="{{ route('explore') }}"
+            id="secondary-nav"
+            data-guest-href="{{ route('explore') }}"
+            data-member-href="{{ route('leaderboard') }}"
+            class="{{ request()->routeIs('explore') ? 'active' : '' }}"
+        >
+            <span class="ic" data-nav-icon>🔍</span>
+            <span data-nav-label>Jelajah</span>
         </a>
-        <a href="{{ route('creator.dashboard') }}" class="fab" title="Buat Karya" data-auth-only hidden>
-            <span class="ic">＋</span>
+        <a
+            href="{{ route('creator.dashboard') }}"
+            id="middle-nav"
+            class="fab"
+            title="Buat Karya"
+            data-auth-only
+            hidden
+        >
+            <span class="ic" data-nav-icon>＋</span>
+            <span data-nav-label hidden>Buat</span>
         </a>
-        <a href="{{ route('wallet') }}" class="{{ request()->routeIs('wallet') ? 'active' : '' }}">
+        <a href="{{ route('wallet') }}" id="wallet-nav" class="{{ request()->routeIs('wallet') ? 'active' : '' }}">
             <span class="ic">◈</span> Wallet
         </a>
         <a
@@ -98,7 +120,7 @@
             data-member-href="{{ route('wallet') }}"
             class="{{ request()->routeIs('login') || request()->routeIs('creator.dashboard') ? 'active' : '' }}"
         >
-            <span class="ic">◔</span> <span data-account-label>Akun</span>
+            <span class="ic" data-nav-icon>◔</span> <span data-account-label>Akun</span>
         </a>
     </nav>
 
