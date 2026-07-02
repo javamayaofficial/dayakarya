@@ -60,6 +60,7 @@
                     <div class="field field-text-content" style="grid-column:1/-1">
                         <label>Isi karya</label>
                         <textarea id="editor-content" rows="14" placeholder="Tulis isi cerpen atau bagian pembuka karya kamu di sini."></textarea>
+                        <div class="hint">Pisahkan antar paragraf dengan satu baris kosong supaya hasil baca nanti tampil lebih rapi.</div>
                     </div>
                     <div class="field field-audio-url" style="grid-column:1/-1" hidden>
                         <label>URL audio</label>
@@ -193,11 +194,16 @@
       price_credit: Number(document.querySelector('#editor-price-credit').value || 0),
     };
 
-    const { ok, data } = await fetch(DK.api + '/creator/works/' + workId, {
-      method: 'PUT',
-      headers: DK.headers(),
-      body: JSON.stringify(payload),
-    }).then(async (res) => ({ ok: res.ok, data: await res.json() }));
+    let ok = false;
+    let data = {};
+
+    try {
+      const result = await DK.post('/creator/works/' + workId + '/save', payload);
+      ok = result.ok;
+      data = result.data;
+    } catch (error) {
+      data = { message: 'Server Error saat menyimpan draft.' };
+    }
 
     button.disabled = false;
 

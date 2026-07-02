@@ -47,6 +47,7 @@ Route::prefix('v1')->group(function () {
         Route::get('creator/dashboard', [WorkController::class, 'creatorDashboard']);
         Route::get('creator/works/{work}', [WorkController::class, 'creatorShow']);
         Route::post('works', [WorkController::class, 'store']);
+        Route::post('creator/works/{work}/save', [WorkController::class, 'creatorUpdate']);
         Route::put('creator/works/{work}', [WorkController::class, 'creatorUpdate']);
 
         // Affiliate
