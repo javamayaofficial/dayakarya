@@ -7,9 +7,9 @@
     <div class="container creator-container">
         <div class="creator-hero">
             <div class="creator-hero-copy">
-                <span class="section-kicker">Dashboard Member</span>
-                <h1>Masuk ke area yang sama, lalu mulai dari cara kamu sendiri.</h1>
-                <p>Kalau mau nulis, podcast, atau bangun katalog, semua mulainya dari sini. Kalau belum, kamu tetap bisa nikmati karya dan lihat peluang cuannya.</p>
+                <span class="section-kicker">Area Member</span>
+                <h1>Satu tempat untuk nikmati karya, bikin karya, dan mulai cari cuan.</h1>
+                <p>Kalau mau nulis atau podcast, mulainya dari sini. Kalau lagi cari bacaan dan audio yang bagus, semuanya juga ada di sini.</p>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
@@ -17,9 +17,9 @@
                 </div>
             </div>
             <div class="creator-hero-note">
-                <span class="mini-label">Satu Pintu</span>
-                <h2>Bukan cuma buat kreator lama, tapi buat siapa pun yang mau mulai bergerak.</h2>
-                <p>Karya, pembacaan, royalti, dan peluang share karya kumpul di satu panel.</p>
+                <span class="mini-label">Satu Tempat</span>
+                <h2>Masuk sekali, semua pintunya ada di sini.</h2>
+                <p>Lihat perkembangan karya, cek penghasilan, atau bantu sebar karya yang kamu suka dari panel yang sama.</p>
             </div>
         </div>
 
