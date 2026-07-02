@@ -1615,17 +1615,33 @@ img { max-width: 100%; display: block; }
   .page-auth-simple {
     padding-bottom: 0;
   }
+  .page-auth-simple .topbar .row {
+    justify-content: center;
+  }
+  .page-auth-simple .credit-pill {
+    display: none;
+  }
+  .page-auth-simple .brand {
+    margin: 0 auto;
+  }
   .page-auth-simple main {
     min-height: calc(100vh - 72px);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .page-auth-simple .auth-container {
+    max-width: 560px;
+  }
   .page-auth-simple .auth-section {
     width: 100%;
     min-height: auto;
     padding: 24px 0;
     display: block;
+  }
+  .page-auth-simple .auth-shell {
+    display: flex;
+    justify-content: center;
   }
   .page-auth-simple .foot-wrap,
   .page-auth-simple .bottom-nav {
