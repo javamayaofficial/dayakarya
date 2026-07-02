@@ -327,6 +327,34 @@ function applyBottomNavActiveState() {
   });
 }
 
+function setShellMode(mode, session = null) {
+  const shellBadge = document.querySelector('#shell-badge');
+  const body = document.body;
+  if (!body) return;
+
+  if (mode === 'member') {
+    body.classList.add('is-member-area');
+    if (session?.roles?.includes('creator')) {
+      body.dataset.memberRole = 'creator';
+    } else {
+      body.dataset.memberRole = 'member';
+    }
+
+    if (shellBadge) {
+      shellBadge.hidden = false;
+      shellBadge.textContent = session?.roles?.includes('creator') ? 'Creator Area' : 'Member Area';
+    }
+    return;
+  }
+
+  body.classList.remove('is-member-area');
+  delete body.dataset.memberRole;
+  if (shellBadge) {
+    shellBadge.hidden = true;
+    shellBadge.textContent = 'Member Area';
+  }
+}
+
 function initGuestNavigation() {
   const brandLink = document.querySelector('#brand-link');
   const primaryNav = document.querySelector('#primary-nav');
@@ -376,6 +404,7 @@ function initGuestNavigation() {
   if (accountLabel) accountLabel.textContent = 'Akun';
   if (accountIcon) accountIcon.textContent = '◔';
 
+  setShellMode('guest');
   applyBottomNavActiveState();
 }
 
@@ -430,6 +459,7 @@ function initMemberNavigation(session) {
   if (accountLabel) accountLabel.textContent = 'Keluar';
   if (accountIcon) accountIcon.textContent = '⇥';
 
+  setShellMode('member', session);
   applyBottomNavActiveState();
 }
 

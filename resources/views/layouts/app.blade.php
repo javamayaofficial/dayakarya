@@ -40,7 +40,11 @@
     <header class="topbar">
         <div class="container row">
             <a href="{{ route('home') }}" class="brand" id="brand-link" data-guest-href="{{ route('home') }}" data-member-href="{{ route('creator.dashboard') }}">
-                <span class="spine"></span> Dayakarya
+                <span class="spine"></span>
+                <span class="brand-copy">
+                    <span class="brand-name">Dayakarya</span>
+                    <span class="brand-badge" id="shell-badge" hidden>Member Area</span>
+                </span>
             </a>
             <div class="topbar-actions">
                 <a href="{{ route('wallet') }}" class="credit-pill" id="credit-pill">
