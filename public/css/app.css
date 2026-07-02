@@ -1432,6 +1432,74 @@ body.is-member-area .bottom-nav a.fab .ic {
   display: grid;
   gap: 18px;
   margin-top: 18px;
+  padding-bottom: 110px;
+}
+.creator-part-panel {
+  margin-bottom: 22px;
+  padding: 18px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(20,34,60,.04), rgba(255,255,255,.82));
+  border: 1px solid rgba(231,221,202,.95);
+  box-shadow: var(--shadow-sm);
+}
+.creator-part-panel-head {
+  display: grid;
+  gap: 12px;
+}
+.creator-part-panel-head h3 {
+  font-size: 1.05rem;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.creator-part-panel-head p {
+  color: var(--ink-soft);
+  font-size: .9rem;
+}
+.creator-part-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.creator-part-empty {
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.82);
+  border: 1px dashed rgba(20,34,60,.18);
+  color: var(--ink-soft);
+  font-size: .88rem;
+}
+.creator-part-chip {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(231,221,202,.95);
+  background: rgba(255,255,255,.92);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.creator-part-chip.is-active {
+  border-color: rgba(224,161,51,.42);
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,248,236,.96));
+  box-shadow: 0 10px 24px rgba(224,161,51,.12);
+}
+.creator-part-chip-order {
+  color: var(--gold-deep);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.creator-part-chip strong {
+  font-size: .94rem;
+  line-height: 1.35;
+}
+.creator-part-chip-meta {
+  color: var(--ink-soft);
+  font-size: .82rem;
 }
 .creator-writing-guide {
   margin-bottom: 22px;
@@ -2051,6 +2119,11 @@ body.is-member-area .bottom-nav a.fab .ic {
   }
   .creator-editor-layout {
     grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+    align-items: start;
+    padding-bottom: 0;
+  }
+  .creator-part-panel-head {
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
   }
   .creator-writing-guide-grid {

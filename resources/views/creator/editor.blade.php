@@ -31,6 +31,20 @@
                 </div>
                 <div id="editor-msg"></div>
 
+                <div class="creator-part-panel">
+                    <div class="creator-part-panel-head">
+                        <div>
+                            <span class="section-kicker">Kelanjutan Part</span>
+                            <h3>Lanjutkan dari Part 1 ke part berikutnya tanpa ribet.</h3>
+                            <p>Pilih part yang mau kamu edit, atau langsung buka part baru untuk lanjut cerita berikutnya.</p>
+                        </div>
+                        <button class="btn btn-ghost" id="editor-add-part" type="button" onclick="createNextPart()">Tambah Part Berikutnya</button>
+                    </div>
+                    <div class="creator-part-list" id="creator-part-list">
+                        <p class="creator-part-empty">Part karya akan muncul di sini setelah draft dimuat.</p>
+                    </div>
+                </div>
+
                 <div class="creator-writing-guide field-text-content">
                     <div class="creator-writing-guide-head">
                         <strong>Format menulis yang enak dibaca</strong>
@@ -89,8 +103,9 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <textarea id="editor-synopsis" rows="4" placeholder="Ringkas isi karya kamu di sini."></textarea>
                     </div>
                     <div class="field" style="grid-column:1/-1">
-                        <label>Judul bagian pertama</label>
+                        <label id="editor-chapter-label">Judul bagian aktif</label>
                         <input id="editor-chapter-title" placeholder="Contoh: Ketika Hujan Datang">
+                        <div class="hint" id="editor-active-part-copy">Pilih part yang ingin kamu lanjutkan, lalu isi judul dan kontennya di sini.</div>
                     </div>
                     <div class="field field-text-content" style="grid-column:1/-1">
                         <label>Isi karya</label>
@@ -161,6 +176,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 <script>
   const workId = '{{ request()->route('work') }}';
   const debugEndpoint = 'http://127.0.0.1:7777/event';
+  const editorState = {
+    chapters: [],
+    activeChapterId: null,
+  };
 
   // #region debug-point A:frontend-debug-report
   function reportDraftSaveDebug(hypothesisId, msg, data = {}) {
@@ -241,6 +260,106 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       .join('');
   }
 
+  function getCurrentChapterMeta(chapterId = editorState.activeChapterId) {
+    return editorState.chapters.find((item) => Number(item.id) === Number(chapterId)) || null;
+  }
+
+  function updateEditorQuery(chapterId) {
+    const url = new URL(window.location.href);
+    if (chapterId) {
+      url.searchParams.set('chapter_id', chapterId);
+    } else {
+      url.searchParams.delete('chapter_id');
+    }
+
+    window.history.replaceState({}, '', url);
+  }
+
+  function updateActivePartHint() {
+    const label = document.querySelector('#editor-chapter-label');
+    const hint = document.querySelector('#editor-active-part-copy');
+    const activeChapter = getCurrentChapterMeta();
+    const chapterNumber = activeChapter?.order || 1;
+
+    if (label) {
+      label.textContent = `Judul Part ${chapterNumber}`;
+    }
+
+    if (hint) {
+      hint.textContent = `Kamu sedang mengerjakan Part ${chapterNumber}. Simpan dulu sebelum pindah ke part lain.`;
+    }
+  }
+
+  function renderChapterList() {
+    const container = document.querySelector('#creator-part-list');
+    if (!container) return;
+
+    if (!editorState.chapters.length) {
+      container.innerHTML = '<p class="creator-part-empty">Part karya akan muncul di sini setelah draft dimuat.</p>';
+      return;
+    }
+
+    container.innerHTML = editorState.chapters.map((chapter) => {
+      const isActive = Number(chapter.id) === Number(editorState.activeChapterId);
+      const accessLabel = chapter.is_premium
+        ? `Premium ${Number(chapter.price_credit || 0)} credit`
+        : 'Gratis';
+      const statusLabel = chapter.status === 'published' ? 'Tayang' : 'Draft';
+
+      return `
+        <button
+          type="button"
+          class="creator-part-chip ${isActive ? 'is-active' : ''}"
+          data-chapter-id="${chapter.id}"
+        >
+          <span class="creator-part-chip-order">Part ${chapter.order}</span>
+          <strong>${escapePreviewHtml(chapter.title || `Bagian ${chapter.order}`)}</strong>
+          <span class="creator-part-chip-meta">${statusLabel} · ${accessLabel}</span>
+        </button>
+      `;
+    }).join('');
+
+    container.querySelectorAll('[data-chapter-id]').forEach((button) => {
+      button.addEventListener('click', () => {
+        switchEditorChapter(Number(button.dataset.chapterId));
+      });
+    });
+  }
+
+  function applyEditorPayload(work = {}, editor = {}, chapters = []) {
+    if (Array.isArray(chapters)) {
+      editorState.chapters = chapters;
+    }
+
+    editorState.activeChapterId = editor.chapter_id || editorState.activeChapterId;
+
+    document.querySelector('#editor-heading').textContent = work.title || 'Lanjut Edit Draft';
+    document.querySelector('#editor-title').value = work.title || '';
+    document.querySelector('#editor-type').value = work.type || 'cerpen';
+    document.querySelector('#editor-synopsis').value = work.synopsis || '';
+    document.querySelector('#editor-chapter-title').value = editor.chapter_title || 'Bagian 1';
+    document.querySelector('#editor-content').value = editor.content || '';
+    document.querySelector('#editor-audio-url').value = editor.audio_url || '';
+    document.querySelector('#editor-video-url').value = editor.video_url || '';
+    document.querySelector('#editor-duration').value = editor.duration_seconds || '';
+    document.querySelector('#editor-is-premium').value = editor.is_premium ? '1' : '0';
+    document.querySelector('#editor-price-credit').value = editor.price_credit || 0;
+
+    updateEditorQuery(editorState.activeChapterId);
+    renderChapterList();
+    updateActivePartHint();
+    toggleEditorFields();
+    updateReadingPreview();
+  }
+
+  async function switchEditorChapter(chapterId) {
+    if (!chapterId || Number(chapterId) === Number(editorState.activeChapterId)) {
+      return;
+    }
+
+    await loadDraftEditor(chapterId);
+  }
+
   async function ensureEditorSession() {
     if (!DK.token()) {
       location.href = '/masuk';
@@ -257,33 +376,64 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     return true;
   }
 
-  async function loadDraftEditor() {
+  async function loadDraftEditor(chapterId = null) {
     const okSession = await ensureEditorSession();
     if (!okSession) return;
 
     const msg = document.querySelector('#editor-msg');
 
     try {
-      const data = await DK.get('/creator/works/' + workId);
-      const work = data.work || {};
-      const editor = data.editor || {};
+      const params = new URLSearchParams(window.location.search);
+      if (chapterId) {
+        params.set('chapter_id', chapterId);
+      }
 
-      document.querySelector('#editor-heading').textContent = work.title || 'Lanjut Edit Draft';
-      document.querySelector('#editor-title').value = work.title || '';
-      document.querySelector('#editor-type').value = work.type || 'cerpen';
-      document.querySelector('#editor-synopsis').value = work.synopsis || '';
-      document.querySelector('#editor-chapter-title').value = editor.chapter_title || 'Bagian 1';
-      document.querySelector('#editor-content').value = editor.content || '';
-      document.querySelector('#editor-audio-url').value = editor.audio_url || '';
-      document.querySelector('#editor-video-url').value = editor.video_url || '';
-      document.querySelector('#editor-duration').value = editor.duration_seconds || '';
-      document.querySelector('#editor-is-premium').value = editor.is_premium ? '1' : '0';
-      document.querySelector('#editor-price-credit').value = editor.price_credit || 0;
-
-      toggleEditorFields();
-      updateReadingPreview();
+      const query = params.toString();
+      const data = await DK.get('/creator/works/' + workId + (query ? `?${query}` : ''));
+      applyEditorPayload(data.work || {}, data.editor || {}, data.chapters || []);
     } catch (error) {
       msg.innerHTML = '<div class="alert alert-error">Draft belum berhasil dimuat. Coba masuk ulang lalu buka lagi dari dashboard.</div>';
+    }
+  }
+
+  async function createNextPart() {
+    const button = document.querySelector('#editor-add-part');
+    const msg = document.querySelector('#editor-msg');
+    if (!button) return;
+
+    button.disabled = true;
+    msg.innerHTML = '';
+
+    try {
+      const response = await fetch(DK.api + '/creator/works/' + workId + '/chapters', {
+        method: 'POST',
+        headers: DK.headers(),
+        body: JSON.stringify({}),
+      });
+
+      const rawText = await response.text();
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? JSON.parse(rawText || '{}')
+        : { message: rawText || 'Server tidak mengirim JSON.' };
+
+      if (!response.ok) {
+        const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Part baru belum berhasil dibuat.');
+        msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
+        return;
+      }
+
+      applyEditorPayload({
+        title: document.querySelector('#editor-title').value,
+        type: document.querySelector('#editor-type').value,
+        synopsis: document.querySelector('#editor-synopsis').value,
+      }, data.editor || {}, data.chapters || []);
+      msg.innerHTML = '<div class="alert alert-success">Part baru sudah siap. Lanjutkan isi cerita berikutnya di bawah ini.</div>';
+      document.querySelector('#editor-chapter-title')?.focus();
+    } catch (error) {
+      msg.innerHTML = '<div class="alert alert-error">Part baru belum berhasil dibuat. Coba lagi sebentar.</div>';
+    } finally {
+      button.disabled = false;
     }
   }
 
@@ -297,6 +447,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       title: document.querySelector('#editor-title').value,
       type: document.querySelector('#editor-type').value,
       synopsis: document.querySelector('#editor-synopsis').value,
+      chapter_id: editorState.activeChapterId,
       chapter_title: document.querySelector('#editor-chapter-title').value,
       content: document.querySelector('#editor-content').value,
       audio_url: document.querySelector('#editor-audio-url').value,
@@ -362,9 +513,21 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       return;
     }
 
-    document.querySelector('#editor-heading').textContent = payload.title || 'Lanjut Edit Draft';
+    applyEditorPayload({
+      title: data.work?.title || payload.title,
+      type: data.work?.type || payload.type,
+      synopsis: data.work?.synopsis || payload.synopsis,
+    }, data.editor || {
+      chapter_id: payload.chapter_id,
+      chapter_title: payload.chapter_title,
+      content: payload.content,
+      audio_url: payload.audio_url,
+      video_url: payload.video_url,
+      duration_seconds: payload.duration_seconds,
+      is_premium: payload.is_premium,
+      price_credit: payload.price_credit,
+    }, data.chapters || editorState.chapters);
     msg.innerHTML = '<div class="alert alert-success">Draft berhasil disimpan. Kamu bisa lanjut lagi kapan saja dari halaman ini.</div>';
-    updateReadingPreview();
   }
 
   document.querySelector('#editor-content')?.addEventListener('input', updateReadingPreview);
