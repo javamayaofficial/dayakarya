@@ -42,9 +42,14 @@
             <a href="{{ route('home') }}" class="brand">
                 <span class="spine"></span> Dayakarya
             </a>
-            <a href="{{ route('wallet') }}" class="credit-pill" id="credit-pill">
-                <span class="dot"></span> <span id="credit-value">Credit</span>
-            </a>
+            <div class="topbar-actions">
+                <a href="{{ route('wallet') }}" class="credit-pill" id="credit-pill">
+                    <span class="dot"></span> <span id="credit-value">Credit</span>
+                </a>
+                <button type="button" class="topbar-logout" id="logout-button" hidden>
+                    Keluar
+                </button>
+            </div>
         </div>
     </header>
 

@@ -118,6 +118,13 @@ img { max-width: 100%; display: block; }
 .topbar .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 60px; }
 .brand { display: flex; align-items: center; gap: 10px; min-width: 0; font-family: var(--font-display); font-size: clamp(1.15rem, 5.4vw, 1.35rem); font-weight: 600; }
 .brand .spine { width: 8px; height: 26px; border-radius: 4px; background: linear-gradient(var(--gold), var(--gold-deep)); box-shadow: 0 0 0 3px rgba(224,161,51,.15); }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
 .credit-pill {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--ink); color: var(--paper);
@@ -130,6 +137,26 @@ img { max-width: 100%; display: block; }
 .credit-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
 .credit-pill[data-auth-state="guest"] .dot {
   background: #f6d58d;
+}
+.topbar-logout {
+  appearance: none;
+  border: 1px solid rgba(20,34,60,.14);
+  background: rgba(255,255,255,.84);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-logout:hover {
+  background: rgba(255,255,255,.96);
+}
+.topbar-logout[hidden] {
+  display: none !important;
 }
 
 /* ---- Hero ---- */

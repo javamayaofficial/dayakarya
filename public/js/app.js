@@ -317,6 +317,38 @@ async function initAccountNav() {
   if (accountLabel) accountLabel.textContent = 'Akun';
 }
 
+async function initLogoutButton() {
+  const logoutButton = document.querySelector('#logout-button');
+  if (!logoutButton) return;
+
+  if (!DK.token()) {
+    logoutButton.hidden = true;
+    return;
+  }
+
+  const session = await resolveInternalArea();
+  if (!session.authenticated) {
+    logoutButton.hidden = true;
+    return;
+  }
+
+  logoutButton.hidden = false;
+
+  if (logoutButton.dataset.bound === 'true') return;
+  logoutButton.dataset.bound = 'true';
+
+  logoutButton.addEventListener('click', async () => {
+    logoutButton.disabled = true;
+    showAppStatus('Sedang keluar dari akun...', {
+      tone: 'success',
+      duration: 1800,
+    });
+
+    await DK.logout();
+    window.location.href = '/masuk';
+  });
+}
+
 async function attemptInstall() {
   if (isStandaloneMode()) return 'installed';
   if (!deferredInstallPrompt) return 'unavailable';
@@ -407,6 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreditPill();
   DK.refreshCredit();
   initAccountNav();
+  initLogoutButton();
   initInstallButtons();
   initOauthNotice();
 });
