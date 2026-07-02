@@ -4,6 +4,12 @@
 @section('body_class', 'page-work')
 
 @section('content')
+@php
+    $chapters = $work->chapters;
+    $chapterCount = $chapters->count();
+    $isAudioWork = $work->isAudio();
+    $selectedStatusLabel = $selectedChapter?->is_premium ? 'Perlu dibuka dengan Credit' : 'Bisa langsung dinikmati';
+@endphp
 <section class="section">
     <div class="container">
         <div class="work-hero card">
@@ -11,7 +17,7 @@
                 <span class="type-tag">{{ config('dayakarya.work_types')[$work->type] ?? $work->type }}</span>
             </div>
             <div class="work-hero-copy">
-                <span class="section-kicker">Karya Unggulan</span>
+                <span class="section-kicker">Fokus Karya</span>
                 <h1>{{ $work->title }}</h1>
                 <div class="work-meta work-meta-rich">
                     <span>✍️ {{ $work->creator->name }}</span>
@@ -23,11 +29,11 @@
                 <p class="work-synopsis">{{ $work->synopsis }}</p>
                 <div class="work-hero-actions">
                     <button class="btn btn-ghost" onclick="DK.follow({{ $work->creator_id }})">+ Ikuti Kreator</button>
-                    <a href="#daftar-bagian" class="btn btn-primary">Mulai Baca</a>
+                    <a href="#fokus-karya" class="btn btn-primary">{{ $isAudioWork ? 'Mulai Dengar' : 'Mulai Nikmati' }}</a>
                 </div>
                 <div class="work-badges">
-                    <span class="work-badge">Layak masuk katalog premium</span>
-                    <span class="work-badge">Disusun untuk audiens yang serius</span>
+                    <span class="work-badge">{{ $isAudioWork ? 'Mode dengar yang lebih fokus' : 'Mode baca yang lebih fokus' }}</span>
+                    <span class="work-badge">Pilih bagian, lalu nikmati tanpa terdistraksi</span>
                 </div>
             </div>
         </div>
@@ -35,44 +41,133 @@
         <div class="section work-context">
             <div class="work-context-grid">
                 <div class="context-card">
-                    <span class="mini-label mini-label-dark">Tentang karya ini</span>
-                    <h2>Karya ini dipresentasikan dengan rasa nilai.</h2>
-                    <p>Di Dayakarya, karya diposisikan sebagai aset digital yang layak diapresiasi.</p>
+                    <span class="mini-label mini-label-dark">Cara Menikmati</span>
+                    <h2>{{ $isAudioWork ? 'Pilih episode yang ingin didengar, lalu biarkan fokusmu tetap di karya ini.' : 'Pilih bagian yang ingin dibaca, lalu nikmati isinya dengan tampilan yang lebih tenang.' }}</h2>
+                    <p>{{ $isAudioWork ? 'Urutan episode, status akses, dan player disusun supaya pendengar tidak bingung pindah-pindah.' : 'Urutan bagian, status akses, dan ruang baca disusun supaya pembaca tidak terdistraksi dari isi cerita.' }}</p>
                 </div>
                 <div class="context-card context-card-soft">
-                    <span class="mini-label mini-label-dark">Akses konten</span>
-                    <h3>Bagian gratis membuka rasa penasaran. Bagian premium menjual pengalaman penuh.</h3>
-                    <p>Alurnya dibuat nyaman sejak awal hingga akses premium.</p>
+                    <span class="mini-label mini-label-dark">Status Karya</span>
+                    <h3>{{ $chapterCount }} bagian siap dinikmati, dari pembuka gratis sampai bagian premium.</h3>
+                    <p>Kalau ada bagian yang terkunci, kamu bisa buka saat itu juga lalu langsung lanjut menikmati karya yang sedang dipilih.</p>
                 </div>
             </div>
         </div>
 
-        <div class="section-head section-head-premium" id="daftar-bagian">
-            <div>
-                <span class="section-kicker">Daftar Bagian</span>
-                <h2>Pilih bagian yang ingin Anda nikmati</h2>
-            </div>
-        </div>
-        @foreach($work->chapters->where('status','published') as $ch)
-            <div class="chapter-row">
-                <div style="display:flex;align-items:center;gap:12px">
-                    <span class="idx">{{ sprintf('%02d', $ch->order) }}</span>
-                    <div>
-                        <div style="font-weight:600">{{ $ch->title }}</div>
-                        @if($ch->is_premium)
-                            <span class="lock">🔒 {{ $ch->price_credit }} Credit</span>
+        @if($selectedChapter)
+            <div class="work-focus-shell" id="fokus-karya">
+                <aside class="work-playlist card">
+                    <div class="section-head section-head-premium">
+                        <div>
+                            <span class="section-kicker">Daftar Bagian</span>
+                            <h2>{{ $isAudioWork ? 'Pilih episode yang ingin didengar' : 'Pilih bagian yang ingin dibaca' }}</h2>
+                        </div>
+                    </div>
+                    <div class="work-playlist-list">
+                        @foreach($chapters as $ch)
+                            <div class="chapter-row {{ $selectedChapter->id === $ch->id ? 'is-active' : '' }}">
+                                <div class="chapter-row-main">
+                                    <span class="idx">{{ sprintf('%02d', $ch->order) }}</span>
+                                    <div>
+                                        <div class="chapter-row-title">{{ $ch->title }}</div>
+                                        <div class="chapter-row-meta">
+                                            @if($ch->is_premium)
+                                                <span class="lock">🔒 {{ $ch->price_credit }} Credit</span>
+                                            @else
+                                                <span class="free">Gratis</span>
+                                            @endif
+                                            @if($isAudioWork && $ch->duration_seconds)
+                                                <span>{{ gmdate('i:s', (int) $ch->duration_seconds) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                @if($ch->is_premium)
+                                    <button
+                                        type="button"
+                                        class="btn btn-gold chapter-unlock-btn"
+                                        data-chapter-id="{{ $ch->id }}"
+                                        data-title="{{ e($ch->title) }}"
+                                        data-order="{{ $ch->order }}"
+                                        data-credit="{{ $ch->price_credit }}"
+                                        onclick="unlockSelectedChapter(this)"
+                                    >Buka</button>
+                                @else
+                                    <a
+                                        class="btn btn-ghost chapter-open-btn"
+                                        href="{{ route('work.show', ['work' => $work, 'bagian' => $ch->id]) }}#fokus-karya"
+                                    >{{ $isAudioWork ? 'Dengar' : 'Baca' }}</a>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </aside>
+
+                <div class="work-reader card" data-mode="{{ $isAudioWork ? 'audio' : 'text' }}">
+                    <div class="work-reader-head">
+                        <div>
+                            <span class="section-kicker">Sedang Dipilih</span>
+                            <h2 id="chapter-focus-title">{{ $selectedChapter->title }}</h2>
+                        </div>
+                        <div class="work-reader-status" id="chapter-focus-meta">
+                            <span>Bagian {{ sprintf('%02d', $selectedChapter->order) }}</span>
+                            <span>{{ $selectedStatusLabel }}</span>
+                        </div>
+                    </div>
+
+                    <div id="chapter-focus-feedback"></div>
+
+                    <div
+                        class="work-locked-state"
+                        id="chapter-lock-state"
+                        @if(! $selectedChapter->is_premium) hidden @endif
+                    >
+                        <span class="mini-label mini-label-dark">Butuh Akses</span>
+                        <h3>Bagian ini bisa langsung kamu buka saat siap lanjut.</h3>
+                        <p>Setelah dibuka, isi karya akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.</p>
+                        <button
+                            type="button"
+                            class="btn btn-gold"
+                            id="chapter-focus-unlock"
+                            data-chapter-id="{{ $selectedChapter->id }}"
+                            data-title="{{ e($selectedChapter->title) }}"
+                            data-order="{{ $selectedChapter->order }}"
+                            data-credit="{{ $selectedChapter->price_credit }}"
+                            onclick="unlockSelectedChapter(this)"
+                        >Buka Bagian Ini · {{ $selectedChapter->price_credit }} Credit</button>
+                    </div>
+
+                    <div
+                        class="work-audio-player"
+                        id="chapter-audio-shell"
+                        @if(! $isAudioWork || $selectedChapter->is_premium) hidden @endif
+                    >
+                        @if($selectedChapter->audio_url)
+                            <audio id="chapter-audio" controls preload="metadata" src="{{ $selectedChapter->audio_url }}"></audio>
                         @else
-                            <span class="free">Gratis</span>
+                            <div class="work-soft-note">Audio untuk bagian ini belum tersedia.</div>
                         @endif
                     </div>
+
+                    <div
+                        class="work-reader-output"
+                        id="chapter-text-output"
+                        @if($isAudioWork || $selectedChapter->is_premium) hidden @endif
+                    >{!! nl2br(e($selectedChapter->content ?: 'Isi bagian ini belum tersedia.')) !!}</div>
+
+                    <div class="work-reader-footer">
+                        <span>{{ $isAudioWork ? 'Kalau sudah selesai, kamu bisa pindah ke episode berikutnya dari daftar di samping.' : 'Kalau sudah selesai, kamu bisa lanjut ke bagian berikutnya dari daftar di samping.' }}</span>
+                    </div>
                 </div>
-                @if($ch->is_premium)
-                    <button class="btn btn-gold" style="padding:9px 16px;min-height:40px" onclick="DK.unlock({{ $ch->id }})">Buka</button>
-                @else
-                    <a class="btn btn-ghost" style="padding:9px 16px;min-height:40px" href="#baca-{{ $ch->id }}">Baca</a>
-                @endif
             </div>
-        @endforeach
+        @else
+            <div class="card">
+                <div class="state" style="grid-column:1/-1">
+                    <div class="emoji">🖋️</div>
+                    <h3>Karya ini belum punya bagian yang tayang</h3>
+                    <p>Begitu ada bagian yang terbit, pembaca dan pendengar bisa langsung menikmati dari halaman ini.</p>
+                </div>
+            </div>
+        @endif
     </div>
 </section>
 @endsection
@@ -80,13 +175,100 @@
 @push('scripts')
 <script>
   DK.refreshCredit();
-  DK.unlock = async function(chapterId) {
+  function escapeWorkHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function nl2Paragraphs(value) {
+    return escapeWorkHtml(value)
+      .split(/\n{2,}/)
+      .map((paragraph) => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
+      .join('');
+  }
+
+  function setActiveChapter(chapterId) {
+    document.querySelectorAll('.chapter-row').forEach((row) => {
+      const button = row.querySelector('[data-chapter-id]');
+      row.classList.toggle('is-active', button && Number(button.dataset.chapterId) === Number(chapterId));
+    });
+  }
+
+  function renderUnlockedChapter(button, payload) {
+    const reader = document.querySelector('.work-reader');
+    const title = button.dataset.title || 'Bagian terpilih';
+    const order = String(button.dataset.order || '').padStart(2, '0');
+    const mode = reader?.dataset.mode || 'text';
+    const meta = document.querySelector('#chapter-focus-meta');
+    const titleNode = document.querySelector('#chapter-focus-title');
+    const lockState = document.querySelector('#chapter-lock-state');
+    const textOutput = document.querySelector('#chapter-text-output');
+    const audioShell = document.querySelector('#chapter-audio-shell');
+    const feedback = document.querySelector('#chapter-focus-feedback');
+
+    if (titleNode) titleNode.textContent = title;
+    if (meta) meta.innerHTML = `<span>Bagian ${order}</span><span>Sudah dibuka dan siap dinikmati</span>`;
+    if (lockState) lockState.hidden = true;
+    if (feedback) feedback.innerHTML = '<div class="alert alert-success">Bagian berhasil dibuka. Selamat menikmati.</div>';
+
+    if (mode === 'audio') {
+      if (audioShell) {
+        audioShell.hidden = false;
+        audioShell.innerHTML = payload.audio_url
+          ? `<audio id="chapter-audio" controls preload="metadata" src="${escapeWorkHtml(payload.audio_url)}"></audio>`
+          : '<div class="work-soft-note">Audio untuk bagian ini belum tersedia.</div>';
+      }
+      if (textOutput) {
+        textOutput.hidden = true;
+        textOutput.innerHTML = '';
+      }
+    } else {
+      if (textOutput) {
+        textOutput.hidden = false;
+        textOutput.innerHTML = nl2Paragraphs(payload.content || 'Isi bagian ini belum tersedia.');
+      }
+      if (audioShell) {
+        audioShell.hidden = true;
+        audioShell.innerHTML = '';
+      }
+    }
+
+    const chapterId = Number(button.dataset.chapterId);
+    setActiveChapter(chapterId);
+    if (window.history?.replaceState) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('bagian', chapterId);
+      url.hash = 'fokus-karya';
+      window.history.replaceState({}, '', url);
+    }
+  }
+
+  async function unlockSelectedChapter(button) {
     if (!DK.token()) { location.href = '/masuk'; return; }
+    const chapterId = button.dataset.chapterId;
     const ref = (document.cookie.match(/dk_ref=([^;]+)/) || [])[1];
+    const feedback = document.querySelector('#chapter-focus-feedback');
+    button.disabled = true;
+    if (feedback) feedback.innerHTML = '';
+
     const { ok, data } = await DK.post('/chapters/' + chapterId + '/unlock', { ref });
-    alert(data.message || (ok ? 'Berhasil dibuka!' : 'Gagal.'));
-    if (ok) { DK.refreshCredit(); location.reload(); }
-  };
+    button.disabled = false;
+
+    if (!ok) {
+      if (feedback) {
+        feedback.innerHTML = `<div class="alert alert-error">${data.message || 'Bagian belum berhasil dibuka.'}</div>`;
+      }
+      return;
+    }
+
+    DK.refreshCredit();
+    renderUnlockedChapter(button, data);
+  }
+
   DK.follow = async function(creatorId) {
     if (!DK.token()) { location.href = '/masuk'; return; }
     alert('Kamu sekarang mengikuti kreator ini.');

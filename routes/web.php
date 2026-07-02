@@ -5,6 +5,7 @@ use App\Models\Payment;
 use App\Models\Work;
 use App\Http\Controllers\Web\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,22 @@ Route::get('/manifest.webmanifest', function () {
 })->name('pwa.manifest');
 Route::get('/manifest.json', fn () => redirect()->route('pwa.manifest', status: 302));
 
-Route::get('/karya/{work:slug}', function (Work $work) {
+Route::get('/karya/{work:slug}', function (Request $request, Work $work) {
     abort_unless($work->status === 'published', 404);
-    return view('reader.work', ['work' => $work->load('creator', 'chapters')]);
+
+    $work->load([
+        'creator',
+        'chapters' => fn ($query) => $query->where('status', 'published')->orderBy('order'),
+    ]);
+
+    $selectedChapter = $work->chapters
+        ->firstWhere('id', $request->integer('bagian'))
+        ?? $work->chapters->first();
+
+    return view('reader.work', [
+        'work' => $work,
+        'selectedChapter' => $selectedChapter,
+    ]);
 })->name('work.show');
 
 // Redirect affiliate link + tracking klik

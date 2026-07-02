@@ -48,11 +48,33 @@
 
         <div class="creator-panel-grid">
             <div class="creator-panel card">
+                <div class="creator-production-guide">
+                    <div class="creator-guide-card">
+                        <span class="section-kicker">Alur Produksi</span>
+                        <h3>Mulai dari draft yang jelas, lalu pikirkan pengalaman orang yang menikmatinya.</h3>
+                        <p>Tujuannya bukan cuma karya tayang, tapi juga enak dibaca atau didengar sampai selesai.</p>
+                    </div>
+                    <div class="creator-guide-steps">
+                        <div class="creator-guide-step">
+                            <strong>1. Tentukan formatnya</strong>
+                            <span>Pilih apakah karya ini cocok dinikmati sebagai bacaan atau audio.</span>
+                        </div>
+                        <div class="creator-guide-step">
+                            <strong>2. Bikin pembukanya jelas</strong>
+                            <span>Judul dan sinopsis harus bikin orang paham mereka akan menikmati karya seperti apa.</span>
+                        </div>
+                        <div class="creator-guide-step">
+                            <strong>3. Jaga kenyamanan output</strong>
+                            <span>Teks perlu ringan di mata. Audio perlu tenang di telinga. Fokusnya selalu ke karya yang dipilih.</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="creator-quick-create" id="creator-quick-create">
                     <div class="section-head section-head-premium">
                         <div>
                             <span class="section-kicker">Quick Create</span>
-                        <h2>Kalau sudah siap, bikin draft baru dari sini</h2>
+                            <h2>Kalau sudah siap, bikin draft baru dari sini</h2>
                         </div>
                     </div>
                     <div id="creator-msg"></div>
@@ -63,7 +85,7 @@
                         </div>
                         <div class="field">
                             <label>Tipe karya</label>
-                            <select id="creator-type">
+                            <select id="creator-type" onchange="updateProductionHint()">
                                 <option value="cerpen">Cerpen</option>
                                 <option value="novel">Novel Berseri</option>
                                 <option value="podcast">Podcast</option>
@@ -78,7 +100,8 @@
                             <textarea id="creator-synopsis" rows="4" placeholder="Tulis ringkasan karya untuk menyimpan draft pertama Anda."></textarea>
                         </div>
                     </div>
-                    <button class="btn btn-gold" id="creator-submit" onclick="createWork()">Simpan Sebagai Draft</button>
+                    <div class="creator-production-hint" id="creator-production-hint"></div>
+                    <button class="btn btn-gold" id="creator-submit" onclick="createWork()">Simpan Draft & Mulai Produksi</button>
                 </div>
 
                 <div class="section-head section-head-premium">
@@ -99,14 +122,14 @@
 
             <aside class="creator-side">
                 <div class="creator-side-card">
-                    <span class="section-kicker">Prioritas Berikutnya</span>
-                    <h3>Belum siap bikin karya? Tidak masalah.</h3>
-                    <p>Kamu tetap bisa baca, dengar, simpan ide, lalu mulai saat sudah yakin.</p>
+                    <span class="section-kicker">Output Nyaman</span>
+                    <h3>Bacaan enak di layar kecil. Audio enak didengar tanpa bikin capek.</h3>
+                    <p>Pakai kalimat pembuka yang jelas, ritme yang rapi, dan jangan ganggu fokus orang dari karya yang sedang mereka pilih.</p>
                 </div>
                 <div class="creator-side-card creator-side-card-soft">
-                    <span class="section-kicker">Cuan</span>
-                    <h3>Kalau ada karya yang bagus, kamu juga bisa bantu share dan ikut besarkan nilainya.</h3>
-                    <p>Mulai dari bikin karya sendiri atau ikut sebar karya yang kamu suka, dua-duanya bisa jalan dari area ini.</p>
+                    <span class="section-kicker">Setelah Tayang</span>
+                    <h3>Begitu karya tayang, cek lagi pengalaman pembaca dan pendengarnya.</h3>
+                    <p>Lihat apakah halaman karya sudah langsung fokus ke isi, bagian yang dipilih, dan alurnya nyaman sampai selesai.</p>
                 </div>
             </aside>
         </div>
@@ -177,6 +200,49 @@
       </div>`;
   }
 
+  function updateProductionHint() {
+    const type = document.querySelector('#creator-type')?.value || 'cerpen';
+    const hint = document.querySelector('#creator-production-hint');
+    if (!hint) return;
+
+    const guidance = {
+      cerpen: {
+        title: 'Mode baca',
+        text: 'Cocok untuk pembaca yang ingin langsung masuk ke cerita. Pakai judul yang kuat, pembuka yang cepat, dan paragraf yang nyaman dibaca di HP.',
+      },
+      novel: {
+        title: 'Mode baca berseri',
+        text: 'Cocok untuk karya yang tumbuh pelan-pelan. Pastikan sinopsis memberi arah, lalu tiap bagian terasa bikin orang ingin lanjut.',
+      },
+      podcast: {
+        title: 'Mode dengar',
+        text: 'Cocok untuk pendengar. Pastikan opening tidak bertele-tele, ritmenya tenang, dan suara utamanya nyaman diikuti.',
+      },
+      audio_story: {
+        title: 'Mode dengar cerita',
+        text: 'Cocok untuk cerita audio yang imersif. Fokus ke alur yang gampang diikuti dan durasi yang tidak melelahkan telinga.',
+      },
+      dongeng: {
+        title: 'Mode dongeng',
+        text: 'Cocok untuk pengalaman yang hangat dan mudah dinikmati. Jaga bahasa tetap ringan, jelas, dan enak didengar.',
+      },
+      motivasi: {
+        title: 'Mode inspirasi',
+        text: 'Cocok untuk karya yang ingin memberi dorongan cepat. Langsung ke inti, hindari pembukaan yang terlalu panjang.',
+      },
+      audiobook: {
+        title: 'Mode audiobook',
+        text: 'Cocok untuk sesi dengar yang lebih lama. Pecah alurnya rapi dan jaga tempo supaya pendengar tetap betah.',
+      },
+    };
+
+    const current = guidance[type] || guidance.cerpen;
+    hint.innerHTML = `
+      <strong>${current.title}</strong>
+      <span>${current.text}</span>
+    `;
+  }
+
   async function loadCreatorDashboard() {
     const session = await ensureMemberSession();
     if (!session) return;
@@ -237,12 +303,13 @@
       return;
     }
 
-    msg.innerHTML = '<div class="alert alert-success">Draft karya berhasil dibuat dan langsung masuk ke katalog kreator Anda.</div>';
+    msg.innerHTML = '<div class="alert alert-success">Draft karya berhasil dibuat. Sekarang kamu sudah punya titik awal produksi yang bisa terus dirapikan sebelum tayang.</div>';
     document.querySelector('#creator-title').value = '';
     document.querySelector('#creator-synopsis').value = '';
     loadCreatorDashboard();
   }
 
+  updateProductionHint();
   loadCreatorDashboard();
 </script>
 @endpush
