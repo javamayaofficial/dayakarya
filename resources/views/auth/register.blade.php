@@ -9,7 +9,7 @@
             <aside class="auth-aside">
                 <span class="section-kicker">Mulai Bareng Dayakarya</span>
                 <h1>Bikin akun, lalu mulai taruh skill, hobi, dan karya kamu di tempat yang lebih enak dilihat.</h1>
-                <p>Cocok buat kreator, pembaca, affiliate, sponsor, sampai partner yang mau semuanya terasa lebih rapi.</p>
+                <p>Satu akun buat masuk ke area member, nikmati karya orang lain, atau mulai bikin karya kamu sendiri saat sudah siap.</p>
                 <div class="auth-points">
                     <div class="auth-point">
                         <strong>Buat kreator yang mau karyanya lebih bernilai</strong>
@@ -20,8 +20,8 @@
                         <span>Cari bacaan, audio, dan konten premium tanpa tampilan yang bikin capek.</span>
                     </div>
                     <div class="auth-point">
-                        <strong>Buat kolaborator yang mau kerja sama lebih gampang</strong>
-                        <span>Affiliate, sponsor, dan program CSR bisa ketemu di tempat yang sama.</span>
+                        <strong>Buat yang mau ikut cari cuan juga</strong>
+                        <span>Kalau ada karya yang kamu suka, kamu bisa bantu share dan ikut besarkan jangkauannya.</span>
                     </div>
                 </div>
             </aside>
@@ -30,24 +30,13 @@
                 <div class="auth-card-head">
                     <span class="mini-label mini-label-dark">Buat Akun Dayakarya</span>
                     <h2>Mulai gratis hari ini</h2>
-                    <p>Buat akun untuk mulai upload karya, jelajah katalog, atau buka peluang kolaborasi.</p>
+                    <p>Buat akun untuk masuk ke dashboard member, baca karya, atau mulai bikin karya kapan pun kamu siap.</p>
                 </div>
 
                 <div id="msg"></div>
                 @if (session('google_auth_error'))
                     <div class="alert alert-error">{{ session('google_auth_error') }}</div>
                 @endif
-                <div class="field">
-                    <label>Saya ingin menjadi</label>
-                    <select id="role">
-                        <option value="creator">Kreator (menulis / mendongeng / podcast)</option>
-                        <option value="reader">Pembaca</option>
-                        <option value="listener">Pendengar</option>
-                        <option value="affiliate">Affiliate (promosi & komisi)</option>
-                        <option value="sponsor">Sponsor</option>
-                        <option value="csr">Perusahaan / CSR</option>
-                    </select>
-                </div>
                 <div class="field"><label>Nama lengkap</label><input id="name" placeholder="Nama kamu"></div>
                 <div class="field"><label>Email</label><input type="email" id="email" placeholder="nama@email.com"></div>
                 <div class="field">
@@ -67,7 +56,7 @@
                     <a href="/masuk">Masuk sekarang</a>
                 </div>
                 <div class="auth-note">
-                    Gratis daftar. Kalau serius berkarya, tempatnya sudah siap.
+                    Gratis daftar. Masuk dulu, nanti mau baca, bikin karya, atau share karya bisa dipilih dari dalam.
                 </div>
             </div>
         </div>
@@ -86,20 +75,18 @@
       return;
     }
 
-    const roles = Array.isArray(me.roles) ? me.roles : [];
-    location.href = roles.includes('creator') ? '/creator' : '/wallet';
+    location.href = '/creator';
   }
 
   async function doRegister() {
     const msg = document.querySelector('#msg');
-    const body = ['role','name','email','phone','password','password_confirmation']
+    const body = ['name','email','phone','password','password_confirmation']
       .reduce((o,k)=>(o[k]=document.querySelector('#'+k).value,o),{});
     const { ok, data } = await DK.post('/auth/register', body);
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Akun dibuat! Mengalihkan…</div>';
-      const redirectTo = body.role === 'creator' ? '/creator' : '/wallet';
-      setTimeout(() => location.href = redirectTo, 800);
+      setTimeout(() => location.href = '/creator', 800);
     } else {
       const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Gagal mendaftar.');
       msg.innerHTML = `<div class="alert alert-error">${first}</div>`;

@@ -24,7 +24,6 @@ class AuthController extends \App\Http\Controllers\Controller
             'email'    => ['required', 'email', 'unique:users,email'],
             'phone'    => ['required', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'confirmed', Password::min(8)],
-            'role'     => ['required', 'in:creator,reader,listener,affiliate,sponsor,csr'],
         ]);
 
         $user = User::create([
@@ -34,12 +33,12 @@ class AuthController extends \App\Http\Controllers\Controller
             'password' => $data['password'],
             'status'   => 'active',
         ]);
-        $user->assignRole($data['role']);
+        $user->assignRole('creator');
 
         // Kirim salam verifikasi via WhatsApp (Fonnte)
         $this->notifier->whatsapp($user,
-            "Selamat datang di Dayakarya, {$user->name}! Akunmu sebagai " . ucfirst($data['role']) .
-            " sudah aktif. Yuk mulai berkarya dan berpenghasilan.");
+            "Selamat datang di Dayakarya, {$user->name}! Akunmu sudah aktif. " .
+            "Sekarang kamu bisa baca karya, bikin karya, dan mulai cari cuan dari satu tempat.");
 
         $token = $user->createToken('dayakarya')->plainTextToken;
 

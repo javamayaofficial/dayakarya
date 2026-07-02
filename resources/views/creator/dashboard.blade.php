@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Dashboard Kreator — Dayakarya')
+@section('title', 'Dashboard Member — Dayakarya')
 @section('body_class', 'page-creator')
 
 @section('content')
@@ -7,9 +7,9 @@
     <div class="container creator-container">
         <div class="creator-hero">
             <div class="creator-hero-copy">
-                <span class="section-kicker">Creator Cockpit</span>
-                <h1>Bangun katalog yang bernilai dan baca angkanya dengan tenang.</h1>
-                <p>Dashboard ini memberi kontrol yang rapi untuk karya dan monetisasi.</p>
+                <span class="section-kicker">Dashboard Member</span>
+                <h1>Masuk ke area yang sama, lalu mulai dari cara kamu sendiri.</h1>
+                <p>Kalau mau nulis, podcast, atau bangun katalog, semua mulainya dari sini. Kalau belum, kamu tetap bisa nikmati karya dan lihat peluang cuannya.</p>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
@@ -17,9 +17,9 @@
                 </div>
             </div>
             <div class="creator-hero-note">
-                <span class="mini-label">Monetization Ready</span>
-                <h2>Bukan sekadar statistik, tetapi meja kendali kreator.</h2>
-                <p>Karya, pembacaan, royalti, dan pengikut tersaji dalam satu panel.</p>
+                <span class="mini-label">Satu Pintu</span>
+                <h2>Bukan cuma buat kreator lama, tapi buat siapa pun yang mau mulai bergerak.</h2>
+                <p>Karya, pembacaan, royalti, dan peluang share karya kumpul di satu panel.</p>
             </div>
         </div>
 
@@ -52,7 +52,7 @@
                     <div class="section-head section-head-premium">
                         <div>
                             <span class="section-kicker">Quick Create</span>
-                            <h2>Terbitkan draft baru tanpa keluar dari dashboard</h2>
+                        <h2>Kalau sudah siap, bikin draft baru dari sini</h2>
                         </div>
                     </div>
                     <div id="creator-msg"></div>
@@ -83,8 +83,8 @@
 
                 <div class="section-head section-head-premium">
                     <div>
-                        <span class="section-kicker">Katalog Kreator</span>
-                        <h2>Karyaku</h2>
+                        <span class="section-kicker">Katalog Saya</span>
+                        <h2>Karya Saya</h2>
                     </div>
                 </div>
                 <div class="work-grid work-grid-premium" id="my-works">
@@ -100,13 +100,13 @@
             <aside class="creator-side">
                 <div class="creator-side-card">
                     <span class="section-kicker">Prioritas Berikutnya</span>
-                    <h3>Naikkan nilai katalog, bukan sekadar stok konten.</h3>
-                    <p>Fokus pada konsistensi, presentasi, dan alur premium.</p>
+                    <h3>Belum siap bikin karya? Tidak masalah.</h3>
+                    <p>Kamu tetap bisa baca, dengar, simpan ide, lalu mulai saat sudah yakin.</p>
                 </div>
                 <div class="creator-side-card creator-side-card-soft">
-                    <span class="section-kicker">Monetisasi</span>
-                    <h3>Royalti, wallet, dan affiliate bekerja lebih baik saat katalog terasa bernilai.</h3>
-                    <p>Gunakan dashboard ini untuk menentukan apa yang perlu dipromosikan.</p>
+                    <span class="section-kicker">Cuan</span>
+                    <h3>Kalau ada karya yang bagus, kamu juga bisa bantu share dan ikut besarkan nilainya.</h3>
+                    <p>Mulai dari bikin karya sendiri atau ikut sebar karya yang kamu suka, dua-duanya bisa jalan dari area ini.</p>
                 </div>
             </aside>
         </div>
@@ -116,7 +116,7 @@
 
 @push('scripts')
 <script>
-  async function ensureCreatorSession() {
+  async function ensureMemberSession() {
     if (!DK.token()) {
       location.href = '/masuk';
       return null;
@@ -126,12 +126,6 @@
     if (!me?.user?.id) {
       DK.clearToken();
       location.href = '/masuk';
-      return null;
-    }
-
-    const roles = Array.isArray(me.roles) ? me.roles : [];
-    if (!roles.includes('creator')) {
-      location.href = '/wallet';
       return null;
     }
 
@@ -184,7 +178,7 @@
   }
 
   async function loadCreatorDashboard() {
-    const session = await ensureCreatorSession();
+    const session = await ensureMemberSession();
     if (!session) return;
 
     try {
@@ -202,12 +196,12 @@
 
       document.querySelector('#my-works').innerHTML = works.map(creatorCard).join('');
     } catch (error) {
-      document.querySelector('#creator-msg').innerHTML = '<div class="alert alert-error">Dashboard kreator belum berhasil dimuat. Silakan masuk ulang lalu coba lagi.</div>';
+      document.querySelector('#creator-msg').innerHTML = '<div class="alert alert-error">Dashboard member belum berhasil dimuat. Silakan masuk ulang lalu coba lagi.</div>';
       document.querySelector('#my-works').innerHTML = `
         <div class="state" style="grid-column:1/-1">
           <div class="emoji">⚠️</div>
           <h3>Dashboard belum berhasil dimuat</h3>
-          <p>Data karya dan statistik belum bisa ditampilkan saat ini. Coba muat ulang halaman atau masuk kembali ke akun Anda.</p>
+          <p>Data karya dan statistik belum bisa ditampilkan saat ini. Coba muat ulang halaman atau masuk kembali ke akun kamu.</p>
         </div>`;
     }
   }

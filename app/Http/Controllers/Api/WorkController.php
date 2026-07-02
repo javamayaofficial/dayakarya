@@ -49,7 +49,7 @@ class WorkController extends \App\Http\Controllers\Controller
 
     public function creatorDashboard(Request $request): JsonResponse
     {
-        $this->authorizeCreator($request);
+        $this->authorizeMember($request);
 
         $user = $request->user();
         $works = $user->works()
@@ -81,7 +81,7 @@ class WorkController extends \App\Http\Controllers\Controller
 
     public function store(Request $request): JsonResponse
     {
-        $this->authorizeCreator($request);
+        $this->authorizeMember($request);
 
         $data = $request->validate([
             'title'       => ['required', 'string', 'max:150'],
@@ -101,8 +101,8 @@ class WorkController extends \App\Http\Controllers\Controller
         ], 201);
     }
 
-    protected function authorizeCreator(Request $request): void
+    protected function authorizeMember(Request $request): void
     {
-        abort_unless($request->user()->hasRole('creator'), 403, 'Khusus creator.');
+        abort_unless($request->user() !== null, 401, 'Silakan login dulu.');
     }
 }

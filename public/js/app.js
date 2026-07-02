@@ -278,14 +278,11 @@ async function resolveInternalArea() {
     return { authenticated: false, href: '/masuk', label: 'Akun' };
   }
 
-  const roles = Array.isArray(me.roles) ? me.roles : [];
-  const isCreator = roles.includes('creator');
-
   return {
     authenticated: true,
-    href: isCreator ? '/creator' : '/wallet',
-    label: isCreator ? 'Akun' : 'Akun',
-    roles,
+    href: '/creator',
+    label: 'Akun',
+    roles: Array.isArray(me.roles) ? me.roles : [],
     user: me.user,
   };
 }
@@ -334,15 +331,11 @@ function setShellMode(mode, session = null) {
 
   if (mode === 'member') {
     body.classList.add('is-member-area');
-    if (session?.roles?.includes('creator')) {
-      body.dataset.memberRole = 'creator';
-    } else {
-      body.dataset.memberRole = 'member';
-    }
+    body.dataset.memberRole = 'member';
 
     if (shellBadge) {
       shellBadge.hidden = false;
-      shellBadge.textContent = session?.roles?.includes('creator') ? 'Creator Area' : 'Member Area';
+      shellBadge.textContent = 'Member Area';
     }
     return;
   }
@@ -409,8 +402,7 @@ function initGuestNavigation() {
 }
 
 function initMemberNavigation(session) {
-  const isCreator = Boolean(session.roles?.includes('creator'));
-  const dashboardHref = isCreator ? '/creator' : '/wallet';
+  const dashboardHref = '/creator';
   const brandLink = document.querySelector('#brand-link');
   const primaryNav = document.querySelector('#primary-nav');
   const secondaryNav = document.querySelector('#secondary-nav');
@@ -428,7 +420,7 @@ function initMemberNavigation(session) {
     href: dashboardHref,
     icon: '◫',
     label: 'Dashboard',
-    matchPrefix: isCreator ? '/creator' : '/wallet',
+    matchPrefix: '/creator',
   });
 
   setNavItem(secondaryNav, {

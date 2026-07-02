@@ -27,7 +27,7 @@
                     </div>
                     <div class="proof-item">
                         <strong>Skill bisa terus berkembang</strong>
-                        <span>Karya, pembaca, affiliate, dan peluang kerja sama bisa tumbuh di tempat yang sama.</span>
+                        <span>Karya, pembaca, dan peluang share bisa tumbuh di tempat yang sama.</span>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@
                         <strong>Bisa dibuka di web dan tetap nyaman buat konten audio</strong>
                     </div>
                     <div class="stat-tile">
-                        <span class="label">Kerja Sama</span>
-                        <strong>Lebih enak ditawarkan ke sponsor, partner, atau program CSR</strong>
+                        <span class="label">Promosi</span>
+                        <strong>Lebih gampang dibagikan ke pembaca baru, komunitas, dan partner promosi</strong>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="item"><span class="ic">◆</span> Royalti otomatis</div>
             <div class="item"><span class="ic">◆</span> Withdraw ke rekening</div>
             <div class="item"><span class="ic">◆</span> Komisi affiliate</div>
-            <div class="item"><span class="ic">◆</span> Didukung Program CSR</div>
+            <div class="item"><span class="ic">◆</span> Bisa bantu share karya</div>
         </div>
     </div>
 </section>
@@ -88,8 +88,8 @@
             </article>
             <article class="feature-card">
                 <span class="feature-icon">03</span>
-                <h3>Lebih siap diajak kerja sama</h3>
-                <p>Kalau mau dibawa ke sponsor atau partner, tampilannya sudah lebih meyakinkan.</p>
+                <h3>Lebih enak dibagikan</h3>
+                <p>Kalau mau dipromosikan atau dibantu sebar, tampilannya sudah lebih siap.</p>
             </article>
         </div>
     </div>

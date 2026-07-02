@@ -50,8 +50,7 @@
       return;
     }
 
-    const roles = Array.isArray(me.roles) ? me.roles : [];
-    location.href = roles.includes('creator') ? '/creator' : '/wallet';
+    location.href = '/creator';
   }
 
   async function doLogin() {
@@ -63,9 +62,7 @@
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Berhasil masuk. Mengalihkan…</div>';
-      const roles = Array.isArray(data.roles) ? data.roles : [];
-      const redirectTo = roles.includes('creator') ? '/creator' : '/wallet';
-      setTimeout(() => location.href = redirectTo, 700);
+      setTimeout(() => location.href = '/creator', 700);
     } else {
       const err = data.errors?.email?.[0] || data.message || 'Gagal masuk.';
       msg.innerHTML = `<div class="alert alert-error">${err}</div>`;
