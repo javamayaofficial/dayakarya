@@ -74,11 +74,7 @@ Route::view('/creator/works/{work}', 'creator.editor')->name('creator.work.edit'
 
 // Halaman statis (CMS)
 Route::view('/tentang', 'reader.page')->name('about');
-Route::view('/kontak', 'reader.contact')->name('contact');
 Route::view('/faq', 'reader.faq')->name('faq');
 Route::view('/privacy', 'reader.privacy')->name('privacy');
 Route::view('/terms', 'reader.terms')->name('terms');
-Route::view('/refund-policy', 'reader.refund')->name('refund');
-Route::view('/content-policy', 'reader.content-policy')->name('content.policy');
-Route::view('/creator-agreement', 'reader.creator-agreement')->name('creator.agreement');
 Route::view('/hapus-akun', 'reader.account-deletion')->name('account.deletion');

@@ -1,6 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Privacy Policy - DAYAKARYA')
-@section('desc', 'Kebijakan Privasi DAYAKARYA menjelaskan pengumpulan, penggunaan, perlindungan data, dan kontak privasi resmi.')
+@section('title', 'Kebijakan Privasi — Dayakarya')
 @section('body_class', 'page-support')
 @section('content')
 <section class="section">
@@ -8,15 +7,10 @@
         <div class="support-hero">
             <span class="section-kicker">Kebijakan Privasi</span>
             <h1>Privasi pengguna dijaga dengan standar yang jelas, agar kepercayaan tidak berhenti pada tampilan saja.</h1>
-            <p>Halaman ini menjelaskan jenis data yang dikumpulkan DAYAKARYA, alasan penggunaannya, serta cara kami menjaga informasi pribadi agar pengalaman berkarya dan bertransaksi digital tetap aman, tertata, dan layak dipercaya.</p>
+            <p>Halaman ini menjelaskan jenis data yang dikumpulkan Dayakarya, alasan penggunaannya, serta cara kami menjaga informasi pribadi agar pengalaman berkarya dan bertransaksi tetap terasa aman, tertata, dan layak dipercaya.</p>
         </div>
 
         <div class="legal-grid">
-            <article class="support-panel legal-card">
-                <h2 class="support-title">Operator layanan</h2>
-                <p class="support-copy">DAYAKARYA dikelola oleh PT Java Maya Studio bekerja sama dengan Yayasan Pondok Dayacipta Nusantara. Kebijakan ini berlaku untuk seluruh layanan digital di dalam platform.</p>
-            </article>
-
             <article class="support-panel legal-card">
                 <h2 class="support-title">Data yang kami kumpulkan</h2>
                 <ul class="legal-list">
@@ -56,7 +50,7 @@
 
             <article class="support-panel legal-card legal-card-highlight">
                 <h2 class="support-title">Kontak privasi</h2>
-                <p class="support-copy">Untuk pertanyaan terkait privasi atau permintaan terkait data pribadi, hubungi tim DAYAKARYA melalui <a href="mailto:admin@dayakarya.id">admin@dayakarya.id</a> atau <a href="tel:085722224391">085722224391</a> pada jam operasional Senin - Jumat, 09.00 - 17.00 WIB.</p>
+                <p class="support-copy">Untuk pertanyaan terkait privasi atau permintaan terkait data pribadi, hubungi tim Dayakarya melalui <a href="mailto:admin@dayakarya.id">admin@dayakarya.id</a> dengan subjek yang jelas agar penanganan dapat dilakukan lebih cepat.</p>
                 <p class="legal-note">Dengan menggunakan Dayakarya, Anda menyetujui pemrosesan data sebagaimana dijelaskan di halaman ini. Kebijakan ini dapat diperbarui dari waktu ke waktu untuk menyesuaikan perkembangan layanan.</p>
             </article>
         </div>

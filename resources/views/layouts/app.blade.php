@@ -11,8 +11,67 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Dayakarya">
     <meta name="format-detection" content="telephone=no">
-    <title>@yield('title', 'Dayakarya — Berkarya, Berdampak, Berpenghasilan')</title>
-    <meta name="description" content="@yield('desc', 'Platform kreator Indonesia untuk menulis, mendongeng, dan berpenghasilan dari karya digital.')">
+    @php
+        $defaultTitle = 'DAYAKARYA - Platform Creator Economy Indonesia';
+        $defaultDescription = 'DAYAKARYA adalah platform Creator Economy Indonesia untuk penulis, storyteller, podcaster, dan kreator digital. Pengguna dapat top up credit untuk membuka konten premium digital tanpa penjualan barang fisik.';
+        $baseUrl = rtrim(config('app.url') ?: url('/'), '/');
+        $pageTitle = trim($__env->yieldContent('title', $defaultTitle));
+        $pageDescription = trim($__env->yieldContent('desc', $defaultDescription));
+        $ogType = trim($__env->yieldContent('og_type', 'website'));
+        $canonicalUrl = url()->current();
+        $ogImage = asset('img/icon-512.png');
+        $organizationSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => 'DAYAKARYA',
+            'alternateName' => 'Platform Creator Economy Indonesia',
+            'url' => $baseUrl,
+            'logo' => asset('img/icon-512.png'),
+            'description' => $defaultDescription,
+            'email' => 'admin@dayakarya.id',
+            'telephone' => '085722224391',
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Jl. Melati Utama No.18, Cipadung Kidul, Kecamatan Panyileukan',
+                'addressLocality' => 'Kota Bandung',
+                'addressRegion' => 'Jawa Barat',
+                'addressCountry' => 'ID',
+            ],
+            'contactPoint' => [[
+                '@type' => 'ContactPoint',
+                'contactType' => 'customer support',
+                'email' => 'admin@dayakarya.id',
+                'telephone' => '085722224391',
+                'availableLanguage' => ['id', 'en'],
+                'areaServed' => 'ID',
+            ]],
+        ];
+        $websiteSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => 'DAYAKARYA',
+            'url' => $baseUrl,
+            'description' => $defaultDescription,
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'PT Java Maya Studio',
+            ],
+        ];
+    @endphp
+    <title>{{ $pageTitle }}</title>
+    <meta name="description" content="{{ $pageDescription }}">
+    <meta property="og:site_name" content="DAYAKARYA">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $pageDescription }}">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:locale" content="id_ID">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $pageDescription }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
 
     {{-- PWA --}}
     <link rel="manifest" href="{{ route('pwa.manifest') }}">
@@ -32,6 +91,8 @@
         $jsVersion = file_exists(public_path('js/app.js')) ? filemtime(public_path('js/app.js')) : null;
     @endphp
     <link rel="stylesheet" href="/css/app.css{{ $cssVersion ? '?v=' . $cssVersion : '' }}">
+    <script type="application/ld+json">@json($organizationSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
+    <script type="application/ld+json">@json($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)</script>
     @stack('head')
 </head>
 <body class="@yield('body_class')">
@@ -63,20 +124,49 @@
 
     <footer class="foot-wrap">
         <div class="foot container">
-            <div class="foot-brand">
-                <span class="spine"></span>
-                <div>
-                    <strong>Dayakarya</strong>
-                    <p>Rumah kreator Indonesia untuk berkarya, berdampak, dan berpenghasilan.</p>
+            <div class="foot-grid">
+                <div class="foot-column foot-column-brand">
+                    <div class="foot-brand">
+                        <span class="spine"></span>
+                        <div>
+                            <strong>DAYAKARYA</strong>
+                            <p>Platform Creator Economy Indonesia untuk karya digital, top up credit, dan unlock konten premium.</p>
+                        </div>
+                    </div>
+                    <p class="foot-copy">Dikelola oleh <strong>PT Java Maya Studio</strong> dan bekerja sama dengan <strong>Yayasan Pondok Dayacipta Nusantara</strong>.</p>
+                </div>
+                <div class="foot-column">
+                    <strong class="foot-heading">Support</strong>
+                    <div class="foot-stack">
+                        <a href="mailto:admin@dayakarya.id">admin@dayakarya.id</a>
+                        <a href="tel:085722224391">085722224391</a>
+                        <span>Senin - Jumat, 09.00 - 17.00 WIB</span>
+                    </div>
+                </div>
+                <div class="foot-column">
+                    <strong class="foot-heading">Business Address</strong>
+                    <div class="foot-stack">
+                        <span>Jl. Melati Utama No.18</span>
+                        <span>Cipadung Kidul, Panyileukan</span>
+                        <span>Kota Bandung, Jawa Barat</span>
+                        <span>Indonesia</span>
+                    </div>
+                </div>
+                <div class="foot-column">
+                    <strong class="foot-heading">Navigation</strong>
+                    <div class="foot-links">
+                        <a href="{{ route('about') }}">About</a>
+                        <a href="{{ route('faq') }}">FAQ</a>
+                        <a href="{{ route('privacy') }}">Privacy Policy</a>
+                        <a href="{{ route('terms') }}">Terms of Service</a>
+                        <a href="{{ route('refund') }}">Refund Policy</a>
+                        <a href="{{ route('contact') }}">Contact</a>
+                        <a href="{{ route('content.policy') }}">Content Policy</a>
+                        <a href="{{ route('creator.agreement') }}">Creator Agreement</a>
+                    </div>
                 </div>
             </div>
-            <div class="foot-links">
-                <a href="{{ route('leaderboard') }}" data-auth-only hidden>Leaderboard</a>
-                <a href="{{ route('privacy') }}">Kebijakan Privasi</a>
-                <a href="{{ route('terms') }}">Syarat Layanan</a>
-                <a href="{{ route('account.deletion') }}">Penghapusan Akun</a>
-            </div>
-            <p class="foot-copy">Dayakarya oleh PT Java Maya Studio &middot; &copy; {{ date('Y') }}</p>
+            <p class="foot-copy foot-copy-bottom">&copy; {{ date('Y') }} DAYAKARYA - PT Java Maya Studio. Seluruh transaksi dilakukan secara digital di dalam platform.</p>
         </div>
     </footer>
 

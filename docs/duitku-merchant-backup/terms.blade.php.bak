@@ -1,6 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Terms of Service - DAYAKARYA')
-@section('desc', 'Syarat Layanan DAYAKARYA menjelaskan ruang lingkup layanan, transaksi digital, konten, dan tanggung jawab pengguna.')
+@section('title', 'Syarat Layanan — Dayakarya')
 @section('body_class', 'page-support')
 @section('content')
 <section class="section">
@@ -8,15 +7,10 @@
         <div class="support-hero">
             <span class="section-kicker">Syarat Layanan</span>
             <h1>Aturan layanan disusun agar setiap karya, transaksi, dan interaksi berjalan dengan batas yang jelas.</h1>
-            <p>Halaman ini memuat prinsip dasar penggunaan DAYAKARYA untuk kreator, penikmat karya, affiliate, maupun pihak lain yang berinteraksi di dalam ekosistem platform digital.</p>
+            <p>Halaman ini memuat prinsip dasar penggunaan Dayakarya untuk kreator, penikmat karya, affiliate, maupun pihak lain yang berinteraksi di dalam ekosistem platform.</p>
         </div>
 
         <div class="legal-grid">
-            <article class="support-panel legal-card">
-                <h2 class="support-title">Operator platform</h2>
-                <p class="support-copy">DAYAKARYA dikelola oleh PT Java Maya Studio bekerja sama dengan Yayasan Pondok Dayacipta Nusantara sebagai platform creator economy Indonesia untuk produk dan layanan digital.</p>
-            </article>
-
             <article class="support-panel legal-card">
                 <h2 class="support-title">Ruang lingkup layanan</h2>
                 <p class="support-copy">Dayakarya menyediakan ruang digital untuk publikasi karya, akses premium, wallet, transaksi pendukung, dan interaksi lain yang relevan dengan ekosistem kreator digital.</p>
@@ -44,8 +38,6 @@
                 <h2 class="support-title">Transaksi dan monetisasi</h2>
                 <ul class="legal-list">
                     <li>Transaksi top up, akses premium, dan monetisasi kreator diproses sesuai alur sistem dan verifikasi yang berlaku.</li>
-                    <li>Produk yang ditawarkan adalah produk digital seperti bab premium, episode premium, audio premium, dan konten premium lainnya.</li>
-                    <li>DAYAKARYA tidak menjual barang fisik dan seluruh transaksi dilakukan secara digital di dalam platform.</li>
                     <li>Jika ditemukan indikasi fraud, duplikasi, atau penyalahgunaan, Dayakarya dapat menahan proses sampai verifikasi selesai.</li>
                     <li>Ketentuan teknis, biaya layanan, dan status transaksi dapat diperbarui mengikuti kebutuhan operasional platform.</li>
                 </ul>
