@@ -1,36 +1,15 @@
 @extends('layouts.app')
 @section('title', 'Masuk — Dayakarya')
-@section('body_class', 'page-auth')
+@section('body_class', 'page-auth page-auth-simple')
 
 @section('content')
 <section class="section auth-section">
     <div class="container auth-container">
         <div class="auth-shell">
-            <aside class="auth-aside">
-                <span class="section-kicker">Akses Ruang Dayakarya</span>
-                <h1>Masuk ke ruang karya yang terasa bernilai.</h1>
-                <p>Dayakarya menghadirkan akses yang rapi untuk karya, audiens, dan monetisasi.</p>
-                <div class="auth-points">
-                    <div class="auth-point">
-                        <strong>Wallet dan royalti</strong>
-                        <span>Pantau credit, top up, dan histori dalam satu alur.</span>
-                    </div>
-                    <div class="auth-point">
-                        <strong>Nikmati karya premium</strong>
-                        <span>Buka konten premium dan jelajahi katalog dengan nyaman.</span>
-                    </div>
-                    <div class="auth-point">
-                        <strong>Untuk kreator yang ingin naik kelas</strong>
-                        <span>Bangun katalog dan pendapatan dengan citra yang rapi.</span>
-                    </div>
-                </div>
-            </aside>
-
             <div class="auth-card card">
                 <div class="auth-card-head">
                     <span class="mini-label mini-label-dark">Login Dayakarya</span>
                     <h2>Selamat datang kembali</h2>
-                    <p>Masuk untuk lanjut membaca, berkarya, dan mengelola akun.</p>
                 </div>
 
                 <div id="msg"></div>
@@ -53,9 +32,6 @@
                 <div class="auth-meta">
                     <span>Belum punya akun?</span>
                     <a href="/daftar">Buat akun gratis</a>
-                </div>
-                <div class="auth-note">
-                    Masuk untuk kembali ke Dayakarya.
                 </div>
             </div>
         </div>

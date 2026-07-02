@@ -573,6 +573,17 @@ img { max-width: 100%; display: block; }
   color: var(--muted);
   font-size: .84rem;
 }
+.page-auth-simple .auth-container {
+  max-width: 620px;
+}
+.page-auth-simple .auth-shell {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+.page-auth-simple .auth-card {
+  width: 100%;
+  max-width: 520px;
+}
 
 /* ---- Explore ---- */
 .page-explore::before,
@@ -1556,6 +1567,9 @@ img { max-width: 100%; display: block; }
     grid-template-columns: minmax(0, 1.05fr) minmax(380px, .95fr);
     gap: 22px;
     align-items: stretch;
+  }
+  .page-auth-simple .auth-shell {
+    grid-template-columns: minmax(0, 1fr);
   }
   .auth-card {
     padding: 32px;
