@@ -16,13 +16,13 @@
         <div class="wallet-hero">
             <div class="wallet-hero-copy">
                 <span class="section-kicker">Wallet Dayakarya</span>
-                <h1>Kelola credit dan transaksi dengan lebih tenang.</h1>
-                <p>Saldo, top up, dan histori ditampilkan dengan jelas.</p>
+                <h1>Atur credit dan transaksi tanpa ribet.</h1>
+                <p>Saldo, top up, dan riwayatnya kelihatan jelas.</p>
             </div>
             <div class="wallet-hero-note">
-                <span class="mini-label">Financial Layer</span>
-                <h2>Transaksi yang rapi membangun rasa percaya.</h2>
-                <p>Top up, histori, dan saldo tampil dalam alur yang bersih.</p>
+                <span class="mini-label">Buat Pembayaran</span>
+                <h2>Semuanya dibuat biar kamu lebih gampang top up dan pakai credit.</h2>
+                <p>Dari isi saldo sampai cek riwayat, semuanya ada di satu tempat.</p>
             </div>
         </div>
 
@@ -35,12 +35,12 @@
             <div class="balance-card balance-card-rupiah">
                 <span class="label">Saldo Rupiah</span>
                 <strong class="value" id="rupiah-balance">—</strong>
-                <p>Pendapatan dan aliran nilai terlihat lebih transparan.</p>
+                <p>Kalau ada pemasukan, angkanya kelihatan lebih jelas.</p>
             </div>
             <div class="balance-card balance-card-soft">
                 <span class="label">Konversi Credit</span>
                 <strong class="value">Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</strong>
-                <p>1 credit memiliki nilai rupiah yang jelas.</p>
+                <p>1 credit punya nilai rupiah yang jelas.</p>
             </div>
         </div>
 
@@ -49,10 +49,10 @@
                 <div class="wallet-panel-head">
                     <div>
                         <span class="section-kicker">Top Up</span>
-                        <h2>Isi credit dengan alur yang jelas</h2>
+                        <h2>Isi credit sesuai kebutuhan</h2>
                     </div>
                 </div>
-                <p class="wallet-copy">Pilih nominal yang sesuai untuk membuka akses premium.</p>
+                <p class="wallet-copy">Pilih nominal yang pas buat buka karya premium atau lanjut baca tanpa putus.</p>
                 <div class="chips chips-elevated" id="topup-options">
                     <span class="chip" data-credit="50">50</span>
                     <span class="chip active" data-credit="100">100</span>
@@ -72,22 +72,22 @@
             <div class="wallet-panel wallet-panel-info card">
                 <div class="wallet-panel-head">
                     <div>
-                        <span class="section-kicker">Kepercayaan Sistem</span>
-                        <h2>Semua dibuat agar mudah dipahami</h2>
+                        <span class="section-kicker">Biar Lebih Tenang</span>
+                        <h2>Semua angkanya gampang dipahami</h2>
                     </div>
                 </div>
                 <div class="wallet-info-list">
                     <div class="wallet-info-item">
-                        <strong>Nilai credit selalu jelas</strong>
-                        <span>Konversi dan total selalu tampil di depan.</span>
+                        <strong>Nilai credit jelas</strong>
+                        <span>Konversi dan total langsung kelihatan.</span>
                     </div>
                     <div class="wallet-info-item">
-                        <strong>Histori mudah diaudit</strong>
-                        <span>Setiap aktivitas dompet tercatat rapi.</span>
+                        <strong>Riwayat rapi</strong>
+                        <span>Setiap transaksi tercatat, jadi lebih gampang dicek.</span>
                     </div>
                     <div class="wallet-info-item">
-                        <strong>Dibangun untuk monetisasi yang rapi</strong>
-                        <span>Satu wallet untuk pembaca, pendengar, dan kreator.</span>
+                        <strong>Satu wallet, banyak kebutuhan</strong>
+                        <span>Bisa dipakai pembaca, pendengar, dan kreator dalam alur yang sama.</span>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
         <div class="section-head section-head-premium" style="margin-top:24px">
             <div>
                 <span class="section-kicker">Riwayat Transaksi</span>
-                <h2>Setiap pergerakan saldo tercatat rapi</h2>
+                <h2>Semua pergerakan saldo ada catatannya</h2>
             </div>
         </div>
         <div id="trx-list"><div class="state"><div class="emoji">🧾</div><p>Memuat riwayat…</p></div></div>
@@ -141,16 +141,16 @@
     topupButton.textContent = 'Masuk Untuk Membuka Wallet';
     topupMessage.innerHTML = `
       <div class="alert alert-success">
-        Wallet memakai login akun pengguna, bukan session admin.
+        Wallet ini pakai login akun pengguna, bukan session admin.
         <a href="/masuk" style="font-weight:700;text-decoration:underline">Masuk sekarang</a>
         untuk melihat saldo, histori, dan top up.
       </div>`;
     document.querySelector('#trx-list').innerHTML = `
       <div class="state">
         <div class="emoji">🔐</div>
-        <h3>Wallet siap setelah Anda masuk</h3>
+        <h3>Wallet baru terbuka setelah kamu masuk</h3>
         <p>Masuk untuk melihat saldo, histori, dan top up.</p>
-        <a href="/masuk" class="btn btn-primary">Masuk Ke Akun Pengguna</a>
+        <a href="/masuk" class="btn btn-primary">Masuk ke Akun</a>
       </div>`;
   }
 

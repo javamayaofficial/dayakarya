@@ -7,15 +7,15 @@
     <div class="container">
         <div class="explore-shell">
             <div class="explore-copy">
-                <span class="section-kicker">Kurasi Katalog Dayakarya</span>
-                <h1>Temukan karya yang layak mendapat waktu Anda.</h1>
-                <p>Jelajahi cerita, podcast, dongeng, dan audiobook dalam katalog yang rapi.</p>
+                <span class="section-kicker">Jelajahi Karya</span>
+                <h1>Cari karya yang enak dibaca, didengar, dan layak kamu ikuti.</h1>
+                <p>Cerita, podcast, dongeng, dan audiobook dikumpulkan di katalog yang rapi.</p>
             </div>
             <div class="explore-highlight">
                 <div class="highlight-card">
-                    <span class="mini-label">Pilihan Berkualitas</span>
-                    <h2>Karya tidak sekadar ditampilkan. Karya dipresentasikan dengan nilai.</h2>
-                    <p>Pakai pencarian dan filter untuk menemukan yang paling sesuai.</p>
+                    <span class="mini-label">Pilihan Editor</span>
+                    <h2>Di sini karya tidak numpuk begitu saja. Semuanya tampil lebih enak dilihat.</h2>
+                    <p>Pakai pencarian dan filter biar kamu cepat ketemu yang cocok.</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="section-head section-head-premium">
                 <div>
                     <span class="section-kicker">Temukan Karya</span>
-                    <h2>Ruang jelajah untuk selera yang lebih selektif</h2>
+                        <h2>Lagi cari bacaan atau audio yang pas?</h2>
                 </div>
             </div>
             <div class="search-shell">
@@ -51,16 +51,16 @@
 
         <div class="explore-meta">
             <div class="meta-card">
-                <strong>Pencarian yang terarah</strong>
-                <span>Temukan karya relevan lebih cepat.</span>
+                <strong>Cari lebih cepat</strong>
+                <span>Filter dan pencarian bantu kamu nemu yang pas.</span>
             </div>
             <div class="meta-card">
-                <strong>Presentasi yang meyakinkan</strong>
-                <span>Setiap karya tampil dengan rasa editorial.</span>
+                <strong>Tampil lebih enak</strong>
+                <span>Setiap karya ditata biar lebih gampang dinikmati.</span>
             </div>
             <div class="meta-card">
                 <strong>Siap untuk konten premium</strong>
-                <span>Pengalaman gratis dan premium terasa tetap halus.</span>
+                <span>Gratis atau berbayar, alurnya tetap terasa rapi.</span>
             </div>
         </div>
 
@@ -92,7 +92,7 @@
       const json = await DK.get('/works?search=' + encodeURIComponent(e.target.value));
       const items = json.data ?? [];
       el.innerHTML = items.length ? items.map(w => DK.workCard(w)).join('')
-        : `<div class="state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3>Tidak ditemukan</h3><p>Coba kata kunci lain.</p></div>`;
+        : `<div class="state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3>Belum ketemu</h3><p>Coba ganti kata kunci atau pilih kategori lain.</p></div>`;
     }, 350);
   });
 </script>
