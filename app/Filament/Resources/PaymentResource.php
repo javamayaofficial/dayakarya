@@ -6,7 +6,6 @@ use App\Filament\Resources\PaymentResource\Pages;
 use App\Models\Payment;
 use App\Services\NotificationService;
 use App\Services\WalletService;
-use Illuminate\Support\Facades\Log;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -173,17 +172,6 @@ class PaymentResource extends Resource
                     ->visible(fn (Payment $record): bool => $record->status === 'paid')
                     ->action(function (Payment $record): void {
                         $record->loadMissing('user');
-                        // #region debug-point payment-resource-notify-action
-                        Log::info('Debug topup notify action triggered', [
-                            'payment_id' => $record->id,
-                            'order_id' => $record->order_id,
-                            'user_id' => $record->user?->id,
-                            'user_email' => $record->user?->email,
-                            'user_phone' => $record->user?->phone,
-                            'provider_whatsapp' => \App\Support\IntegrationSettings::get('providers.whatsapp', config('dayakarya.providers.whatsapp', 'fonnte')),
-                            'provider_email' => \App\Support\IntegrationSettings::get('providers.email', config('dayakarya.providers.email', 'mailketing')),
-                        ]);
-                        // #endregion debug-point payment-resource-notify-action
                         app(NotificationService::class)->topupSuccess($record->user, (int) $record->credit_amount);
 
                         Notification::make()

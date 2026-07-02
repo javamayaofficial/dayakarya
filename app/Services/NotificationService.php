@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\User;
 use App\Services\Email\EmailManager;
 use App\Services\WhatsApp\WhatsAppManager;
-use Illuminate\Support\Facades\Log;
 
 /**
  * NotificationService — satu pintu untuk mengirim notifikasi ke pengguna
@@ -22,48 +21,15 @@ class NotificationService
 {
     public function whatsapp(User $user, string $message): bool
     {
-        // #region debug-point notification-whatsapp-entry
-        Log::info('Debug notification whatsapp entry', [
-            'user_id' => $user->id,
-            'has_phone' => filled($user->phone),
-            'phone' => $user->phone,
-        ]);
-        // #endregion debug-point notification-whatsapp-entry
         if (! $user->phone) {
-            // #region debug-point notification-whatsapp-skip
-            Log::warning('Debug notification whatsapp skipped because phone is empty', [
-                'user_id' => $user->id,
-            ]);
-            // #endregion debug-point notification-whatsapp-skip
             return false;
         }
-        $result = WhatsAppManager::driver()->send($user->phone, $message);
-        // #region debug-point notification-whatsapp-result
-        Log::info('Debug notification whatsapp result', [
-            'user_id' => $user->id,
-            'result' => $result,
-        ]);
-        // #endregion debug-point notification-whatsapp-result
-        return $result;
+        return WhatsAppManager::driver()->send($user->phone, $message);
     }
 
     public function email(User $user, string $subject, string $htmlBody): bool
     {
-        // #region debug-point notification-email-entry
-        Log::info('Debug notification email entry', [
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'subject' => $subject,
-        ]);
-        // #endregion debug-point notification-email-entry
-        $result = EmailManager::driver()->send($user->email, $subject, $htmlBody);
-        // #region debug-point notification-email-result
-        Log::info('Debug notification email result', [
-            'user_id' => $user->id,
-            'result' => $result,
-        ]);
-        // #endregion debug-point notification-email-result
-        return $result;
+        return EmailManager::driver()->send($user->email, $subject, $htmlBody);
     }
 
     // ---- Helper event siap pakai ----
@@ -71,12 +37,6 @@ class NotificationService
     public function topupSuccess(User $user, int $credit): void
     {
         $msg = "Halo {$user->name}! Top up berhasil. {$credit} Credit sudah masuk ke Wallet Dayakarya kamu. Selamat menikmati karya favoritmu!";
-        // #region debug-point notification-topup-success
-        Log::info('Debug topupSuccess called', [
-            'user_id' => $user->id,
-            'credit' => $credit,
-        ]);
-        // #endregion debug-point notification-topup-success
         $this->whatsapp($user, $msg);
         $this->email(
             $user,
