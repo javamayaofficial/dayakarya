@@ -161,14 +161,14 @@ function getInstallFallbackMessage() {
   }
 
   if (/iphone|ipad|ipod/i.test(ua)) {
-    return 'Di iPhone atau iPad, buka Share lalu pilih Add to Home Screen.';
+    return 'Kalau pakai iPhone atau iPad, buka Share lalu pilih Add to Home Screen.';
   }
 
   if (/android/i.test(ua)) {
-    return 'Gunakan menu browser lalu pilih Install App atau Tambahkan ke layar utama.';
+    return 'Kalau pakai Android, buka menu browser lalu pilih Install App atau Tambahkan ke layar utama.';
   }
 
-  return 'Gunakan menu browser Anda lalu pilih Install App atau Add to Home Screen.';
+  return 'Buka menu browser, lalu pilih Install App atau Add to Home Screen.';
 }
 
 function updateInstallButtons() {
@@ -183,10 +183,10 @@ function updateInstallButtons() {
         ? 'Simpan ke Home Screen'
         : 'Pasang Dayakarya';
   const note = installed
-    ? 'Dayakarya sudah aktif sebagai aplikasi di perangkat ini.'
+    ? 'Dayakarya sudah siap dipakai dari layar utama.'
     : deferredInstallPrompt
-      ? 'Pasang Dayakarya ke homescreen untuk akses lebih cepat, lebih stabil, dan terasa seperti aplikasi.'
-      : 'Jika prompt otomatis belum muncul, Anda tetap bisa menambahkan Dayakarya ke layar utama dari menu browser.';
+      ? 'Pasang Dayakarya ke layar utama biar bukanya lebih cepat dan terasa seperti aplikasi.'
+      : 'Kalau tombol install belum muncul, tenang, Dayakarya tetap bisa disimpan ke layar utama lewat menu browser.';
 
   document.documentElement.classList.toggle('pwa-installable', Boolean(deferredInstallPrompt));
 

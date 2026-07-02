@@ -19,7 +19,7 @@
                         <span data-install-label>Install App</span>
                     </button>
                 </div>
-                <p class="install-note" data-install-note>Pasang Dayakarya agar akses terasa cepat dan rapi seperti aplikasi.</p>
+                <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih enak, seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
                         <strong>Monetisasi yang rapi</strong>
