@@ -160,6 +160,24 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 @push('scripts')
 <script>
   const workId = '{{ request()->route('work') }}';
+  const debugEndpoint = 'http://127.0.0.1:7777/event';
+
+  // #region debug-point A:frontend-debug-report
+  function reportDraftSaveDebug(hypothesisId, msg, data = {}) {
+    fetch(debugEndpoint, {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionId: 'draft-save-error',
+        runId: 'pre-fix',
+        hypothesisId,
+        location: 'resources/views/creator/editor.blade.php',
+        msg: `[DEBUG] ${msg}`,
+        data,
+        ts: Date.now(),
+      }),
+    }).catch(() => {});
+  }
+  // #endregion
 
   function editorMode(type) {
     if (type === 'video_series') return 'video';
@@ -290,12 +308,49 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
     let ok = false;
     let data = {};
+    // #region debug-point B:save-request-start
+    reportDraftSaveDebug('B', 'save draft request started', {
+      workId,
+      type: payload.type,
+      titleLength: payload.title?.length ?? 0,
+      synopsisLength: payload.synopsis?.length ?? 0,
+      contentLength: payload.content?.length ?? 0,
+      hasAudioUrl: Boolean(payload.audio_url),
+      hasVideoUrl: Boolean(payload.video_url),
+      isPremium: payload.is_premium,
+      priceCredit: payload.price_credit,
+    });
+    // #endregion
 
     try {
-      const result = await DK.post('/creator/works/' + workId + '/save', payload);
-      ok = result.ok;
-      data = result.data;
+      const response = await fetch(DK.api + '/creator/works/' + workId + '/save', {
+        method: 'POST',
+        headers: DK.headers(),
+        body: JSON.stringify(payload),
+      });
+      const rawText = await response.text();
+      const contentType = response.headers.get('content-type') || '';
+
+      // #region debug-point C:save-response
+      reportDraftSaveDebug('C', 'save draft response received', {
+        status: response.status,
+        ok: response.ok,
+        contentType,
+        responseSnippet: rawText.slice(0, 500),
+      });
+      // #endregion
+
+      ok = response.ok;
+      data = contentType.includes('application/json')
+        ? JSON.parse(rawText || '{}')
+        : { message: rawText || 'Server tidak mengirim JSON.' };
     } catch (error) {
+      // #region debug-point D:save-request-error
+      reportDraftSaveDebug('D', 'save draft request crashed before parsing response', {
+        name: error?.name,
+        message: error?.message,
+      });
+      // #endregion
       data = { message: 'Server Error saat menyimpan draft.' };
     }
 
