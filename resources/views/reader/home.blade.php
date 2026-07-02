@@ -80,16 +80,18 @@
                 <span class="feature-icon">01</span>
                 <h3>Karya tampil lebih bernilai</h3>
                 <p>Presentasi, metadata, dan alur beli dibuat pantas dijual.</p>
+            </article>
             <article class="feature-card">
                 <span class="feature-icon">02</span>
                 <h3>Monetisasi terasa meyakinkan</h3>
                 <p>Top up, unlock, royalti, dan affiliate tersusun jelas.</p>
+            </article>
             <article class="feature-card">
                 <span class="feature-icon">03</span>
                 <h3>Siap dibawa ke kolaborasi besar</h3>
                 <p>Strukturnya mendukung sponsor dan CSR tanpa kehilangan kredibilitas.</p>
+            </article>
         </div>
-    </div>
     </div>
 </section>
 
@@ -136,16 +138,18 @@
                 <span class="journey-step">Langkah 1</span>
                 <h3>Terbitkan karya dengan positioning yang kuat</h3>
                 <p>Bangun katalog yang rapi dan mudah ditemukan.</p>
+            </article>
             <article class="journey-card">
                 <span class="journey-step">Langkah 2</span>
                 <h3>Aktifkan akses premium yang pantas dibayar</h3>
                 <p>Jual pengalaman yang terasa eksklusif dan jelas nilainya.</p>
+            </article>
             <article class="journey-card">
                 <span class="journey-step">Langkah 3</span>
                 <h3>Perluas distribusi lewat affiliate dan kolaborasi</h3>
                 <p>Gunakan affiliate, sponsor, dan CSR untuk memperluas jangkauan.</p>
+            </article>
         </div>
-    </div>
     </div>
 </section>
 
