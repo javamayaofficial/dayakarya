@@ -31,6 +31,41 @@
                 </div>
                 <div id="editor-msg"></div>
 
+                <div class="creator-writing-guide field-text-content">
+                    <div class="creator-writing-guide-head">
+                        <strong>Format menulis yang enak dibaca</strong>
+                        <span>Ikuti pola ini supaya cerpen tidak terasa padat dan melelahkan.</span>
+                    </div>
+                    <div class="creator-writing-guide-grid">
+                        <div class="creator-writing-tip">
+                            <strong>1. Satu aksi, satu paragraf</strong>
+                            <span>Kalau ada perpindahan suasana, tokoh bicara, atau aksi baru, pindah paragraf.</span>
+                        </div>
+                        <div class="creator-writing-tip">
+                            <strong>2. Kasih jeda napas</strong>
+                            <span>Gunakan satu baris kosong antar paragraf. Jangan numpuk jadi satu blok panjang.</span>
+                        </div>
+                        <div class="creator-writing-tip">
+                            <strong>3. Pembuka jangan muter</strong>
+                            <span>Usahakan 2-4 paragraf awal sudah bikin pembaca merasa ada sesuatu yang sedang terjadi.</span>
+                        </div>
+                        <div class="creator-writing-tip">
+                            <strong>4. Dialog dipisah</strong>
+                            <span>Kalau tokoh bicara, lebih enak dibaca kalau dialog berdiri sendiri, tidak dicampur paragraf panjang.</span>
+                        </div>
+                    </div>
+                    <div class="creator-writing-example">
+                        <span class="section-kicker">Contoh Format</span>
+                        <pre id="writing-example">Hujan turun sejak magrib. Di teras rumah itu, Damar masih duduk sendirian.
+
+Ia menatap jalan yang basah, seolah sedang menunggu sesuatu yang entah akan datang atau tidak.
+
+"Ayah belum pulang?" tanya adiknya pelan.
+
+Damar menoleh sebentar, lalu menggeleng.</pre>
+                    </div>
+                </div>
+
                 <div class="creator-form-grid">
                     <div class="field">
                         <label>Judul karya</label>
@@ -94,6 +129,18 @@
             </div>
 
             <aside class="creator-side">
+                <div class="creator-side-card creator-side-card-soft field-text-content">
+                    <span class="section-kicker">Preview Baca</span>
+                    <h3>Lihat dulu hasil baca sebelum tayang.</h3>
+                    <p>Kalau preview terasa sesak, biasanya paragrafnya masih terlalu rapat atau kalimatnya terlalu panjang.</p>
+                    <div class="creator-preview-meta">
+                        <span id="preview-paragraph-count">0 paragraf</span>
+                        <span id="preview-word-count">0 kata</span>
+                    </div>
+                    <div class="creator-reading-preview" id="creator-reading-preview">
+                        <p>Tulis isi karya dulu, nanti preview baca akan tampil di sini.</p>
+                    </div>
+                </div>
                 <div class="creator-side-card">
                     <span class="section-kicker">Biar Enak Dibaca</span>
                     <h3>Buat pembuka yang cepat masuk dan paragraf yang tidak bikin capek.</h3>
@@ -124,10 +171,56 @@
     const type = document.querySelector('#editor-type')?.value || 'cerpen';
     const mode = editorMode(type);
 
-    document.querySelector('.field-text-content').hidden = mode !== 'text';
+    document.querySelectorAll('.field-text-content').forEach((item) => {
+      item.hidden = mode !== 'text';
+    });
     document.querySelector('.field-audio-url').hidden = mode !== 'audio';
     document.querySelector('.field-video-url').hidden = mode !== 'video';
     document.querySelector('.field-media-duration').hidden = mode === 'text';
+    updateReadingPreview();
+  }
+
+  function escapePreviewHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
+  function updateReadingPreview() {
+    const preview = document.querySelector('#creator-reading-preview');
+    const paragraphCount = document.querySelector('#preview-paragraph-count');
+    const wordCount = document.querySelector('#preview-word-count');
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    if (!preview || !paragraphCount || !wordCount) return;
+
+    if (mode !== 'text') {
+      preview.innerHTML = '<p>Preview baca khusus ditampilkan untuk karya teks seperti cerpen dan novel.</p>';
+      paragraphCount.textContent = '0 paragraf';
+      wordCount.textContent = '0 kata';
+      return;
+    }
+
+    const content = document.querySelector('#editor-content')?.value || '';
+    const clean = content.trim();
+    if (!clean) {
+      preview.innerHTML = '<p>Tulis isi karya dulu, nanti preview baca akan tampil di sini.</p>';
+      paragraphCount.textContent = '0 paragraf';
+      wordCount.textContent = '0 kata';
+      return;
+    }
+
+    const paragraphs = clean.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
+    const words = clean.split(/\s+/).filter(Boolean);
+
+    paragraphCount.textContent = `${paragraphs.length} paragraf`;
+    wordCount.textContent = `${words.length} kata`;
+    preview.innerHTML = paragraphs
+      .map((paragraph) => `<p>${escapePreviewHtml(paragraph).replace(/\n/g, '<br>')}</p>`)
+      .join('');
   }
 
   async function ensureEditorSession() {
@@ -170,6 +263,7 @@
       document.querySelector('#editor-price-credit').value = editor.price_credit || 0;
 
       toggleEditorFields();
+      updateReadingPreview();
     } catch (error) {
       msg.innerHTML = '<div class="alert alert-error">Draft belum berhasil dimuat. Coba masuk ulang lalu buka lagi dari dashboard.</div>';
     }
@@ -215,7 +309,11 @@
 
     document.querySelector('#editor-heading').textContent = payload.title || 'Lanjut Edit Draft';
     msg.innerHTML = '<div class="alert alert-success">Draft berhasil disimpan. Kamu bisa lanjut lagi kapan saja dari halaman ini.</div>';
+    updateReadingPreview();
   }
+
+  document.querySelector('#editor-content')?.addEventListener('input', updateReadingPreview);
+  document.querySelector('#editor-type')?.addEventListener('change', updateReadingPreview);
 
   loadDraftEditor();
 </script>
