@@ -74,16 +74,16 @@ const DK = {
       const items = json.data ?? [];
       if (!items.length) {
         el.innerHTML = `<div class="state" style="grid-column:1/-1">
-          <div class="emoji">🖋️</div><h3>Belum ada karya unggulan</h3>
-          <p>Jadilah kreator pertama yang membangun katalog bernilai di sini.</p>
-          <a href="/daftar" class="btn btn-gold">Mulai Bangun Karya</a></div>`;
+          <div class="emoji">🖋️</div><h3>Belum ada karya yang tampil di sini</h3>
+          <p>Kalau mau, kamu bisa jadi salah satu yang pertama mengisinya.</p>
+          <a href="/daftar" class="btn btn-gold">Mulai Upload Karya</a></div>`;
         return;
       }
       el.innerHTML = items.map(w => this.workCard(w)).join('');
     } catch (e) {
       el.innerHTML = `<div class="state" style="grid-column:1/-1">
-        <div class="emoji">⚠️</div><h3>Katalog belum berhasil dimuat</h3>
-        <p>Periksa koneksi Anda, lalu coba lagi dalam beberapa saat.</p></div>`;
+        <div class="emoji">⚠️</div><h3>Karyanya belum bisa dimuat</h3>
+        <p>Coba cek koneksi dulu, lalu buka lagi sebentar ya.</p></div>`;
     }
   },
 
@@ -186,7 +186,7 @@ function updateInstallButtons() {
     ? 'Dayakarya sudah siap dipakai dari layar utama.'
     : deferredInstallPrompt
       ? 'Pasang Dayakarya ke layar utama biar bukanya lebih cepat dan terasa seperti aplikasi.'
-      : 'Kalau tombol install belum muncul, tenang, Dayakarya tetap bisa disimpan ke layar utama lewat menu browser.';
+      : 'Kalau tombol install belum muncul, tenang, kamu tetap bisa simpan Dayakarya ke layar utama lewat menu browser.';
 
   document.documentElement.classList.toggle('pwa-installable', Boolean(deferredInstallPrompt));
 

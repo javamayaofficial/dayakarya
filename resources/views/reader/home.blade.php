@@ -8,9 +8,9 @@
     <div class="container">
         <div class="hero-shell">
             <div class="hero-copy">
-                <span class="eyebrow">Creator Economy Indonesia</span>
-                <h1>Karya yang serius pantas punya <em>panggung</em> yang setara.</h1>
-                <p>Dayakarya menghadirkan terbitan, akses premium, dan monetisasi dalam satu ruang yang rapi.</p>
+                <span class="eyebrow">Tempat Karya Naik Kelas</span>
+                <h1>Karya bagus layak punya <em>tempat</em> yang juga bagus.</h1>
+                <p>Di sini kamu bisa terbitkan karya, buka akses berbayar, dan kelola penghasilannya di satu tempat.</p>
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
                     <a href="{{ route('explore') }}" class="btn btn-ghost">Jelajahi Karya</a>
@@ -19,36 +19,36 @@
                         <span data-install-label>Install App</span>
                     </button>
                 </div>
-                <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih enak, seperti aplikasi.</p>
+                <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
-                        <strong>Monetisasi yang rapi</strong>
-                        <span>Royalti, top up, dan akses premium tersusun jelas.</span>
+                        <strong>Jual karya lebih gampang</strong>
+                        <span>Top up, unlock, dan royalti sudah disiapkan dalam satu alur.</span>
                     </div>
                     <div class="proof-item">
-                        <strong>Ekosistem yang siap tumbuh</strong>
-                        <span>Kreator, affiliate, sponsor, dan CSR bertemu dalam satu alur.</span>
+                        <strong>Siap buat tumbuh</strong>
+                        <span>Karya, pembaca, affiliate, sampai sponsor bisa jalan di tempat yang sama.</span>
                     </div>
                 </div>
             </div>
             <div class="hero-showcase">
                 <div class="hero-card hero-card-primary">
-                    <span class="mini-label">Creator Economy</span>
-                    <h2>Naikkan nilai karya sebelum menaikkan harga aksesnya.</h2>
-                    <p>Untuk kreator yang ingin tampil kredibel dan menjual dengan elegan.</p>
+                    <span class="mini-label">Untuk Kreator</span>
+                    <h2>Bikin karya kamu terlihat lebih serius, lalu mulai jual dengan lebih yakin.</h2>
+                    <p>Cocok buat kreator yang ingin tampil rapi, dipercaya, dan lebih siap dibayar.</p>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-tile">
-                        <span class="label">Monetisasi</span>
-                        <strong>Royalti, credit, dan affiliate dalam satu sistem</strong>
+                        <span class="label">Penghasilan</span>
+                        <strong>Top up, royalti, dan affiliate jalan di satu tempat</strong>
                     </div>
                     <div class="stat-tile">
-                        <span class="label">Distribusi</span>
-                        <strong>Siap untuk web dan pengalaman audio-first</strong>
+                        <span class="label">Sebar</span>
+                        <strong>Bisa dibuka di web dan tetap nyaman buat konten audio</strong>
                     </div>
                     <div class="stat-tile">
-                        <span class="label">Kolaborasi</span>
-                        <strong>Siap dibawa ke sponsor dan CSR</strong>
+                        <span class="label">Kerja Sama</span>
+                        <strong>Lebih enak ditawarkan ke sponsor, partner, atau program CSR</strong>
                     </div>
                 </div>
             </div>
@@ -72,24 +72,24 @@
         <div class="section-head section-head-premium">
             <div>
                 <span class="section-kicker">Kenapa Dayakarya</span>
-                    <h2>Lebih dari sekadar platform upload</h2>
+                    <h2>Bukan cuma tempat upload karya</h2>
             </div>
         </div>
         <div class="feature-grid">
             <article class="feature-card">
                 <span class="feature-icon">01</span>
-                <h3>Karya tampil lebih bernilai</h3>
-                <p>Presentasi, metadata, dan alur beli dibuat pantas dijual.</p>
+                <h3>Karya terlihat lebih rapi</h3>
+                <p>Tampilan, info, dan alur belinya dibuat lebih enak dilihat.</p>
             </article>
             <article class="feature-card">
                 <span class="feature-icon">02</span>
-                <h3>Monetisasi terasa meyakinkan</h3>
-                <p>Top up, unlock, royalti, dan affiliate tersusun jelas.</p>
+                <h3>Jual karya jadi lebih jelas</h3>
+                <p>Top up, unlock, royalti, dan affiliate sudah disusun biar tidak bikin bingung.</p>
             </article>
             <article class="feature-card">
                 <span class="feature-icon">03</span>
-                <h3>Siap dibawa ke kolaborasi besar</h3>
-                <p>Strukturnya mendukung sponsor dan CSR tanpa kehilangan kredibilitas.</p>
+                <h3>Lebih siap diajak kerja sama</h3>
+                <p>Kalau mau dibawa ke sponsor atau partner, tampilannya sudah lebih meyakinkan.</p>
             </article>
         </div>
     </div>
@@ -129,25 +129,25 @@
     <div class="container">
         <div class="section-head section-head-premium">
             <div>
-                <span class="section-kicker">Alur Monetisasi</span>
-                    <h2>Bangun pendapatan dengan sistem yang rapi.</h2>
+                <span class="section-kicker">Cara Mulainya</span>
+                    <h2>Mulai dapat penghasilan dari karya, pelan-pelan tapi jelas.</h2>
             </div>
         </div>
         <div class="journey-grid">
             <article class="journey-card">
                 <span class="journey-step">Langkah 1</span>
-                <h3>Terbitkan karya dengan positioning yang kuat</h3>
-                <p>Bangun katalog yang rapi dan mudah ditemukan.</p>
+                <h3>Upload karya dan rapikan tampilannya</h3>
+                <p>Bikin orang lebih gampang nemu dan tertarik baca karya kamu.</p>
             </article>
             <article class="journey-card">
                 <span class="journey-step">Langkah 2</span>
-                <h3>Aktifkan akses premium yang pantas dibayar</h3>
-                <p>Jual pengalaman yang terasa eksklusif dan jelas nilainya.</p>
+                <h3>Buka akses berbayar kalau sudah siap</h3>
+                <p>Jual karya atau bagian premium tanpa alur yang ribet.</p>
             </article>
             <article class="journey-card">
                 <span class="journey-step">Langkah 3</span>
-                <h3>Perluas distribusi lewat affiliate dan kolaborasi</h3>
-                <p>Gunakan affiliate, sponsor, dan CSR untuk memperluas jangkauan.</p>
+                <h3>Besarkan jangkauan pelan-pelan</h3>
+                <p>Pakai affiliate atau kerja sama biar karya kamu makin banyak yang lihat.</p>
             </article>
         </div>
     </div>
@@ -157,13 +157,13 @@
     <div class="container">
         <div class="cta-panel">
             <div>
-                <span class="section-kicker">Untuk Kreator yang Ingin Naik Kelas</span>
-                <h2>Mulai dari platform yang membuat karya tampak bernilai.</h2>
-                <p>Bangun citra, pengalaman, dan monetisasi dalam satu standar yang rapi.</p>
+                <span class="section-kicker">Kalau Mau Mulai Serius</span>
+                <h2>Mulai dari tempat yang bikin karya kamu terasa lebih layak dilihat dan dibayar.</h2>
+                <p>Biar karya, pengalaman pembaca, dan penghasilan kamu tumbuh di tempat yang sama.</p>
             </div>
             <div class="cta-actions">
-                <a href="{{ route('register') }}" class="btn btn-gold">Mulai Bangun Karyamu</a>
-                <a href="{{ route('explore') }}" class="btn btn-primary">Lihat Standar Karyanya</a>
+                <a href="{{ route('register') }}" class="btn btn-gold">Mulai dari Sekarang</a>
+                <a href="{{ route('explore') }}" class="btn btn-primary">Lihat Contohnya</a>
             </div>
         </div>
     </div>
