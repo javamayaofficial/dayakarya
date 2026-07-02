@@ -576,9 +576,15 @@ img { max-width: 100%; display: block; }
 .page-auth-simple .auth-container {
   max-width: 620px;
 }
+.page-auth-simple .auth-section {
+  min-height: calc(100vh - 260px);
+  display: flex;
+  align-items: center;
+}
 .page-auth-simple .auth-shell {
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
+  width: 100%;
 }
 .page-auth-simple .auth-card {
   width: 100%;
@@ -1570,6 +1576,9 @@ img { max-width: 100%; display: block; }
   }
   .page-auth-simple .auth-shell {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .page-auth-simple .auth-section {
+    min-height: calc(100vh - 280px);
   }
   .auth-card {
     padding: 32px;
