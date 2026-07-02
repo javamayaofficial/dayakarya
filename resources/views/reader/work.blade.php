@@ -10,6 +10,21 @@
     $isAudioWork = $work->isAudio();
     $isVideoWork = $work->isVideo();
     $selectedStatusLabel = $selectedChapter?->is_premium ? 'Perlu dibuka dengan Credit' : 'Bisa langsung dinikmati';
+    $chapterPayloads = $chapters->mapWithKeys(function ($chapter) use ($isAudioWork, $isVideoWork) {
+        return [
+            $chapter->id => [
+                'id' => $chapter->id,
+                'title' => $chapter->title,
+                'order' => $chapter->order,
+                'is_premium' => (bool) $chapter->is_premium,
+                'price_credit' => (int) $chapter->price_credit,
+                'duration_seconds' => $chapter->duration_seconds,
+                'content' => $chapter->is_premium || $isAudioWork || $isVideoWork ? null : $chapter->content,
+                'audio_url' => $chapter->audio_url,
+                'video_url' => $chapter->video_url,
+            ],
+        ];
+    });
 @endphp
 <section class="section">
     <div class="container">
@@ -55,6 +70,11 @@
         </div>
 
         @if($selectedChapter)
+            <div class="work-comfort-strip">
+                <div class="comfort-pill">Akses dibuka tetap di tempat yang sama</div>
+                <div class="comfort-pill">Pindah bagian gratis tanpa reload berulang</div>
+                <div class="comfort-pill">Fokus tetap ke karya yang sedang kamu pilih</div>
+            </div>
             <div class="work-focus-shell" id="fokus-karya">
                 <aside class="work-playlist card">
                     <div class="section-head section-head-premium">
@@ -85,18 +105,17 @@
                                 @if($ch->is_premium)
                                     <button
                                         type="button"
-                                        class="btn btn-gold chapter-unlock-btn"
-                                        data-chapter-id="{{ $ch->id }}"
-                                        data-title="{{ e($ch->title) }}"
-                                        data-order="{{ $ch->order }}"
-                                        data-credit="{{ $ch->price_credit }}"
-                                        onclick="unlockSelectedChapter(this)"
-                                    >Buka</button>
-                                @else
-                                    <a
                                         class="btn btn-ghost chapter-open-btn"
-                                        href="{{ route('work.show', ['work' => $work, 'bagian' => $ch->id]) }}#fokus-karya"
-                                    >{{ $isVideoWork ? 'Tonton' : ($isAudioWork ? 'Dengar' : 'Baca') }}</a>
+                                        data-chapter-id="{{ $ch->id }}"
+                                        onclick="selectChapterById({{ $ch->id }})"
+                                    >Lihat</button>
+                                @else
+                                    <button
+                                        type="button"
+                                        class="btn btn-ghost chapter-open-btn"
+                                        data-chapter-id="{{ $ch->id }}"
+                                        onclick="selectChapterById({{ $ch->id }})"
+                                    >{{ $isVideoWork ? 'Tonton' : ($isAudioWork ? 'Dengar' : 'Baca') }}</button>
                                 @endif
                             </div>
                         @endforeach
@@ -115,6 +134,19 @@
                         </div>
                     </div>
 
+                    <div class="work-reader-tools">
+                        <div class="work-reader-note">
+                            {{ $isVideoWork ? 'Tontonan dibuat tetap fokus ke episode yang dipilih, tanpa muter-muter halaman lagi.' : ($isAudioWork ? 'Pendengar langsung tetap di panel yang sama saat pindah episode atau buka akses.' : 'Pembaca bisa atur ukuran baca supaya lebih nyaman di mata dan tetap fokus ke isi.') }}
+                        </div>
+                        @if(! $isAudioWork && ! $isVideoWork)
+                            <div class="reading-controls" id="reading-controls">
+                                <button type="button" class="is-active" data-reading-size="normal">A</button>
+                                <button type="button" data-reading-size="large">A+</button>
+                                <button type="button" data-reading-size="xlarge">A++</button>
+                            </div>
+                        @endif
+                    </div>
+
                     <div id="chapter-focus-feedback"></div>
 
                     <div
@@ -130,9 +162,6 @@
                             class="btn btn-gold"
                             id="chapter-focus-unlock"
                             data-chapter-id="{{ $selectedChapter->id }}"
-                            data-title="{{ e($selectedChapter->title) }}"
-                            data-order="{{ $selectedChapter->order }}"
-                            data-credit="{{ $selectedChapter->price_credit }}"
                             onclick="unlockSelectedChapter(this)"
                         >Buka Bagian Ini · {{ $selectedChapter->price_credit }} Credit</button>
                     </div>
@@ -188,6 +217,8 @@
 @push('scripts')
 <script>
   DK.refreshCredit();
+  const chapterMap = @json($chapterPayloads, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
   function escapeWorkHtml(value) {
     return String(value ?? '')
       .replaceAll('&', '&amp;')
@@ -211,12 +242,43 @@
     });
   }
 
-  function renderUnlockedChapter(button, payload) {
-    const reader = document.querySelector('.work-reader');
-    const title = button.dataset.title || 'Bagian terpilih';
-    const order = String(button.dataset.order || '').padStart(2, '0');
-    const mode = reader?.dataset.mode || 'text';
+  function formatDuration(seconds) {
+    if (!seconds) return '';
+    const total = Number(seconds);
+    const hours = Math.floor(total / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    const secs = total % 60;
+    if (hours > 0) {
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  function syncUnlockButton(chapter) {
+    const unlockButton = document.querySelector('#chapter-focus-unlock');
+    if (!unlockButton) return;
+
+    unlockButton.dataset.chapterId = chapter.id;
+    unlockButton.textContent = `Buka Bagian Ini · ${chapter.price_credit} Credit`;
+  }
+
+  function updateReaderMeta(chapter, statusText) {
     const meta = document.querySelector('#chapter-focus-meta');
+    const duration = formatDuration(chapter.duration_seconds);
+    const metaParts = [`<span>Bagian ${String(chapter.order || '').padStart(2, '0')}</span>`];
+    if (duration) {
+      metaParts.push(`<span>${duration}</span>`);
+    }
+    metaParts.push(`<span>${statusText}</span>`);
+
+    if (meta) meta.innerHTML = metaParts.join('');
+  }
+
+  function renderChapter(chapter, { unlocked = false, feedbackMessage = '' } = {}) {
+    if (!chapter) return;
+
+    const reader = document.querySelector('.work-reader');
+    const mode = reader?.dataset.mode || 'text';
     const titleNode = document.querySelector('#chapter-focus-title');
     const lockState = document.querySelector('#chapter-lock-state');
     const textOutput = document.querySelector('#chapter-text-output');
@@ -224,64 +286,108 @@
     const videoShell = document.querySelector('#chapter-video-shell');
     const feedback = document.querySelector('#chapter-focus-feedback');
 
-    if (titleNode) titleNode.textContent = title;
-    if (meta) meta.innerHTML = `<span>Bagian ${order}</span><span>Sudah dibuka dan siap dinikmati</span>`;
-    if (lockState) lockState.hidden = true;
-    if (feedback) feedback.innerHTML = '<div class="alert alert-success">Bagian berhasil dibuka. Selamat menikmati.</div>';
+    if (titleNode) titleNode.textContent = chapter.title || 'Bagian terpilih';
 
-    if (mode === 'audio') {
+    if (chapter.is_premium && !unlocked) {
+      updateReaderMeta(chapter, 'Perlu dibuka dengan Credit');
+      if (lockState) lockState.hidden = false;
+      syncUnlockButton(chapter);
+      if (feedback) feedback.innerHTML = feedbackMessage ? `<div class="alert alert-success">${feedbackMessage}</div>` : '';
       if (audioShell) {
-        audioShell.hidden = false;
-        audioShell.innerHTML = payload.audio_url
-          ? `<audio id="chapter-audio" controls preload="metadata" src="${escapeWorkHtml(payload.audio_url)}"></audio>`
-          : '<div class="work-soft-note">Audio untuk bagian ini belum tersedia.</div>';
+        audioShell.hidden = true;
+        audioShell.innerHTML = '';
       }
       if (videoShell) {
         videoShell.hidden = true;
         videoShell.innerHTML = '';
-      }
-      if (textOutput) {
-        textOutput.hidden = true;
-        textOutput.innerHTML = '';
-      }
-    } else if (mode === 'video') {
-      if (videoShell) {
-        videoShell.hidden = false;
-        videoShell.innerHTML = payload.video_url
-          ? `<video id="chapter-video" controls playsinline preload="metadata" src="${escapeWorkHtml(payload.video_url)}"></video>`
-          : '<div class="work-soft-note">Video untuk episode ini belum tersedia.</div>';
-      }
-      if (audioShell) {
-        audioShell.hidden = true;
-        audioShell.innerHTML = '';
       }
       if (textOutput) {
         textOutput.hidden = true;
         textOutput.innerHTML = '';
       }
     } else {
-      if (textOutput) {
-        textOutput.hidden = false;
-        textOutput.innerHTML = nl2Paragraphs(payload.content || 'Isi bagian ini belum tersedia.');
+      updateReaderMeta(chapter, unlocked ? 'Sudah dibuka dan siap dinikmati' : 'Siap dinikmati');
+      if (lockState) lockState.hidden = true;
+      if (feedback) {
+        feedback.innerHTML = feedbackMessage ? `<div class="alert alert-success">${feedbackMessage}</div>` : '';
       }
-      if (audioShell) {
-        audioShell.hidden = true;
-        audioShell.innerHTML = '';
-      }
-      if (videoShell) {
-        videoShell.hidden = true;
-        videoShell.innerHTML = '';
+
+      if (mode === 'audio') {
+        if (audioShell) {
+          audioShell.hidden = false;
+          audioShell.innerHTML = chapter.audio_url
+            ? `<audio id="chapter-audio" controls preload="metadata" src="${escapeWorkHtml(chapter.audio_url)}"></audio>`
+            : '<div class="work-soft-note">Audio untuk bagian ini belum tersedia.</div>';
+        }
+        if (videoShell) {
+          videoShell.hidden = true;
+          videoShell.innerHTML = '';
+        }
+        if (textOutput) {
+          textOutput.hidden = true;
+          textOutput.innerHTML = '';
+        }
+      } else if (mode === 'video') {
+        if (videoShell) {
+          videoShell.hidden = false;
+          videoShell.innerHTML = chapter.video_url
+            ? `<video id="chapter-video" controls playsinline preload="metadata" src="${escapeWorkHtml(chapter.video_url)}"></video>`
+            : '<div class="work-soft-note">Video untuk episode ini belum tersedia.</div>';
+        }
+        if (audioShell) {
+          audioShell.hidden = true;
+          audioShell.innerHTML = '';
+        }
+        if (textOutput) {
+          textOutput.hidden = true;
+          textOutput.innerHTML = '';
+        }
+      } else {
+        if (textOutput) {
+          textOutput.hidden = false;
+          textOutput.innerHTML = nl2Paragraphs(chapter.content || 'Isi bagian ini belum tersedia.');
+        }
+        if (audioShell) {
+          audioShell.hidden = true;
+          audioShell.innerHTML = '';
+        }
+        if (videoShell) {
+          videoShell.hidden = true;
+          videoShell.innerHTML = '';
+        }
       }
     }
 
-    const chapterId = Number(button.dataset.chapterId);
-    setActiveChapter(chapterId);
+    setActiveChapter(chapter.id);
     if (window.history?.replaceState) {
       const url = new URL(window.location.href);
-      url.searchParams.set('bagian', chapterId);
+      url.searchParams.set('bagian', chapter.id);
       url.hash = 'fokus-karya';
       window.history.replaceState({}, '', url);
     }
+
+    document.querySelector('#fokus-karya')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderUnlockedChapter(button, payload) {
+    const chapterId = Number(button.dataset.chapterId);
+    const chapter = {
+      ...(chapterMap[chapterId] || {}),
+      content: payload.content ?? null,
+      audio_url: payload.audio_url ?? null,
+      video_url: payload.video_url ?? null,
+    };
+    chapterMap[chapterId] = chapter;
+    renderChapter(chapter, {
+      unlocked: true,
+      feedbackMessage: 'Bagian berhasil dibuka. Selamat menikmati.',
+    });
+  }
+
+  function selectChapterById(chapterId) {
+    const chapter = chapterMap[Number(chapterId)];
+    if (!chapter) return;
+    renderChapter(chapter, { unlocked: false });
   }
 
   async function unlockSelectedChapter(button) {
@@ -310,5 +416,22 @@
     if (!DK.token()) { location.href = '/masuk'; return; }
     alert('Kamu sekarang mengikuti kreator ini.');
   };
+
+  function applyReadingSize(size) {
+    const output = document.querySelector('#chapter-text-output');
+    if (!output) return;
+    output.dataset.readingSize = size;
+    localStorage.setItem('dk_reading_size', size);
+
+    document.querySelectorAll('[data-reading-size]').forEach((button) => {
+      button.classList.toggle('is-active', button.dataset.readingSize === size);
+    });
+  }
+
+  document.querySelectorAll('[data-reading-size]').forEach((button) => {
+    button.addEventListener('click', () => applyReadingSize(button.dataset.readingSize));
+  });
+
+  applyReadingSize(localStorage.getItem('dk_reading_size') || 'normal');
 </script>
 @endpush
