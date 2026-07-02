@@ -287,11 +287,12 @@ async function resolveInternalArea() {
   };
 }
 
-function setNavItem(item, { href, icon, label, hidden = false, fab = false, matchPrefix = '' }) {
+function setNavItem(item, { href, icon, label, hidden = false, fab = false, matchPrefix = '', title = '' }) {
   if (!item) return;
 
   item.hidden = hidden;
   if (href) item.setAttribute('href', href);
+  if (title) item.setAttribute('title', title);
   item.dataset.matchPrefix = matchPrefix;
   item.classList.toggle('fab', fab);
 
@@ -383,6 +384,7 @@ function initGuestNavigation() {
     hidden: true,
     fab: true,
     matchPrefix: '/creator',
+    title: 'Buat Karya',
   });
 
   if (walletNav) {
@@ -432,11 +434,12 @@ function initMemberNavigation(session) {
 
   setNavItem(middleNav, {
     href: '/explore',
-    icon: '🛍',
-    label: 'Market',
+    icon: '📚',
+    label: 'Karya',
     hidden: false,
     fab: false,
     matchPrefix: '/explore',
+    title: 'Jelajahi Karya',
   });
 
   if (walletNav) {
