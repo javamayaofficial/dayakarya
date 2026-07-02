@@ -166,34 +166,77 @@
   }
 
   function creatorCard(work) {
-    const statusLabel = {
-      draft: 'Draft',
-      review: 'Menunggu review',
-      published: 'Tayang',
-      rejected: 'Perlu revisi',
-    }[work.status] ?? work.status;
+    const chapterCount = Number(work.chapters_count ?? 0);
+    const readyChapterCount = Number(work.ready_chapters_count ?? 0);
+    const publishedChapterCount = Number(work.published_chapters_count ?? 0);
 
-    const actionLabel = work.status === 'published' ? 'Lihat Karya' : 'Lanjut Edit';
+    const publishState = (() => {
+      if (work.status === 'published') {
+        return {
+          badge: 'Sudah Tayang',
+          actionLabel: 'Lihat Karya',
+          note: publishedChapterCount > 0
+            ? `${publishedChapterCount} part sudah tayang di katalog`
+            : 'Karya ini sudah bisa dilihat akun lain',
+          tone: 'live',
+        };
+      }
+
+      if (work.status === 'rejected') {
+        return {
+          badge: 'Perlu Revisi',
+          actionLabel: 'Lanjut Edit',
+          note: 'Buka editor lalu rapikan lagi sebelum ditayangkan.',
+          tone: 'revise',
+        };
+      }
+
+      if (readyChapterCount > 0) {
+        return {
+          badge: 'Siap Tayang',
+          actionLabel: 'Lanjut Edit',
+          note: 'Masuk ke editor lalu klik Tayangkan Sekarang.',
+          tone: 'ready',
+        };
+      }
+
+      return {
+        badge: 'Draft',
+        actionLabel: 'Lanjut Edit',
+        note: 'Isi minimal 1 part dulu supaya siap ditayangkan.',
+        tone: 'draft',
+      };
+    })();
+
     const actionHref = work.status === 'published'
       ? `/karya/${work.slug}`
       : `/creator/works/${work.id}`;
 
+    const coverStyle = work.cover
+      ? `background-image:url('${escapeHtml(work.cover)}');background-size:cover;background-position:center;`
+      : '';
+
     return `
       <article class="work-card work-card-premium">
-        <div class="card-cover">
-          <div class="card-badge">${escapeHtml(statusLabel)}</div>
+        <div class="card-cover" style="${coverStyle}">
+          <div class="card-badge">${escapeHtml(publishState.badge)}</div>
         </div>
         <div class="card-body">
-          <div class="eyebrow">${escapeHtml(work.category?.name ?? 'Tanpa kategori')} · ${escapeHtml((work.type || '').replace('_', ' '))}</div>
+          <div class="eyebrow">${escapeHtml(work.category?.name ?? 'Tanpa kategori')} · ${escapeHtml(DK.typeLabel(work.type || ''))}</div>
           <h3>${escapeHtml(work.title)}</h3>
           <div class="work-meta">
             <span>${(work.views ?? 0).toLocaleString('id-ID')} views</span>
             <span>${(work.likes_count ?? 0).toLocaleString('id-ID')} suka</span>
           </div>
-          <div class="work-meta">${work.published_at ? new Date(work.published_at).toLocaleDateString('id-ID') : 'Belum dipublikasikan'}</div>
+          <div class="work-meta">
+            <span>${chapterCount} part</span>
+            <span>${readyChapterCount} siap tayang</span>
+          </div>
+          <div class="work-meta">${work.published_at ? 'Tayang sejak ' + new Date(work.published_at).toLocaleDateString('id-ID') : 'Belum dipublikasikan'}</div>
+          <div class="work-meta">${escapeHtml(publishState.note)}</div>
           <div class="work-card-footer">
-            <a class="read-link" href="${actionHref}">${actionLabel}</a>
-            <span class="read-stat">${work.status === 'draft' ? 'Masih bisa dirapikan' : 'Sudah tayang'}</span>
+            <a class="read-link" href="${actionHref}">${publishState.actionLabel}</a>
+            <span class="read-stat">${publishState.badge}</span>
           </div>
         </div>
       </article>

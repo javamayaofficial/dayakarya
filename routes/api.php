@@ -46,7 +46,9 @@ Route::prefix('v1')->group(function () {
         // Karya (creator)
         Route::get('creator/dashboard', [WorkController::class, 'creatorDashboard']);
         Route::get('creator/works/{work}', [WorkController::class, 'creatorShow']);
+        Route::post('creator/works/{work}/cover', [WorkController::class, 'creatorUploadCover']);
         Route::post('creator/works/{work}/chapters', [WorkController::class, 'creatorStoreChapter']);
+        Route::post('creator/works/{work}/publish', [WorkController::class, 'creatorPublish']);
         Route::post('works', [WorkController::class, 'store']);
         Route::post('creator/works/{work}/save', [WorkController::class, 'creatorUpdate']);
         Route::put('creator/works/{work}', [WorkController::class, 'creatorUpdate']);

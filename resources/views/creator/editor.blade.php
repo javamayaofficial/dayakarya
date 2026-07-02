@@ -31,6 +31,28 @@
                 </div>
                 <div id="editor-msg"></div>
 
+                <div class="creator-cover-panel">
+                    <div class="creator-cover-copy">
+                        <span class="section-kicker">Cover Karya</span>
+                        <h3>Pasang mockup cerpen atau cover utama karya di sini.</h3>
+                        <p>Satu cover dipakai untuk seluruh karya, jadi Part 1 sampai Part berikutnya tetap punya wajah yang sama di katalog dan halaman detail.</p>
+                    </div>
+                    <div class="creator-cover-layout">
+                        <div class="creator-cover-preview-shell">
+                            <img id="creator-cover-preview" class="creator-cover-preview" alt="Preview cover karya" hidden>
+                            <div id="creator-cover-empty" class="creator-cover-empty">Belum ada cover. Upload mockup cerpen biar tampilan karya lebih meyakinkan.</div>
+                        </div>
+                        <div class="creator-cover-actions">
+                            <label class="proof-upload-field creator-cover-field">
+                                <span>Pilih gambar cover</span>
+                                <input id="editor-cover-file" type="file" accept="image/png,image/jpeg,image/webp">
+                            </label>
+                            <button class="btn btn-ghost" id="editor-upload-cover" type="button" onclick="uploadWorkCover()">Upload Cover</button>
+                            <div class="hint">Format yang disarankan: JPG, PNG, atau WEBP dengan rasio tegak seperti cover novel atau cerpen.</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="creator-part-panel">
                     <div class="creator-part-panel-head">
                         <div>
@@ -139,6 +161,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
                 <div class="creator-editor-actions">
                     <button class="btn btn-gold" id="editor-save" onclick="saveDraft()">Simpan Perubahan</button>
+                    <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Sekarang</button>
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Nanti Lanjut Lagi</a>
                 </div>
             </div>
@@ -179,6 +202,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   const editorState = {
     chapters: [],
     activeChapterId: null,
+    cover: null,
   };
 
   // #region debug-point A:frontend-debug-report
@@ -290,6 +314,25 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
   }
 
+  function syncCoverPreview(coverUrl) {
+    const image = document.querySelector('#creator-cover-preview');
+    const empty = document.querySelector('#creator-cover-empty');
+    editorState.cover = coverUrl || null;
+
+    if (!image || !empty) return;
+
+    if (coverUrl) {
+      image.src = coverUrl;
+      image.hidden = false;
+      empty.hidden = true;
+      return;
+    }
+
+    image.removeAttribute('src');
+    image.hidden = true;
+    empty.hidden = false;
+  }
+
   function renderChapterList() {
     const container = document.querySelector('#creator-part-list');
     if (!container) return;
@@ -332,6 +375,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
 
     editorState.activeChapterId = editor.chapter_id || editorState.activeChapterId;
+    syncCoverPreview(work.cover || null);
 
     document.querySelector('#editor-heading').textContent = work.title || 'Lanjut Edit Draft';
     document.querySelector('#editor-title').value = work.title || '';
@@ -350,6 +394,57 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     updateActivePartHint();
     toggleEditorFields();
     updateReadingPreview();
+  }
+
+  async function uploadWorkCover() {
+    const input = document.querySelector('#editor-cover-file');
+    const button = document.querySelector('#editor-upload-cover');
+    const msg = document.querySelector('#editor-msg');
+    const file = input?.files?.[0];
+
+    if (!file) {
+      msg.innerHTML = '<div class="alert alert-error">Pilih file cover dulu sebelum upload.</div>';
+      return;
+    }
+
+    button.disabled = true;
+    msg.innerHTML = '';
+
+    try {
+      const formData = new FormData();
+      formData.append('cover', file);
+
+      const headers = { Accept: 'application/json' };
+      if (DK.token()) {
+        headers.Authorization = 'Bearer ' + DK.token();
+      }
+
+      const response = await fetch(DK.api + '/creator/works/' + workId + '/cover', {
+        method: 'POST',
+        headers,
+        body: formData,
+      });
+
+      const rawText = await response.text();
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? JSON.parse(rawText || '{}')
+        : { message: rawText || 'Server tidak mengirim JSON.' };
+
+      if (!response.ok) {
+        const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Cover belum berhasil diunggah.');
+        msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
+        return;
+      }
+
+      syncCoverPreview(data.cover || data.work?.cover || null);
+      msg.innerHTML = '<div class="alert alert-success">Cover karya berhasil diunggah dan siap dipakai di halaman karya.</div>';
+      input.value = '';
+    } catch (error) {
+      msg.innerHTML = '<div class="alert alert-error">Upload cover belum berhasil. Coba lagi sebentar.</div>';
+    } finally {
+      button.disabled = false;
+    }
   }
 
   async function switchEditorChapter(chapterId) {
@@ -528,6 +623,49 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       price_credit: payload.price_credit,
     }, data.chapters || editorState.chapters);
     msg.innerHTML = '<div class="alert alert-success">Draft berhasil disimpan. Kamu bisa lanjut lagi kapan saja dari halaman ini.</div>';
+  }
+
+  async function publishWork() {
+    const button = document.querySelector('#editor-publish');
+    const msg = document.querySelector('#editor-msg');
+    if (!button) return;
+
+    button.disabled = true;
+    msg.innerHTML = '';
+
+    try {
+      const response = await fetch(DK.api + '/creator/works/' + workId + '/publish', {
+        method: 'POST',
+        headers: DK.headers(),
+        body: JSON.stringify({
+          chapter_id: editorState.activeChapterId,
+        }),
+      });
+
+      const rawText = await response.text();
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? JSON.parse(rawText || '{}')
+        : { message: rawText || 'Server tidak mengirim JSON.' };
+
+      if (!response.ok) {
+        const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Karya belum berhasil ditayangkan.');
+        msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
+        return;
+      }
+
+      applyEditorPayload({
+        title: data.work?.title || document.querySelector('#editor-title').value,
+        type: data.work?.type || document.querySelector('#editor-type').value,
+        synopsis: data.work?.synopsis || document.querySelector('#editor-synopsis').value,
+        cover: data.work?.cover || editorState.cover,
+      }, data.editor || {}, data.chapters || editorState.chapters);
+      msg.innerHTML = '<div class="alert alert-success">Karya sudah tayang. Sekarang akun lain seharusnya bisa melihatnya di katalog karya.</div>';
+    } catch (error) {
+      msg.innerHTML = '<div class="alert alert-error">Karya belum berhasil ditayangkan. Coba lagi sebentar.</div>';
+    } finally {
+      button.disabled = false;
+    }
   }
 
   document.querySelector('#editor-content')?.addEventListener('input', updateReadingPreview);

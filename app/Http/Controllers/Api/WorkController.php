@@ -7,6 +7,9 @@ use App\Models\Follow;
 use App\Models\Work;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 /**
  * Katalog karya: explore, trending, detail, pencarian, dan CRUD oleh creator.
@@ -55,6 +58,22 @@ class WorkController extends \App\Http\Controllers\Controller
         $user = $request->user();
         $works = $user->works()
             ->with('category:id,name')
+            ->withCount('chapters')
+            ->withCount([
+                'chapters as published_chapters_count' => fn ($query) => $query->where('status', 'published'),
+                'chapters as ready_chapters_count' => fn ($query) => $query->where(function ($chapterQuery) {
+                    $chapterQuery
+                        ->where(function ($textQuery) {
+                            $textQuery->whereNotNull('content')->where('content', '!=', '');
+                        })
+                        ->orWhere(function ($audioQuery) {
+                            $audioQuery->whereNotNull('audio_url')->where('audio_url', '!=', '');
+                        })
+                        ->orWhere(function ($videoQuery) {
+                            $videoQuery->whereNotNull('video_url')->where('video_url', '!=', '');
+                        });
+                }),
+            ])
             ->latest()
             ->get([
                 'id',
@@ -220,6 +239,83 @@ class WorkController extends \App\Http\Controllers\Controller
                 ->values(),
             'editor' => $this->serializeEditorChapter($chapter),
         ], 201);
+    }
+
+    public function creatorUploadCover(Request $request, Work $work): JsonResponse
+    {
+        $this->authorizeOwnership($request, $work);
+
+        $data = $request->validate([
+            'cover' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+        ]);
+
+        $previousCover = $work->getRawOriginal('cover');
+        if ($previousCover && ! Str::startsWith($previousCover, ['http://', 'https://', '/storage/'])) {
+            Storage::disk('public')->delete($previousCover);
+        }
+
+        $extension = $data['cover']->getClientOriginalExtension() ?: 'jpg';
+        $filename = 'work-' . $work->id . '-cover-' . time() . '.' . strtolower($extension);
+        $path = $data['cover']->storeAs('work-covers', $filename, 'public');
+
+        $work->update([
+            'cover' => $path,
+        ]);
+
+        return response()->json([
+            'message' => 'Cover karya berhasil diunggah.',
+            'cover' => $work->fresh()->cover,
+            'work' => $work->fresh(),
+        ]);
+    }
+
+    public function creatorPublish(Request $request, Work $work): JsonResponse
+    {
+        $this->authorizeOwnership($request, $work);
+
+        $data = $request->validate([
+            'chapter_id' => ['nullable', 'integer'],
+        ]);
+
+        $chapter = null;
+
+        if (!empty($data['chapter_id'])) {
+            $chapter = $work->chapters()->find($data['chapter_id']);
+            abort_unless($chapter !== null, 404, 'Bagian yang mau ditayangkan tidak ditemukan.');
+        }
+
+        $chapter = $chapter ?: $work->chapters()->orderBy('order')->first();
+        abort_unless($chapter !== null, 422, 'Buat dulu minimal satu part sebelum ditayangkan.');
+
+        $hasContent = filled($chapter->content)
+            || filled($chapter->audio_url)
+            || filled($chapter->video_url);
+
+        abort_unless($hasContent, 422, 'Isi part aktif masih kosong. Lengkapi dulu sebelum ditayangkan.');
+
+        $publishTime = Carbon::now();
+
+        $work->forceFill([
+            'status' => 'published',
+            'published_at' => $work->published_at ?: $publishTime,
+        ])->save();
+
+        $chapter->forceFill([
+            'status' => 'published',
+            'published_at' => $chapter->published_at ?: $publishTime,
+        ])->save();
+
+        return response()->json([
+            'message' => 'Karya berhasil ditayangkan dan sekarang bisa dilihat akun lain.',
+            'work' => $work->fresh(['category:id,name']),
+            'chapter' => $this->serializeCreatorChapter($chapter->fresh()),
+            'chapters' => $work->chapters()
+                ->orderBy('order')
+                ->get()
+                ->map(fn (Chapter $item) => $this->serializeCreatorChapter($item))
+                ->values(),
+            'editor' => $this->serializeEditorChapter($chapter->fresh()),
+        ]);
     }
 
     protected function authorizeMember(Request $request): void
