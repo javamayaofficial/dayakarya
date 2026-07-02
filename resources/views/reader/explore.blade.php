@@ -74,26 +74,33 @@
 @push('scripts')
 <script>
   let currentType = '';
-  DK.loadWorks({ type: '', target: '#explore-grid' });
+  const exploreGridTarget = '#explore-grid';
+  const searchInput = document.querySelector('#search');
+
+  function renderExplore() {
+    DK.loadWorks({
+      type: currentType,
+      target: exploreGridTarget,
+      search: searchInput?.value || '',
+    });
+  }
+
+  renderExplore();
 
   document.querySelectorAll('#type-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('#type-chips .chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       currentType = chip.dataset.type;
-      DK.loadWorks({ type: currentType, target: '#explore-grid' });
+      renderExplore();
     });
   });
 
   let t;
-  document.querySelector('#search').addEventListener('input', (e) => {
+  searchInput?.addEventListener('input', () => {
     clearTimeout(t);
-    t = setTimeout(async () => {
-      const el = document.querySelector('#explore-grid');
-      const json = await DK.get('/works?search=' + encodeURIComponent(e.target.value));
-      const items = json.data ?? [];
-      el.innerHTML = items.length ? items.map(w => DK.workCard(w)).join('')
-        : `<div class="state" style="grid-column:1/-1"><div class="emoji">🔍</div><h3>Belum ketemu</h3><p>Coba ganti kata kunci atau pilih kategori lain.</p></div>`;
+    t = setTimeout(() => {
+      renderExplore();
     }, 350);
   });
 </script>

@@ -18,7 +18,15 @@ class WorkController extends \App\Http\Controllers\Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $q = Work::published()->with('creator:id,name', 'category:id,name');
+        $q = Work::published()
+            ->whereHas('chapters', fn ($chapterQuery) => $chapterQuery->where('status', 'published'))
+            ->with('creator:id,name', 'category:id,name')
+            ->withCount([
+                'chapters as published_chapters_count' => fn ($chapterQuery) => $chapterQuery->where('status', 'published'),
+                'chapters as chapters_free_count' => fn ($chapterQuery) => $chapterQuery
+                    ->where('status', 'published')
+                    ->where('is_premium', false),
+            ]);
 
         if ($request->filled('type')) {
             $q->where('type', $request->type);

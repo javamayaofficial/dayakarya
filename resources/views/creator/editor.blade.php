@@ -36,9 +36,20 @@
                         <span class="section-kicker">Cover Karya</span>
                         <h3>Pasang mockup cerpen atau cover utama karya di sini.</h3>
                         <p>Satu cover dipakai untuk seluruh karya, jadi Part 1 sampai Part berikutnya tetap punya wajah yang sama di katalog dan halaman detail.</p>
+                        <p>Ukuran yang disarankan: <strong>1080 x 1440 piksel</strong> dengan rasio <strong>3:4</strong>. Minimal tetap aman di <strong>900 x 1200 piksel</strong> supaya hasilnya tidak pecah.</p>
+                        <div class="creator-cover-specs">
+                            <span class="creator-cover-spec">Rasio ideal: 3:4</span>
+                            <span class="creator-cover-spec">Rekomendasi: 1080 x 1440 px</span>
+                            <span class="creator-cover-spec">Minimal: 900 x 1200 px</span>
+                            <span class="creator-cover-spec">Maks file: 4 MB</span>
+                        </div>
                     </div>
                     <div class="creator-cover-layout">
                         <div class="creator-cover-preview-shell">
+                            <div class="creator-cover-ratio-badge">Template 3:4</div>
+                            <div class="creator-cover-safe-area" aria-hidden="true">
+                                <span>Area aman judul dan objek utama</span>
+                            </div>
                             <img id="creator-cover-preview" class="creator-cover-preview" alt="Preview cover karya" hidden>
                             <div id="creator-cover-empty" class="creator-cover-empty">Belum ada cover. Upload mockup cerpen biar tampilan karya lebih meyakinkan.</div>
                         </div>
@@ -48,8 +59,68 @@
                                 <input id="editor-cover-file" type="file" accept="image/png,image/jpeg,image/webp">
                             </label>
                             <button class="btn btn-ghost" id="editor-upload-cover" type="button" onclick="uploadWorkCover()">Upload Cover</button>
-                            <div class="hint">Format yang disarankan: JPG, PNG, atau WEBP dengan rasio tegak seperti cover novel atau cerpen.</div>
+                            <div class="hint">Format yang disarankan: JPG, PNG, atau WEBP. Pakai ukuran 1080 x 1440 px atau 900 x 1200 px dengan rasio tegak 3:4 seperti cover novel atau cerpen.</div>
+                            <div class="hint">Tips cepat: judul jangan terlalu mepet ke pinggir, pakai gambar yang tetap jelas saat dipotong kecil, dan simpan file di bawah 4 MB agar upload lebih lancar.</div>
                         </div>
+                    </div>
+                    <div class="creator-cover-card-preview">
+                        <span class="section-kicker">Preview di Katalog</span>
+                        <div class="creator-cover-card-shell">
+                            <article class="work-card work-card-premium creator-cover-card-mockup">
+                                <div class="work-cover" id="creator-cover-card-cover">
+                                    <span class="type-tag" id="creator-cover-card-type">Cerpen</span>
+                                    <span class="free-tag" id="creator-cover-card-access">Gratis</span>
+                                    <div class="cover-fade"></div>
+                                    <div class="cover-meta">
+                                        <span class="cover-pill">Preview katalog</span>
+                                    </div>
+                                </div>
+                                <div class="work-body">
+                                    <h3 id="creator-cover-card-title">Judul karya akan tampil di sini</h3>
+                                    <div class="work-meta">Tampilan contoh di katalog Dayakarya</div>
+                                    <div class="work-card-footer">
+                                        <span class="read-link">Masuk ke karya</span>
+                                        <span class="read-stat">Preview</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="creator-cover-detail-preview">
+                        <span class="section-kicker">Preview di Halaman Karya</span>
+                        <div class="creator-cover-detail-shell">
+                            <div class="work-hero creator-work-hero-mockup">
+                                <div class="work-hero-cover work-cover" id="creator-detail-cover">
+                                    <span class="type-tag" id="creator-detail-type">Cerpen</span>
+                                    <div class="cover-fade"></div>
+                                    <div class="cover-meta">
+                                        <span class="cover-pill">Preview hero karya</span>
+                                    </div>
+                                </div>
+                                <div class="work-hero-copy">
+                                    <span class="section-kicker">Fokus Karya</span>
+                                    <h3 id="creator-detail-title">Judul karya akan tampil di sini</h3>
+                                    <div class="work-meta work-meta-rich">
+                                        <span>✍️ Nama kreator</span>
+                                        <span>•</span>
+                                        <span id="creator-detail-access">Gratis untuk pembaca</span>
+                                    </div>
+                                    <p class="work-synopsis" id="creator-detail-synopsis">Sinopsis karya akan tampil di sini supaya kreator bisa lihat apakah cover dan copy-nya terasa cocok saat masuk ke halaman detail.</p>
+                                    <div class="work-badges">
+                                        <span class="work-badge" id="creator-detail-badge">Mode baca yang lebih fokus</span>
+                                        <span class="work-badge">Preview halaman karya</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="creator-title-guard" id="creator-title-guard">
+                        <strong id="creator-title-guard-label">Judul masih aman</strong>
+                        <p id="creator-title-guard-copy">Panjang judul saat ini masih nyaman untuk kartu katalog dan hero halaman karya.</p>
+                    </div>
+                    <div class="creator-title-guard" id="creator-synopsis-guard">
+                        <strong id="creator-synopsis-guard-label">Sinopsis masih aman</strong>
+                        <p id="creator-synopsis-guard-copy">Panjang sinopsis saat ini masih nyaman untuk hero halaman karya dan tidak terasa sesak.</p>
                     </div>
                 </div>
 
@@ -131,8 +202,33 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                     </div>
                     <div class="field field-text-content" style="grid-column:1/-1">
                         <label>Isi karya</label>
+                        <div class="creator-inline-actions">
+                            <button class="btn btn-ghost" type="button" onclick="autoFormatContent()">Rapikan Otomatis</button>
+                            <span class="hint">Cocok untuk teks copy-paste yang masih numpuk jadi blok panjang.</span>
+                        </div>
                         <textarea id="editor-content" rows="14" placeholder="Tulis isi cerpen atau bagian pembuka karya kamu di sini."></textarea>
                         <div class="hint">Pisahkan antar paragraf dengan satu baris kosong supaya hasil baca nanti tampil lebih rapi.</div>
+                    </div>
+                    <div class="creator-autoformat-compare field-text-content" id="creator-autoformat-compare" hidden>
+                        <div class="creator-autoformat-head">
+                            <div>
+                                <strong>Perbandingan Sebelum dan Sesudah</strong>
+                                <span>Lihat ringkasan perubahan hasil rapikan otomatis sebelum lanjut simpan.</span>
+                            </div>
+                            <button class="btn btn-ghost" type="button" id="creator-autoformat-restore" onclick="restoreAutoFormat()" hidden>Kembalikan Sebelum Dirapikan</button>
+                        </div>
+                        <div class="creator-autoformat-grid">
+                            <div class="creator-autoformat-card">
+                                <span class="section-kicker">Sebelum</span>
+                                <div class="creator-autoformat-meta" id="creator-autoformat-before-meta">0 paragraf · 0 kata</div>
+                                <pre id="creator-autoformat-before">Belum ada preview sebelum dirapikan.</pre>
+                            </div>
+                            <div class="creator-autoformat-card">
+                                <span class="section-kicker">Sesudah</span>
+                                <div class="creator-autoformat-meta" id="creator-autoformat-after-meta">0 paragraf · 0 kata</div>
+                                <pre id="creator-autoformat-after">Belum ada preview sesudah dirapikan.</pre>
+                            </div>
+                        </div>
                     </div>
                     <div class="field field-audio-url" style="grid-column:1/-1" hidden>
                         <label>URL audio</label>
@@ -163,6 +259,26 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                     <button class="btn btn-gold" id="editor-save" onclick="saveDraft()">Simpan Perubahan</button>
                     <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Sekarang</button>
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Nanti Lanjut Lagi</a>
+                </div>
+                <div class="creator-autosave-status-wrap">
+                    <div class="creator-autosave-status" id="creator-autosave-status">Semua perubahan sudah tersimpan.</div>
+                    <div class="creator-autosave-meta" id="creator-autosave-meta">Belum ada riwayat simpan.</div>
+                </div>
+                <div class="creator-publish-checklist">
+                    <div class="creator-publish-checklist-head">
+                        <strong>Checklist Siap Tayang</strong>
+                        <span id="creator-publish-summary">Lengkapi dulu poin penting sebelum karya ditayangkan.</span>
+                    </div>
+                    <div class="creator-publish-checklist-grid" id="creator-publish-checklist">
+                        <span class="creator-publish-item is-pending">Cover belum dicek</span>
+                        <span class="creator-publish-item is-pending">Sinopsis belum dicek</span>
+                        <span class="creator-publish-item is-pending">Part aktif belum dicek</span>
+                        <span class="creator-publish-item is-pending">Akses belum dicek</span>
+                    </div>
+                </div>
+                <div class="creator-title-guard field-text-content" id="creator-content-guard">
+                    <strong id="creator-content-guard-label">Isi part masih aman</strong>
+                    <p id="creator-content-guard-copy">Paragraf dan ritme tulisan saat ini masih nyaman untuk dibaca di layar HP.</p>
                 </div>
             </div>
 
@@ -199,10 +315,23 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 <script>
   const workId = '{{ request()->route('work') }}';
   const debugEndpoint = 'http://127.0.0.1:7777/event';
+  const COVER_MIN_WIDTH = 900;
+  const COVER_MIN_HEIGHT = 1200;
+  const COVER_RECOMMENDED_RATIO = 3 / 4;
+  const COVER_MAX_BYTES = 4 * 1024 * 1024;
   const editorState = {
     chapters: [],
     activeChapterId: null,
     cover: null,
+    previewObjectUrl: null,
+    lastAutoFormatOriginal: null,
+    autosaveTimer: null,
+    isSaving: false,
+    isLoaded: false,
+    lastSavedSnapshot: '',
+    lastSaveMode: 'manual',
+    skipLeaveGuard: false,
+    lastSavedAt: null,
   };
 
   // #region debug-point A:frontend-debug-report
@@ -248,6 +377,119 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#039;');
+  }
+
+  function splitSentences(text) {
+    const matches = text.match(/[^.!?]+[.!?]+(?:["”']+)?|[^.!?]+$/g);
+    return (matches || [text])
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  function summarizeContent(text) {
+    const clean = String(text || '').trim();
+    if (!clean) {
+      return {
+        paragraphs: 0,
+        words: 0,
+      };
+    }
+
+    return {
+      paragraphs: clean.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean).length,
+      words: clean.split(/\s+/).filter(Boolean).length,
+    };
+  }
+
+  function truncatePreviewText(text, maxLength = 360) {
+    const clean = String(text || '').trim();
+    if (!clean) return 'Belum ada isi untuk ditampilkan.';
+    if (clean.length <= maxLength) return clean;
+    return clean.slice(0, maxLength).trimEnd() + '...';
+  }
+
+  function renderAutoFormatComparison(beforeText, afterText) {
+    const shell = document.querySelector('#creator-autoformat-compare');
+    const beforeMeta = document.querySelector('#creator-autoformat-before-meta');
+    const afterMeta = document.querySelector('#creator-autoformat-after-meta');
+    const beforePreview = document.querySelector('#creator-autoformat-before');
+    const afterPreview = document.querySelector('#creator-autoformat-after');
+    const restoreButton = document.querySelector('#creator-autoformat-restore');
+
+    if (!shell || !beforeMeta || !afterMeta || !beforePreview || !afterPreview) return;
+
+    const beforeSummary = summarizeContent(beforeText);
+    const afterSummary = summarizeContent(afterText);
+
+    beforeMeta.textContent = `${beforeSummary.paragraphs} paragraf · ${beforeSummary.words} kata`;
+    afterMeta.textContent = `${afterSummary.paragraphs} paragraf · ${afterSummary.words} kata`;
+    beforePreview.textContent = truncatePreviewText(beforeText);
+    afterPreview.textContent = truncatePreviewText(afterText);
+    shell.hidden = false;
+    if (restoreButton) {
+      restoreButton.hidden = !editorState.lastAutoFormatOriginal;
+    }
+  }
+
+  function normalizeParagraphText(text) {
+    return text
+      .replace(/\r\n?/g, '\n')
+      .replace(/\t/g, ' ')
+      .replace(/[ \u00A0]+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function autoFormatStoryContent(raw) {
+    let text = normalizeParagraphText(raw);
+    if (!text) return '';
+
+    const hasParagraphGap = /\n\s*\n/.test(text);
+    let paragraphs = [];
+
+    if (hasParagraphGap) {
+      paragraphs = text
+        .split(/\n\s*\n/)
+        .map((paragraph) => paragraph.split('\n').map((line) => line.trim()).filter(Boolean).join(' '))
+        .filter(Boolean);
+    } else {
+      const denseText = text.split('\n').map((line) => line.trim()).filter(Boolean).join(' ');
+      const sentences = splitSentences(denseText);
+      let buffer = [];
+      let bufferWords = 0;
+
+      sentences.forEach((sentence) => {
+        const sentenceWords = sentence.split(/\s+/).filter(Boolean).length;
+        const looksLikeDialogue = /["“”]/.test(sentence);
+
+        if (looksLikeDialogue && buffer.length) {
+          paragraphs.push(buffer.join(' ').trim());
+          buffer = [];
+          bufferWords = 0;
+        }
+
+        buffer.push(sentence);
+        bufferWords += sentenceWords;
+
+        if (looksLikeDialogue || bufferWords >= 55 || buffer.length >= 2) {
+          paragraphs.push(buffer.join(' ').trim());
+          buffer = [];
+          bufferWords = 0;
+        }
+      });
+
+      if (buffer.length) {
+        paragraphs.push(buffer.join(' ').trim());
+      }
+    }
+
+    return paragraphs
+      .map((paragraph) => paragraph
+        .replace(/\s*([,.!?;:])\s*/g, '$1 ')
+        .replace(/\s{2,}/g, ' ')
+        .trim())
+      .filter(Boolean)
+      .join('\n\n');
   }
 
   function updateReadingPreview() {
@@ -299,6 +541,286 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     window.history.replaceState({}, '', url);
   }
 
+  function getDraftPayload() {
+    return {
+      title: document.querySelector('#editor-title').value,
+      type: document.querySelector('#editor-type').value,
+      synopsis: document.querySelector('#editor-synopsis').value,
+      chapter_id: editorState.activeChapterId,
+      chapter_title: document.querySelector('#editor-chapter-title').value,
+      content: document.querySelector('#editor-content').value,
+      audio_url: document.querySelector('#editor-audio-url').value,
+      video_url: document.querySelector('#editor-video-url').value,
+      duration_seconds: document.querySelector('#editor-duration').value ? Number(document.querySelector('#editor-duration').value) : null,
+      is_premium: document.querySelector('#editor-is-premium').value === '1',
+      price_credit: Number(document.querySelector('#editor-price-credit').value || 0),
+    };
+  }
+
+  function getDraftSnapshot() {
+    return JSON.stringify(getDraftPayload());
+  }
+
+  function setAutosaveStatus(message, state = 'idle') {
+    const status = document.querySelector('#creator-autosave-status');
+    if (!status) return;
+    status.textContent = message;
+    status.classList.remove('is-idle', 'is-pending', 'is-saving', 'is-error');
+    status.classList.add(`is-${state}`);
+    renderChapterList();
+    renderPublishChecklist();
+  }
+
+  function formatSavedTime(value = null) {
+    const date = value ? new Date(value) : new Date();
+    return new Intl.DateTimeFormat('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Jakarta',
+    }).format(date) + ' WIB';
+  }
+
+  function setAutosaveMeta(message) {
+    const meta = document.querySelector('#creator-autosave-meta');
+    if (!meta) return;
+    meta.textContent = message;
+  }
+
+  function markLastSaved(value = null, source = 'save') {
+    editorState.lastSavedAt = value || new Date().toISOString();
+    const sourceLabel = source === 'publish' ? 'Terakhir ditayangkan' : 'Terakhir tersimpan';
+    setAutosaveMeta(`${sourceLabel} ${formatSavedTime(editorState.lastSavedAt)}.`);
+  }
+
+  function hasUnsavedDraftChanges() {
+    if (!editorState.isLoaded) return false;
+    if (editorState.isSaving) return true;
+    return getDraftSnapshot() !== editorState.lastSavedSnapshot;
+  }
+
+  function shouldBlockEditorLeave() {
+    if (editorState.skipLeaveGuard) return false;
+    return hasUnsavedDraftChanges();
+  }
+
+  function clearAutosaveTimer() {
+    if (editorState.autosaveTimer) {
+      window.clearTimeout(editorState.autosaveTimer);
+      editorState.autosaveTimer = null;
+    }
+  }
+
+  function markDraftDirty() {
+    if (!editorState.isLoaded) return;
+    setAutosaveStatus('Perubahan belum disimpan. Auto-save akan jalan sebentar lagi.', 'pending');
+    if (editorState.lastSavedAt) {
+      setAutosaveMeta(`Draft lokal berubah. Simpan aman terakhir ${formatSavedTime(editorState.lastSavedAt)}.`);
+      return;
+    }
+    setAutosaveMeta('Draft lokal berubah. Belum ada simpan aman di sesi ini.');
+    renderChapterList();
+  }
+
+  function queueAutoSave() {
+    if (!editorState.isLoaded || editorState.isSaving) return;
+
+    const snapshot = getDraftSnapshot();
+    if (snapshot === editorState.lastSavedSnapshot) {
+      setAutosaveStatus('Semua perubahan sudah tersimpan.', 'idle');
+      return;
+    }
+
+    clearAutosaveTimer();
+    markDraftDirty();
+    editorState.autosaveTimer = window.setTimeout(() => {
+      saveDraft({ silent: true, auto: true });
+    }, 3000);
+  }
+
+  function getPartDraftState(chapterId) {
+    const activeId = Number(editorState.activeChapterId);
+    const currentId = Number(chapterId);
+
+    if (currentId === activeId && editorState.isSaving) {
+      return {
+        label: 'Sedang disimpan',
+        className: 'is-saving',
+      };
+    }
+
+    if (currentId === activeId && hasUnsavedDraftChanges()) {
+      return {
+        label: 'Belum aman',
+        className: 'is-pending',
+      };
+    }
+
+    return {
+      label: 'Aman tersimpan',
+      className: 'is-safe',
+    };
+  }
+
+  function getPartProgress(chapter) {
+    const isActive = Number(chapter?.id) === Number(editorState.activeChapterId);
+    const title = isActive
+      ? (document.querySelector('#editor-chapter-title')?.value || '')
+      : (chapter?.title || '');
+    const content = isActive
+      ? (document.querySelector('#editor-content')?.value || '')
+      : (chapter?.content || '');
+    const isPremium = isActive
+      ? document.querySelector('#editor-is-premium')?.value === '1'
+      : Boolean(chapter?.is_premium);
+    const priceCredit = isActive
+      ? Number(document.querySelector('#editor-price-credit')?.value || 0)
+      : Number(chapter?.price_credit || 0);
+
+    const titleReady = Boolean(String(title).trim());
+    const contentReady = String(content).trim().split(/\s+/).filter(Boolean).length >= 20;
+    const accessReady = !isPremium || priceCredit > 0;
+
+    return [
+      {
+        label: titleReady ? 'Judul siap' : 'Judul belum',
+        className: titleReady ? 'is-ready' : 'is-empty',
+      },
+      {
+        label: contentReady ? 'Isi siap' : 'Isi belum',
+        className: contentReady ? 'is-ready' : 'is-empty',
+      },
+      {
+        label: accessReady ? 'Akses siap' : 'Harga belum',
+        className: accessReady ? 'is-ready' : 'is-empty',
+      },
+    ];
+  }
+
+  function getPublishChecklist() {
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const synopsis = document.querySelector('#editor-synopsis')?.value || '';
+    const chapterTitle = document.querySelector('#editor-chapter-title')?.value || '';
+    const content = document.querySelector('#editor-content')?.value || '';
+    const audioUrl = document.querySelector('#editor-audio-url')?.value || '';
+    const videoUrl = document.querySelector('#editor-video-url')?.value || '';
+    const duration = Number(document.querySelector('#editor-duration')?.value || 0);
+    const isPremium = document.querySelector('#editor-is-premium')?.value === '1';
+    const priceCredit = Number(document.querySelector('#editor-price-credit')?.value || 0);
+    const synopsisWords = synopsis.trim().split(/\s+/).filter(Boolean).length;
+    const contentWords = content.trim().split(/\s+/).filter(Boolean).length;
+
+    const items = [
+      {
+        label: editorState.cover ? 'Cover siap' : 'Cover belum ada',
+        ok: Boolean(editorState.cover),
+      },
+      {
+        label: synopsisWords >= 12 ? 'Sinopsis siap' : 'Sinopsis masih tipis',
+        ok: synopsisWords >= 12,
+      },
+      {
+        label: String(chapterTitle).trim() ? 'Judul part siap' : 'Judul part belum ada',
+        ok: Boolean(String(chapterTitle).trim()),
+      },
+    ];
+
+    if (mode === 'text') {
+      items.push({
+        label: contentWords >= 60 ? 'Isi part siap' : 'Isi part masih pendek',
+        ok: contentWords >= 60,
+      });
+    } else if (mode === 'audio') {
+      items.push({
+        label: audioUrl.trim() ? 'Audio siap' : 'URL audio belum ada',
+        ok: Boolean(audioUrl.trim()),
+      });
+      items.push({
+        label: duration > 0 ? 'Durasi siap' : 'Durasi belum diisi',
+        ok: duration > 0,
+      });
+    } else {
+      items.push({
+        label: videoUrl.trim() ? 'Video siap' : 'URL video belum ada',
+        ok: Boolean(videoUrl.trim()),
+      });
+      items.push({
+        label: duration > 0 ? 'Durasi siap' : 'Durasi belum diisi',
+        ok: duration > 0,
+      });
+    }
+
+    items.push({
+      label: !isPremium || priceCredit > 0 ? 'Akses siap' : 'Harga premium belum ada',
+      ok: !isPremium || priceCredit > 0,
+    });
+
+    return items;
+  }
+
+  function renderPublishChecklist() {
+    const container = document.querySelector('#creator-publish-checklist');
+    const summary = document.querySelector('#creator-publish-summary');
+    const button = document.querySelector('#editor-publish');
+    if (!container || !summary) return;
+
+    const items = getPublishChecklist();
+    const readyCount = items.filter((item) => item.ok).length;
+    const missingItems = items.filter((item) => !item.ok);
+
+    container.innerHTML = items
+      .map((item) => `<span class="creator-publish-item ${item.ok ? 'is-ready' : 'is-pending'}">${item.label}</span>`)
+      .join('');
+
+    if (!missingItems.length) {
+      summary.textContent = 'Semua poin penting sudah siap. Karya bisa ditayangkan kapan saja.';
+      button?.removeAttribute('data-readiness');
+      return;
+    }
+
+    summary.textContent = `${readyCount}/${items.length} poin sudah siap. Lengkapi dulu yang masih kurang sebelum tayang.`;
+    button?.setAttribute('data-readiness', 'needs-review');
+  }
+
+  async function attemptLeaveEditor(targetUrl) {
+    if (!targetUrl) return;
+
+    if (!editorState.isLoaded) {
+      editorState.skipLeaveGuard = true;
+      window.location.href = targetUrl;
+      return;
+    }
+
+    if (editorState.isSaving) {
+      const confirmed = window.confirm('Perubahan masih sedang disimpan. Kalau keluar sekarang, update terakhir bisa hilang. Tetap keluar?');
+      if (confirmed) {
+        editorState.skipLeaveGuard = true;
+        window.location.href = targetUrl;
+      }
+      return;
+    }
+
+    if (!hasUnsavedDraftChanges()) {
+      editorState.skipLeaveGuard = true;
+      window.location.href = targetUrl;
+      return;
+    }
+
+    setAutosaveStatus('Menyimpan perubahan sebelum keluar dari editor...', 'saving');
+    const saved = await saveDraft({ silent: true, auto: true });
+    if (saved) {
+      editorState.skipLeaveGuard = true;
+      window.location.href = targetUrl;
+      return;
+    }
+
+    const confirmed = window.confirm('Perubahan terakhir belum berhasil disimpan. Tetap keluar dari editor?');
+    if (confirmed) {
+      editorState.skipLeaveGuard = true;
+      window.location.href = targetUrl;
+    }
+  }
+
   function updateActivePartHint() {
     const label = document.querySelector('#editor-chapter-label');
     const hint = document.querySelector('#editor-active-part-copy');
@@ -314,10 +836,281 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
   }
 
-  function syncCoverPreview(coverUrl) {
+  function clearPreviewObjectUrl() {
+    if (editorState.previewObjectUrl) {
+      URL.revokeObjectURL(editorState.previewObjectUrl);
+      editorState.previewObjectUrl = null;
+    }
+  }
+
+  function refreshCoverCardPreview() {
+    const cardCover = document.querySelector('#creator-cover-card-cover');
+    const cardTitle = document.querySelector('#creator-cover-card-title');
+    const cardType = document.querySelector('#creator-cover-card-type');
+    const cardAccess = document.querySelector('#creator-cover-card-access');
+
+    if (!cardCover || !cardTitle || !cardType || !cardAccess) return;
+
+    const title = document.querySelector('#editor-title')?.value?.trim() || 'Judul karya akan tampil di sini';
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const isPremium = document.querySelector('#editor-is-premium')?.value === '1';
+
+    cardTitle.textContent = title;
+    cardType.textContent = DK.typeLabel(type);
+    cardAccess.textContent = isPremium ? 'Premium' : 'Gratis';
+
+    if (editorState.cover) {
+      cardCover.style.backgroundImage = `url("${editorState.cover.replaceAll('"', '&quot;')}")`;
+      cardCover.style.backgroundSize = 'cover';
+      cardCover.style.backgroundPosition = 'center';
+    } else {
+      cardCover.style.backgroundImage = '';
+      cardCover.style.backgroundSize = '';
+      cardCover.style.backgroundPosition = '';
+    }
+  }
+
+  function detailModeBadge(type) {
+    if (type === 'video_series') return 'Mode nonton yang lebih fokus';
+    if (['podcast', 'audio_story', 'dongeng', 'audiobook'].includes(type)) return 'Mode dengar yang lebih fokus';
+    return 'Mode baca yang lebih fokus';
+  }
+
+  function refreshCoverDetailPreview() {
+    const detailCover = document.querySelector('#creator-detail-cover');
+    const detailType = document.querySelector('#creator-detail-type');
+    const detailTitle = document.querySelector('#creator-detail-title');
+    const detailSynopsis = document.querySelector('#creator-detail-synopsis');
+    const detailAccess = document.querySelector('#creator-detail-access');
+    const detailBadge = document.querySelector('#creator-detail-badge');
+
+    if (!detailCover || !detailType || !detailTitle || !detailSynopsis || !detailAccess || !detailBadge) return;
+
+    const title = document.querySelector('#editor-title')?.value?.trim() || 'Judul karya akan tampil di sini';
+    const synopsis = document.querySelector('#editor-synopsis')?.value?.trim() || 'Sinopsis karya akan tampil di sini supaya kreator bisa lihat apakah cover dan copy-nya terasa cocok saat masuk ke halaman detail.';
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const isPremium = document.querySelector('#editor-is-premium')?.value === '1';
+
+    detailType.textContent = DK.typeLabel(type);
+    detailTitle.textContent = title;
+    detailSynopsis.textContent = synopsis;
+    detailAccess.textContent = isPremium ? 'Butuh credit untuk membuka part premium' : 'Gratis untuk pembaca';
+    detailBadge.textContent = detailModeBadge(type);
+
+    if (editorState.cover) {
+      detailCover.style.backgroundImage = `url("${editorState.cover.replaceAll('"', '&quot;')}")`;
+      detailCover.style.backgroundSize = 'cover';
+      detailCover.style.backgroundPosition = 'center';
+    } else {
+      detailCover.style.backgroundImage = '';
+      detailCover.style.backgroundSize = '';
+      detailCover.style.backgroundPosition = '';
+    }
+  }
+
+  function updateTitleGuard() {
+    const guard = document.querySelector('#creator-title-guard');
+    const label = document.querySelector('#creator-title-guard-label');
+    const copy = document.querySelector('#creator-title-guard-copy');
+    const rawTitle = document.querySelector('#editor-title')?.value || '';
+
+    if (!guard || !label || !copy) return;
+
+    const title = rawTitle.trim();
+    const length = title.length;
+
+    guard.classList.remove('is-safe', 'is-watch', 'is-warning');
+
+    if (!length) {
+      guard.classList.add('is-safe');
+      label.textContent = 'Judul masih kosong';
+      copy.textContent = 'Isi judul dulu, nanti sistem bantu cek apakah panjangnya masih aman untuk katalog dan halaman karya.';
+      return;
+    }
+
+    if (length <= 45) {
+      guard.classList.add('is-safe');
+      label.textContent = 'Judul masih aman';
+      copy.textContent = `Panjang judul ${length} karakter. Ini masih nyaman untuk kartu katalog dan hero halaman karya.`;
+      return;
+    }
+
+    if (length <= 65) {
+      guard.classList.add('is-watch');
+      label.textContent = 'Judul mulai mepet';
+      copy.textContent = `Panjang judul ${length} karakter. Masih bisa dipakai, tapi cek lagi preview katalog dan halaman karya supaya tidak terasa kepanjangan.`;
+      return;
+    }
+
+    guard.classList.add('is-warning');
+    label.textContent = 'Judul terlalu panjang';
+    copy.textContent = `Panjang judul ${length} karakter. Sebaiknya dipendekkan supaya tidak rawan kepotong atau terasa berat saat tampil di katalog dan halaman karya.`;
+  }
+
+  function updateSynopsisGuard() {
+    const guard = document.querySelector('#creator-synopsis-guard');
+    const label = document.querySelector('#creator-synopsis-guard-label');
+    const copy = document.querySelector('#creator-synopsis-guard-copy');
+    const rawSynopsis = document.querySelector('#editor-synopsis')?.value || '';
+
+    if (!guard || !label || !copy) return;
+
+    const synopsis = rawSynopsis.trim();
+    const length = synopsis.length;
+
+    guard.classList.remove('is-safe', 'is-watch', 'is-warning');
+
+    if (!length) {
+      guard.classList.add('is-safe');
+      label.textContent = 'Sinopsis masih kosong';
+      copy.textContent = 'Isi sinopsis dulu, nanti sistem bantu cek apakah panjangnya masih enak dibaca saat tampil di halaman karya.';
+      return;
+    }
+
+    if (length <= 160) {
+      guard.classList.add('is-safe');
+      label.textContent = 'Sinopsis masih aman';
+      copy.textContent = `Panjang sinopsis ${length} karakter. Ini masih nyaman untuk hero halaman karya dan tetap terasa ringan dibaca.`;
+      return;
+    }
+
+    if (length <= 260) {
+      guard.classList.add('is-watch');
+      label.textContent = 'Sinopsis mulai panjang';
+      copy.textContent = `Panjang sinopsis ${length} karakter. Masih bisa dipakai, tapi cek preview halaman karya supaya tidak terasa padat.`;
+      return;
+    }
+
+    guard.classList.add('is-warning');
+    label.textContent = 'Sinopsis terlalu panjang';
+    copy.textContent = `Panjang sinopsis ${length} karakter. Sebaiknya diringkas supaya pembaca cepat paham tanpa merasa sesak saat membuka halaman karya.`;
+  }
+
+  function updateContentGuard() {
+    const guard = document.querySelector('#creator-content-guard');
+    const label = document.querySelector('#creator-content-guard-label');
+    const copy = document.querySelector('#creator-content-guard-copy');
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const rawContent = document.querySelector('#editor-content')?.value || '';
+
+    if (!guard || !label || !copy) return;
+
+    if (mode !== 'text') {
+      guard.classList.remove('is-safe', 'is-watch', 'is-warning');
+      guard.classList.add('is-safe');
+      label.textContent = 'Guard isi fokus untuk karya teks';
+      copy.textContent = 'Untuk audio dan video, fokus utama tetap ke file media. Guard paragraf dipakai khusus untuk cerpen dan novel.';
+      return;
+    }
+
+    const clean = rawContent.trim();
+    guard.classList.remove('is-safe', 'is-watch', 'is-warning');
+
+    if (!clean) {
+      guard.classList.add('is-safe');
+      label.textContent = 'Isi part masih kosong';
+      copy.textContent = 'Mulai isi part dulu, nanti sistem bantu cek apakah paragrafnya sudah enak dibaca atau masih terlalu padat.';
+      return;
+    }
+
+    const paragraphs = clean.split(/\n\s*\n/).map((item) => item.trim()).filter(Boolean);
+    const wordsPerParagraph = paragraphs.map((paragraph) => paragraph.split(/\s+/).filter(Boolean).length);
+    const longestParagraph = wordsPerParagraph.length ? Math.max(...wordsPerParagraph) : 0;
+    const shortOpening = paragraphs.slice(0, 2).join(' ').split(/\s+/).filter(Boolean).length;
+    const denseParagraphCount = wordsPerParagraph.filter((count) => count >= 90).length;
+
+    if (denseParagraphCount >= 2 || longestParagraph >= 130) {
+      guard.classList.add('is-warning');
+      label.textContent = 'Isi part terlalu padat';
+      copy.textContent = `Paragraf terpanjang sekitar ${longestParagraph} kata. Pecah lagi jadi paragraf lebih pendek supaya pembaca tidak cepat lelah.`;
+      return;
+    }
+
+    if (denseParagraphCount >= 1 || longestParagraph >= 75 || shortOpening < 18) {
+      guard.classList.add('is-watch');
+      if (shortOpening < 18) {
+        label.textContent = 'Pembuka masih terlalu tipis';
+        copy.textContent = `Dua paragraf awal baru sekitar ${shortOpening} kata. Tambah sedikit konteks atau ketegangan supaya pembuka terasa lebih kuat.`;
+        return;
+      }
+
+      label.textContent = 'Isi part mulai rapat';
+      copy.textContent = `Paragraf terpanjang sekitar ${longestParagraph} kata. Masih bisa dipakai, tapi akan lebih enak kalau beberapa bagian dipecah lagi.`;
+      return;
+    }
+
+    guard.classList.add('is-safe');
+    label.textContent = 'Isi part masih aman';
+    copy.textContent = `Ada ${paragraphs.length} paragraf dan paragraf terpanjang sekitar ${longestParagraph} kata. Ritme bacanya sudah cukup nyaman di layar HP.`;
+  }
+
+  function autoFormatContent() {
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const contentField = document.querySelector('#editor-content');
+    const msg = document.querySelector('#editor-msg');
+
+    if (mode !== 'text') {
+      msg.innerHTML = '<div class="alert alert-error">Rapikan otomatis saat ini difokuskan untuk karya teks seperti cerpen dan novel.</div>';
+      return;
+    }
+
+    if (!contentField) return;
+
+    const raw = contentField.value || '';
+    if (!raw.trim()) {
+      msg.innerHTML = '<div class="alert alert-error">Isi part masih kosong. Tempel dulu naskah yang mau dirapikan.</div>';
+      return;
+    }
+
+    const formatted = autoFormatStoryContent(raw);
+    if (!formatted) {
+      msg.innerHTML = '<div class="alert alert-error">Naskah belum berhasil dirapikan. Coba cek isi teksnya dulu.</div>';
+      return;
+    }
+
+    editorState.lastAutoFormatOriginal = raw;
+    contentField.value = formatted;
+    renderAutoFormatComparison(raw, formatted);
+    updateReadingPreview();
+    updateContentGuard();
+    renderPublishChecklist();
+    msg.innerHTML = '<div class="alert alert-success">Teks berhasil dirapikan otomatis. Cek lagi hasilnya, lalu edit sedikit kalau ada bagian yang masih ingin kamu atur manual.</div>';
+  }
+
+  function restoreAutoFormat() {
+    const contentField = document.querySelector('#editor-content');
+    const msg = document.querySelector('#editor-msg');
+
+    if (!contentField || !editorState.lastAutoFormatOriginal) {
+      msg.innerHTML = '<div class="alert alert-error">Belum ada hasil rapikan otomatis yang bisa dikembalikan.</div>';
+      return;
+    }
+
+    const currentValue = contentField.value || '';
+    contentField.value = editorState.lastAutoFormatOriginal;
+    renderAutoFormatComparison(currentValue, editorState.lastAutoFormatOriginal);
+    editorState.lastAutoFormatOriginal = null;
+    const restoreButton = document.querySelector('#creator-autoformat-restore');
+    if (restoreButton) {
+      restoreButton.hidden = true;
+    }
+    updateReadingPreview();
+    updateContentGuard();
+    renderPublishChecklist();
+    msg.innerHTML = '<div class="alert alert-success">Isi part sudah dikembalikan ke versi sebelum dirapikan otomatis.</div>';
+  }
+
+  function syncCoverPreview(coverUrl, options = {}) {
     const image = document.querySelector('#creator-cover-preview');
     const empty = document.querySelector('#creator-cover-empty');
-    editorState.cover = coverUrl || null;
+    const { temporary = false } = options;
+
+    if (!temporary) {
+      clearPreviewObjectUrl();
+      editorState.cover = coverUrl || null;
+    }
 
     if (!image || !empty) return;
 
@@ -325,12 +1118,96 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       image.src = coverUrl;
       image.hidden = false;
       empty.hidden = true;
+      refreshCoverCardPreview();
+      refreshCoverDetailPreview();
+      updateTitleGuard();
+      updateSynopsisGuard();
+      updateContentGuard();
+      renderPublishChecklist();
       return;
     }
 
     image.removeAttribute('src');
     image.hidden = true;
     empty.hidden = false;
+    refreshCoverCardPreview();
+    refreshCoverDetailPreview();
+    updateTitleGuard();
+    updateSynopsisGuard();
+    updateContentGuard();
+    renderPublishChecklist();
+  }
+
+  function formatFileSize(bytes) {
+    if (bytes >= 1024 * 1024) {
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    return `${Math.round(bytes / 1024)} KB`;
+  }
+
+  function readImageMeta(file) {
+    return new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(file);
+      const image = new Image();
+
+      image.onload = () => {
+        resolve({
+          width: image.naturalWidth,
+          height: image.naturalHeight,
+          ratio: image.naturalWidth / image.naturalHeight,
+          objectUrl,
+        });
+      };
+
+      image.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('File cover tidak bisa dibaca sebagai gambar.'));
+      };
+
+      image.src = objectUrl;
+    });
+  }
+
+  async function inspectSelectedCover() {
+    const input = document.querySelector('#editor-cover-file');
+    const msg = document.querySelector('#editor-msg');
+    const file = input?.files?.[0];
+    if (!file) return true;
+
+    if (file.size > COVER_MAX_BYTES) {
+      msg.innerHTML = `<div class="alert alert-error">Ukuran file cover ${formatFileSize(file.size)}. Maksimal upload 4 MB supaya prosesnya tetap lancar.</div>`;
+      input.value = '';
+      return false;
+    }
+
+    try {
+      const meta = await readImageMeta(file);
+      const ratioGap = Math.abs(meta.ratio - COVER_RECOMMENDED_RATIO);
+
+      if (meta.width < COVER_MIN_WIDTH || meta.height < COVER_MIN_HEIGHT) {
+        URL.revokeObjectURL(meta.objectUrl);
+        msg.innerHTML = `<div class="alert alert-error">Ukuran cover masih terlalu kecil: ${meta.width} x ${meta.height}px. Minimal pakai ${COVER_MIN_WIDTH} x ${COVER_MIN_HEIGHT}px.</div>`;
+        input.value = '';
+        return false;
+      }
+
+      clearPreviewObjectUrl();
+      editorState.previewObjectUrl = meta.objectUrl;
+      syncCoverPreview(meta.objectUrl, { temporary: true });
+
+      if (ratioGap > 0.03) {
+        msg.innerHTML = `<div class="alert alert-error">Cover terbaca ${meta.width} x ${meta.height}px. Masih bisa dipakai, tapi rasionya kurang pas untuk template 3:4 dan hasilnya bisa terlihat kepotong.</div>`;
+        return true;
+      }
+
+      msg.innerHTML = `<div class="alert alert-success">Cover siap diupload: ${meta.width} x ${meta.height}px, ${formatFileSize(file.size)}, rasio sudah pas untuk template 3:4.</div>`;
+      return true;
+    } catch (error) {
+      msg.innerHTML = '<div class="alert alert-error">File cover tidak bisa dibaca. Coba pilih JPG, PNG, atau WEBP yang valid.</div>';
+      input.value = '';
+      return false;
+    }
   }
 
   function renderChapterList() {
@@ -348,6 +1225,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
         ? `Premium ${Number(chapter.price_credit || 0)} credit`
         : 'Gratis';
       const statusLabel = chapter.status === 'published' ? 'Tayang' : 'Draft';
+      const draftState = getPartDraftState(chapter.id);
+      const progressItems = getPartProgress(chapter)
+        .map((item) => `<span class="creator-part-progress-chip ${item.className}">${item.label}</span>`)
+        .join('');
 
       return `
         <button
@@ -355,9 +1236,13 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
           class="creator-part-chip ${isActive ? 'is-active' : ''}"
           data-chapter-id="${chapter.id}"
         >
-          <span class="creator-part-chip-order">Part ${chapter.order}</span>
+          <span class="creator-part-chip-topline">
+            <span class="creator-part-chip-order">Part ${chapter.order}</span>
+            <span class="creator-part-chip-state ${draftState.className}">${draftState.label}</span>
+          </span>
           <strong>${escapePreviewHtml(chapter.title || `Bagian ${chapter.order}`)}</strong>
           <span class="creator-part-chip-meta">${statusLabel} · ${accessLabel}</span>
+          <span class="creator-part-progress">${progressItems}</span>
         </button>
       `;
     }).join('');
@@ -394,6 +1279,16 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     updateActivePartHint();
     toggleEditorFields();
     updateReadingPreview();
+    refreshCoverCardPreview();
+    refreshCoverDetailPreview();
+    updateTitleGuard();
+    updateSynopsisGuard();
+    updateContentGuard();
+    editorState.lastSavedSnapshot = getDraftSnapshot();
+    editorState.isLoaded = true;
+    setAutosaveStatus('Semua perubahan sudah tersimpan.', 'idle');
+    markLastSaved(editor.updated_at || work.updated_at || new Date().toISOString(), 'save');
+    renderPublishChecklist();
   }
 
   async function uploadWorkCover() {
@@ -404,6 +1299,11 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
     if (!file) {
       msg.innerHTML = '<div class="alert alert-error">Pilih file cover dulu sebelum upload.</div>';
+      return;
+    }
+
+    const validSelection = await inspectSelectedCover();
+    if (!validSelection) {
       return;
     }
 
@@ -450,6 +1350,13 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   async function switchEditorChapter(chapterId) {
     if (!chapterId || Number(chapterId) === Number(editorState.activeChapterId)) {
       return;
+    }
+
+    if (getDraftSnapshot() !== editorState.lastSavedSnapshot) {
+      const saved = await saveDraft({ silent: true, auto: true });
+      if (!saved) {
+        return;
+      }
     }
 
     await loadDraftEditor(chapterId);
@@ -532,25 +1439,31 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
   }
 
-  async function saveDraft() {
+  async function saveDraft(options = {}) {
+    const { silent = false, auto = false } = options;
     const button = document.querySelector('#editor-save');
     const msg = document.querySelector('#editor-msg');
-    button.disabled = true;
-    msg.innerHTML = '';
+    const snapshotBeforeSave = getDraftSnapshot();
 
-    const payload = {
-      title: document.querySelector('#editor-title').value,
-      type: document.querySelector('#editor-type').value,
-      synopsis: document.querySelector('#editor-synopsis').value,
-      chapter_id: editorState.activeChapterId,
-      chapter_title: document.querySelector('#editor-chapter-title').value,
-      content: document.querySelector('#editor-content').value,
-      audio_url: document.querySelector('#editor-audio-url').value,
-      video_url: document.querySelector('#editor-video-url').value,
-      duration_seconds: document.querySelector('#editor-duration').value ? Number(document.querySelector('#editor-duration').value) : null,
-      is_premium: document.querySelector('#editor-is-premium').value === '1',
-      price_credit: Number(document.querySelector('#editor-price-credit').value || 0),
-    };
+    if (editorState.isSaving) {
+      return false;
+    }
+
+    if (snapshotBeforeSave === editorState.lastSavedSnapshot) {
+      setAutosaveStatus('Semua perubahan sudah tersimpan.', 'idle');
+      return true;
+    }
+
+    clearAutosaveTimer();
+    editorState.isSaving = true;
+    editorState.lastSaveMode = auto ? 'auto' : 'manual';
+    button.disabled = true;
+    if (!silent) {
+      msg.innerHTML = '';
+    }
+    setAutosaveStatus(auto ? 'Menyimpan otomatis...' : 'Menyimpan perubahan...', 'saving');
+
+    const payload = JSON.parse(snapshotBeforeSave);
 
     let ok = false;
     let data = {};
@@ -601,11 +1514,15 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
 
     button.disabled = false;
+    editorState.isSaving = false;
 
     if (!ok) {
       const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Draft belum berhasil disimpan.');
-      msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
-      return;
+      if (!silent) {
+        msg.innerHTML = `<div class="alert alert-error">${first}</div>`;
+      }
+      setAutosaveStatus(auto ? 'Auto-save gagal. Coba simpan manual sebentar lagi.' : 'Simpan gagal. Coba lagi sebentar.', 'error');
+      return false;
     }
 
     applyEditorPayload({
@@ -622,13 +1539,27 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       is_premium: payload.is_premium,
       price_credit: payload.price_credit,
     }, data.chapters || editorState.chapters);
-    msg.innerHTML = '<div class="alert alert-success">Draft berhasil disimpan. Kamu bisa lanjut lagi kapan saja dari halaman ini.</div>';
+    editorState.lastSavedSnapshot = getDraftSnapshot();
+    setAutosaveStatus(auto ? 'Perubahan terbaru sudah tersimpan otomatis.' : 'Semua perubahan sudah tersimpan.', 'idle');
+    markLastSaved(data.editor?.updated_at || data.work?.updated_at || new Date().toISOString(), 'save');
+    if (!silent) {
+      msg.innerHTML = '<div class="alert alert-success">Draft berhasil disimpan. Kamu bisa lanjut lagi kapan saja dari halaman ini.</div>';
+    }
+    return true;
   }
 
   async function publishWork() {
     const button = document.querySelector('#editor-publish');
     const msg = document.querySelector('#editor-msg');
     if (!button) return;
+
+    const checklist = getPublishChecklist();
+    const missingItems = checklist.filter((item) => !item.ok);
+    if (missingItems.length) {
+      renderPublishChecklist();
+      msg.innerHTML = `<div class="alert alert-error">Karya belum siap tayang. Lengkapi dulu: ${missingItems.map((item) => item.label.toLowerCase()).join(', ')}.</div>`;
+      return;
+    }
 
     button.disabled = true;
     msg.innerHTML = '';
@@ -660,6 +1591,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
         synopsis: data.work?.synopsis || document.querySelector('#editor-synopsis').value,
         cover: data.work?.cover || editorState.cover,
       }, data.editor || {}, data.chapters || editorState.chapters);
+      markLastSaved(data.work?.published_at || data.editor?.published_at || new Date().toISOString(), 'publish');
       msg.innerHTML = '<div class="alert alert-success">Karya sudah tayang. Sekarang akun lain seharusnya bisa melihatnya di katalog karya.</div>';
     } catch (error) {
       msg.innerHTML = '<div class="alert alert-error">Karya belum berhasil ditayangkan. Coba lagi sebentar.</div>';
@@ -668,8 +1600,75 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
   }
 
+  document.querySelector('#editor-cover-file')?.addEventListener('change', inspectSelectedCover);
+  document.querySelector('#editor-title')?.addEventListener('input', refreshCoverCardPreview);
+  document.querySelector('#editor-title')?.addEventListener('input', refreshCoverDetailPreview);
+  document.querySelector('#editor-title')?.addEventListener('input', updateTitleGuard);
+  document.querySelector('#editor-title')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-title')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-type')?.addEventListener('change', refreshCoverCardPreview);
+  document.querySelector('#editor-type')?.addEventListener('change', refreshCoverDetailPreview);
+  document.querySelector('#editor-type')?.addEventListener('change', renderPublishChecklist);
+  document.querySelector('#editor-type')?.addEventListener('change', queueAutoSave);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', refreshCoverCardPreview);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', refreshCoverDetailPreview);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', renderPublishChecklist);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', queueAutoSave);
+  document.querySelector('#editor-synopsis')?.addEventListener('input', refreshCoverDetailPreview);
+  document.querySelector('#editor-synopsis')?.addEventListener('input', updateSynopsisGuard);
+  document.querySelector('#editor-synopsis')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-synopsis')?.addEventListener('input', queueAutoSave);
   document.querySelector('#editor-content')?.addEventListener('input', updateReadingPreview);
+  document.querySelector('#editor-content')?.addEventListener('input', updateContentGuard);
+  document.querySelector('#editor-content')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-content')?.addEventListener('input', queueAutoSave);
   document.querySelector('#editor-type')?.addEventListener('change', updateReadingPreview);
+  document.querySelector('#editor-type')?.addEventListener('change', updateContentGuard);
+  document.querySelector('#editor-chapter-title')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-chapter-title')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-audio-url')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-audio-url')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-video-url')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-video-url')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-duration')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-duration')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-price-credit')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-price-credit')?.addEventListener('input', queueAutoSave);
+
+  window.addEventListener('beforeunload', (event) => {
+    if (!shouldBlockEditorLeave()) {
+      return;
+    }
+
+    event.preventDefault();
+    event.returnValue = '';
+  });
+
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href]');
+    if (!link) return;
+    if (event.defaultPrevented) return;
+    if (event.button !== 0) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (link.target === '_blank' || link.hasAttribute('download')) return;
+
+    const href = link.getAttribute('href') || '';
+    if (!href || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+      return;
+    }
+
+    if (!shouldBlockEditorLeave()) {
+      return;
+    }
+
+    const url = new URL(link.href, window.location.href);
+    if (url.href === window.location.href) {
+      return;
+    }
+
+    event.preventDefault();
+    attemptLeaveEditor(url.href);
+  }, true);
 
   loadDraftEditor();
 </script>

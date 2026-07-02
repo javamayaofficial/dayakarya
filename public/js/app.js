@@ -74,20 +74,25 @@ const DK = {
       </a>`;
   },
 
-  async loadWorks({ trending = 0, type = '', target } = {}) {
+  async loadWorks({ trending = 0, type = '', search = '', target } = {}) {
     const el = document.querySelector(target);
     if (!el) return;
     try {
       const q = new URLSearchParams();
       if (trending) q.set('trending', '1');
       if (type) q.set('type', type);
+      if (search) q.set('search', search);
       const json = await this.get('/works?' + q.toString());
       const items = json.data ?? [];
       if (!items.length) {
-        el.innerHTML = `<div class="state" style="grid-column:1/-1">
-          <div class="emoji">🖋️</div><h3>Belum ada karya yang tampil di sini</h3>
-          <p>Kalau mau, kamu bisa jadi salah satu yang pertama mengisinya.</p>
-          <a href="/daftar" class="btn btn-gold">Mulai Upload Karya</a></div>`;
+        el.innerHTML = search
+          ? `<div class="state" style="grid-column:1/-1">
+              <div class="emoji">🔍</div><h3>Belum ketemu</h3>
+              <p>Coba ganti kata kunci atau pilih tipe karya lain.</p></div>`
+          : `<div class="state" style="grid-column:1/-1">
+              <div class="emoji">🖋️</div><h3>Belum ada karya yang tampil di sini</h3>
+              <p>Kalau mau, kamu bisa jadi salah satu yang pertama mengisinya.</p>
+              <a href="/daftar" class="btn btn-gold">Mulai Upload Karya</a></div>`;
         return;
       }
       el.innerHTML = items.map(w => this.workCard(w)).join('');
