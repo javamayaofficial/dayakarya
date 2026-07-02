@@ -1434,6 +1434,57 @@ body.is-member-area .bottom-nav a.fab .ic {
   margin-top: 18px;
   padding-bottom: 110px;
 }
+.creator-cover-panel {
+  margin-bottom: 22px;
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(231,221,202,.95);
+  box-shadow: var(--shadow-sm);
+}
+.creator-cover-copy h3 {
+  font-size: 1.05rem;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.creator-cover-copy p {
+  color: var(--ink-soft);
+  font-size: .9rem;
+}
+.creator-cover-layout {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.creator-cover-preview-shell {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(231,221,202,.95);
+  background: linear-gradient(180deg, rgba(20,34,60,.04), rgba(255,255,255,.92));
+}
+.creator-cover-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+.creator-cover-empty {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  padding: 20px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+.creator-cover-actions {
+  display: grid;
+  gap: 12px;
+}
+.creator-cover-field {
+  margin: 0;
+}
 .creator-part-panel {
   margin-bottom: 22px;
   padding: 18px;
@@ -1587,6 +1638,34 @@ body.is-member-area .bottom-nav a.fab .ic {
 }
 .creator-reading-preview p {
   margin-bottom: 1rem;
+}
+.card-cover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(150deg, var(--paper-2), #e6d9bf);
+  border-bottom: 1px solid rgba(231,221,202,.95);
+  background-size: cover;
+  background-position: center;
+}
+.card-cover::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(15,29,54,0), rgba(15,29,54,.72));
+}
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(20,34,60,.84);
+  color: #fff6e8;
+  font-size: .72rem;
+  font-weight: 700;
 }
 
 /* ---- Leaderboard ---- */
@@ -1935,6 +2014,52 @@ body.is-member-area .bottom-nav a.fab .ic {
   display: grid;
   gap: 14px;
 }
+.support-identity-panel {
+  display: grid;
+  gap: 18px;
+  padding: 22px 18px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(251,247,239,.94));
+  border: 1px solid rgba(231,221,202,.95);
+  box-shadow: var(--shadow);
+}
+.support-identity-copy h2 {
+  font-size: 1.35rem;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.support-identity-copy p {
+  color: var(--ink-soft);
+  max-width: 58ch;
+}
+.support-identity-grid {
+  display: grid;
+  gap: 12px;
+}
+.support-identity-item {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(231,221,202,.95);
+  box-shadow: var(--shadow-sm);
+}
+.support-identity-item strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.support-identity-item a,
+.support-identity-item span {
+  color: var(--ink);
+  font-size: .98rem;
+  font-weight: 700;
+  line-height: 1.6;
+  word-break: break-word;
+}
 .feature-card,
 .journey-card {
   padding: 22px 18px;
@@ -2036,6 +2161,12 @@ body.is-member-area .bottom-nav a.fab .ic {
     align-items: center;
     grid-template-columns: minmax(0, 1.7fr) minmax(240px, 1fr);
   }
+  .support-identity-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .support-identity-item-full {
+    grid-column: 1 / -1;
+  }
 }
 @media (min-width: 860px) {
   .container {
@@ -2126,6 +2257,10 @@ body.is-member-area .bottom-nav a.fab .ic {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
   }
+  .creator-cover-layout {
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    align-items: start;
+  }
   .creator-writing-guide-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2168,6 +2303,7 @@ body.is-member-area .bottom-nav a.fab .ic {
     font-size: 2rem;
   }
   .showcase-panel,
+  .support-identity-panel,
   .cta-panel {
     padding: 30px;
   }

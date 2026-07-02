@@ -69,6 +69,32 @@
 
 <section class="section">
     <div class="container">
+        <div class="support-identity-panel">
+            <div class="support-identity-copy">
+                <span class="section-kicker">Kontak Support</span>
+                <h2>Dayakarya siap melayani pengguna dan partner bisnis secara langsung.</h2>
+                <p>Info ini ditampilkan terbuka di halaman utama agar pengguna, partner, dan tim verifikasi bisa melihat identitas support Dayakarya dengan jelas.</p>
+            </div>
+            <div class="support-identity-grid">
+                <div class="support-identity-item">
+                    <strong>Email Support</strong>
+                    <a href="mailto:admin@dayakarya.id">admin@dayakarya.id</a>
+                </div>
+                <div class="support-identity-item">
+                    <strong>Nomor HP Support</strong>
+                    <a href="tel:085722224391">085722224391</a>
+                </div>
+                <div class="support-identity-item support-identity-item-full">
+                    <strong>Alamat Kantor</strong>
+                    <span>Jl Melati Utama No.18 Cipadung Kidul - Panyileukan - Kota Bandung</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
         <div class="section-head section-head-premium">
             <div>
                 <span class="section-kicker">Kenapa Dayakarya</span>
