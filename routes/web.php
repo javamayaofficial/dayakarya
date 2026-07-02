@@ -70,6 +70,7 @@ Route::get('/wallet/topup/manual/{payment}', fn (Payment $payment) => view('read
 
 // Dashboard creator (shell)
 Route::view('/creator', 'creator.dashboard')->name('creator.dashboard');
+Route::view('/creator/works/{work}', 'creator.editor')->name('creator.work.edit');
 
 // Halaman statis (CMS)
 Route::view('/tentang', 'reader.page')->name('about');

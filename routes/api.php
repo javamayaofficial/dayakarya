@@ -45,7 +45,9 @@ Route::prefix('v1')->group(function () {
 
         // Karya (creator)
         Route::get('creator/dashboard', [WorkController::class, 'creatorDashboard']);
+        Route::get('creator/works/{work}', [WorkController::class, 'creatorShow']);
         Route::post('works', [WorkController::class, 'store']);
+        Route::put('creator/works/{work}', [WorkController::class, 'creatorUpdate']);
 
         // Affiliate
         Route::post('works/{work}/affiliate-link', [AffiliateController::class, 'createLink']);

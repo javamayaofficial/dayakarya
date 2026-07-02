@@ -173,6 +173,11 @@
       rejected: 'Perlu revisi',
     }[work.status] ?? work.status;
 
+    const actionLabel = work.status === 'published' ? 'Lihat Karya' : 'Lanjut Edit';
+    const actionHref = work.status === 'published'
+      ? `/karya/${work.slug}`
+      : `/creator/works/${work.id}`;
+
     return `
       <article class="work-card work-card-premium">
         <div class="card-cover">
@@ -186,6 +191,10 @@
             <span>${(work.likes_count ?? 0).toLocaleString('id-ID')} suka</span>
           </div>
           <div class="work-meta">${work.published_at ? new Date(work.published_at).toLocaleDateString('id-ID') : 'Belum dipublikasikan'}</div>
+          <div class="work-card-footer">
+            <a class="read-link" href="${actionHref}">${actionLabel}</a>
+            <span class="read-stat">${work.status === 'draft' ? 'Masih bisa dirapikan' : 'Sudah tayang'}</span>
+          </div>
         </div>
       </article>
     `;
@@ -309,9 +318,9 @@
     }
 
     msg.innerHTML = '<div class="alert alert-success">Draft karya berhasil dibuat. Sekarang kamu sudah punya titik awal produksi yang bisa terus dirapikan sebelum tayang.</div>';
-    document.querySelector('#creator-title').value = '';
-    document.querySelector('#creator-synopsis').value = '';
-    loadCreatorDashboard();
+    setTimeout(() => {
+      location.href = `/creator/works/${data.work.id}`;
+    }, 450);
   }
 
   updateProductionHint();
