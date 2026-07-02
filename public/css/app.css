@@ -590,6 +590,9 @@ img { max-width: 100%; display: block; }
   width: 100%;
   max-width: 520px;
 }
+.page-auth-simple main {
+  width: 100%;
+}
 
 /* ---- Explore ---- */
 .page-explore::before,
@@ -1606,6 +1609,27 @@ img { max-width: 100%; display: block; }
   }
   .foot-wrap {
     margin-bottom: 120px;
+  }
+}
+@media (min-width: 992px) {
+  .page-auth-simple {
+    padding-bottom: 0;
+  }
+  .page-auth-simple main {
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .page-auth-simple .auth-section {
+    width: 100%;
+    min-height: auto;
+    padding: 24px 0;
+    display: block;
+  }
+  .page-auth-simple .foot-wrap,
+  .page-auth-simple .bottom-nav {
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
