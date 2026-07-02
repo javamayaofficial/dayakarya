@@ -8,9 +8,9 @@
     <div class="container">
         <div class="hero-shell">
             <div class="hero-copy">
-                <span class="eyebrow">Tempat Karya Naik Kelas</span>
-                <h1>Karya bagus layak punya <em>tempat</em> yang juga bagus.</h1>
-                <p>Di sini kamu bisa terbitkan karya, buka akses berbayar, dan kelola penghasilannya di satu tempat.</p>
+                <span class="eyebrow">Karya Bisa Jadi Cuan</span>
+                <h1>Karya yang bagus harus bisa <em>menghasilkan</em>.</h1>
+                <p>Di Dayakarya, karya kamu bisa dibaca, dibayar, dan terus berkembang.</p>
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
                     <a href="{{ route('explore') }}" class="btn btn-ghost">Jelajahi Karya</a>
@@ -22,20 +22,20 @@
                 <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
-                        <strong>Jual karya lebih gampang</strong>
-                        <span>Top up, unlock, dan royalti sudah disiapkan dalam satu alur.</span>
+                        <strong>Lebih gampang mulai jual</strong>
+                        <span>Akses berbayar, top up, dan royalti sudah siap dalam satu alur.</span>
                     </div>
                     <div class="proof-item">
-                        <strong>Siap buat tumbuh</strong>
-                        <span>Karya, pembaca, affiliate, sampai sponsor bisa jalan di tempat yang sama.</span>
+                        <strong>Lebih enak buat tumbuh</strong>
+                        <span>Pembaca, affiliate, dan peluang kerja sama bisa berkembang di tempat yang sama.</span>
                     </div>
                 </div>
             </div>
             <div class="hero-showcase">
                 <div class="hero-card hero-card-primary">
                     <span class="mini-label">Untuk Kreator</span>
-                    <h2>Bikin karya kamu terlihat lebih serius, lalu mulai jual dengan lebih yakin.</h2>
-                    <p>Cocok buat kreator yang ingin tampil rapi, dipercaya, dan lebih siap dibayar.</p>
+                    <h2>Taruh karya di tempat yang bikin orang lebih gampang baca, percaya, dan beli.</h2>
+                    <p>Bukan cuma tampil rapi, tapi juga lebih siap jadi penghasilan.</p>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-tile">
