@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Work extends Model
@@ -44,11 +45,11 @@ class Work extends Model
             return null;
         }
 
-        if (Str::startsWith($value, ['http://', 'https://', '/storage/'])) {
+        if (Str::startsWith($value, ['http://', 'https://', '/storage/', '/public/storage/'])) {
             return $value;
         }
 
-        return '/storage/' . ltrim($value, '/');
+        return Storage::disk('public')->url($value);
     }
 
     // ---- Relasi ----
