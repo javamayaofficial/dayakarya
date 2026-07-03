@@ -174,7 +174,7 @@
       if (work.status === 'published') {
         return {
           badge: 'Sudah Tayang',
-          actionLabel: 'Lihat Karya',
+          actionLabel: 'Edit Lagi',
           note: publishedChapterCount > 0
             ? `${publishedChapterCount} part sudah tayang di katalog`
             : 'Karya ini sudah bisa dilihat akun lain',
@@ -208,12 +208,15 @@
       };
     })();
 
-    const actionHref = work.status === 'published'
-      ? `/karya/${work.slug}`
-      : `/creator/works/${work.id}`;
+    const actionHref = `/creator/works/${work.id}`;
+    const publicHref = work.slug ? `/karya/${work.slug}` : '';
 
-    const coverStyle = work.cover
-      ? `background-image:url('${escapeHtml(work.cover)}');background-size:cover;background-position:center;`
+    const coverUrl = String(work.cover_url ?? work.cover ?? '').trim();
+    const safeCoverUrl = coverUrl
+      ? encodeURI(coverUrl).replaceAll("'", '%27')
+      : '';
+    const coverStyle = safeCoverUrl
+      ? `background-image:url('${safeCoverUrl}');background-size:cover;background-position:center;`
       : '';
 
     return `
@@ -236,7 +239,7 @@
           <div class="work-meta">${escapeHtml(publishState.note)}</div>
           <div class="work-card-footer">
             <a class="read-link" href="${actionHref}">${publishState.actionLabel}</a>
-            <span class="read-stat">${publishState.badge}</span>
+            ${publicHref ? `<a class="read-stat" href="${publicHref}">Lihat Tayang</a>` : `<span class="read-stat">${publishState.badge}</span>`}
           </div>
         </div>
       </article>

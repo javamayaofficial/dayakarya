@@ -103,7 +103,12 @@ class WorkController extends \App\Http\Controllers\Controller
                 'royalty_rupiah' => (int) $user->royalties()->sum('amount_rupiah'),
                 'followers' => Follow::query()->where('creator_id', $user->id)->count(),
             ],
-            'works' => $works,
+            'works' => $works->map(function (Work $work) {
+                $payload = $work->toArray();
+                $payload['cover_url'] = $work->cover;
+
+                return $payload;
+            })->values(),
         ]);
     }
 
