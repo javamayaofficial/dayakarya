@@ -1260,7 +1260,12 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
 
     editorState.activeChapterId = editor.chapter_id || editorState.activeChapterId;
-    syncCoverPreview(work.cover || null);
+    const incomingCover = work.cover_url ?? work.cover;
+    const nextCover = Object.prototype.hasOwnProperty.call(work, 'cover')
+      || Object.prototype.hasOwnProperty.call(work, 'cover_url')
+      ? (incomingCover || null)
+      : (editorState.cover || null);
+    syncCoverPreview(nextCover);
 
     document.querySelector('#editor-heading').textContent = work.title || 'Lanjut Edit Draft';
     document.querySelector('#editor-title').value = work.title || '';
