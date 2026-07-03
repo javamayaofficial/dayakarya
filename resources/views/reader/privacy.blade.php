@@ -14,7 +14,7 @@
         <div class="legal-grid">
             <article class="support-panel legal-card">
                 <h2 class="support-title">Operator layanan</h2>
-                <p class="support-copy">DAYAKARYA dikelola oleh PT Java Maya Studio bekerja sama dengan Yayasan Pondok Dayacipta Nusantara. Kebijakan ini berlaku untuk seluruh layanan digital di dalam platform.</p>
+                <p class="support-copy">DAYAKARYA dikelola oleh Yayasan Pondok Daya Cipta Nusantara. Kebijakan ini berlaku untuk seluruh layanan digital di dalam platform.</p>
             </article>
 
             <article class="support-panel legal-card">

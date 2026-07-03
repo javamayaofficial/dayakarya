@@ -1,6 +1,6 @@
 # Dayakarya
 
-**Platform SaaS Creator Economy Indonesia** — dikembangkan oleh PT Java Maya Studio.
+**Platform SaaS Creator Economy Indonesia** — dikembangkan oleh Yayasan Pondok Daya Cipta Nusantara.
 
 > Ubah karyamu jadi penghasilan. Ubah dukungan jadi dampak.
 
@@ -182,4 +182,4 @@ Siapkan endpoint yang sama, tambahkan `SANCTUM_STATEFUL_DOMAINS` bila perlu, lal
 
 ## Lisensi
 
-Proprietary © PT Java Maya Studio.
+Proprietary © Yayasan Pondok Daya Cipta Nusantara.

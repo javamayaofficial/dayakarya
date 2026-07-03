@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'About - DAYAKARYA')
-@section('desc', 'Tentang DAYAKARYA, platform Creator Economy Indonesia yang dikelola PT Java Maya Studio dan bekerja sama dengan Yayasan Pondok Dayacipta Nusantara.')
+@section('desc', 'Tentang DAYAKARYA, platform Creator Economy Indonesia yang dikelola Yayasan Pondok Daya Cipta Nusantara.')
 @section('body_class', 'page-support')
 @section('content')
 <section class="section">
@@ -14,7 +14,7 @@
         <div class="legal-grid">
             <article class="support-panel legal-card legal-card-highlight">
                 <h2 class="support-title">Identitas bisnis</h2>
-                <p class="support-copy">DAYAKARYA merupakan platform Creator Economy Indonesia yang dikembangkan oleh <strong>PT Java Maya Studio</strong> bekerja sama dengan <strong>Yayasan Pondok Dayacipta Nusantara</strong>.</p>
+                <p class="support-copy">DAYAKARYA merupakan platform Creator Economy Indonesia yang dikelola oleh <strong>Yayasan Pondok Daya Cipta Nusantara</strong>.</p>
             </article>
 
             <article class="support-panel legal-card">
@@ -45,11 +45,11 @@
             <div class="support-identity-grid">
                 <div class="support-identity-item">
                     <strong>Managed By</strong>
-                    <span>PT Java Maya Studio</span>
+                    <span>Yayasan Pondok Daya Cipta Nusantara</span>
                 </div>
                 <div class="support-identity-item">
                     <strong>Collaboration</strong>
-                    <span>Yayasan Pondok Dayacipta Nusantara</span>
+                    <span>Yayasan Pondok Daya Cipta Nusantara</span>
                 </div>
                 <div class="support-identity-item">
                     <strong>Email Support</strong>

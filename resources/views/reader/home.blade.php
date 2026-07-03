@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'DAYAKARYA - Platform Creator Economy Indonesia')
-@section('desc', 'DAYAKARYA adalah platform Creator Economy Indonesia untuk penulis, storyteller, podcaster, dan kreator digital. Pengguna dapat top up credit untuk membuka konten premium digital tanpa penjualan barang fisik.')
+@section('title', 'Dayakarya - Berkarya, Berdampak, Berpenghasilan')
 @section('body_class', 'page-home')
 
 @section('content')
-<section class="hero hero-premium" aria-labelledby="home-hero-title">
+<section class="hero hero-premium">
     <div class="container">
         <div class="hero-shell">
             <div class="hero-copy">
-                <span class="eyebrow">Platform Creator Economy Indonesia</span>
-                <h1 id="home-hero-title">DAYAKARYA</h1>
-                <p class="hero-lead">Platform Creator Economy Indonesia</p>
-                <p>Tempat para penulis, kreator audio, podcaster, dan storyteller mempublikasikan karya digital serta memperoleh penghasilan dari pembaca dan pendengar.</p>
+                <span class="eyebrow">Dari Skill Jadi Cuan</span>
+                <h1>Ubah skill dan hobimu jadi <em>cuan</em>.</h1>
+                <p>Di Dayakarya, karya kamu bisa dibaca, dibayar, dan terus berkembang.</p>
                 <div class="hero-actions">
                     <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
                     <a href="{{ route('explore') }}" class="btn btn-ghost">Jelajahi Karya</a>
@@ -24,33 +22,33 @@
                 <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="hero-proof">
                     <div class="proof-item">
-                        <strong>Dikelola resmi</strong>
-                        <span>Dikelola oleh PT Java Maya Studio bekerja sama dengan Yayasan Pondok Dayacipta Nusantara.</span>
+                        <strong>Mulai cuan tanpa ribet</strong>
+                        <span>Akses berbayar, top up, dan royalti sudah siap dalam satu alur.</span>
                     </div>
                     <div class="proof-item">
-                        <strong>Produk digital penuh</strong>
-                        <span>Tidak menjual barang fisik. Semua transaksi dilakukan secara digital di dalam platform.</span>
+                        <strong>Skill bisa terus berkembang</strong>
+                        <span>Karya, pembaca, dan peluang share bisa tumbuh di tempat yang sama.</span>
                     </div>
                 </div>
             </div>
             <div class="hero-showcase">
                 <div class="hero-card hero-card-primary">
-                    <span class="mini-label">Creator Economy</span>
-                    <h2>Publikasikan karya digital, buka konten premium, dan dapatkan penghasilan dari audiensmu.</h2>
-                    <p>DAYAKARYA membantu karya tampil lebih profesional, lebih mudah dibeli, dan lebih nyaman dinikmati.</p>
+                    <span class="mini-label">Untuk Kreator</span>
+                    <h2>Yang kamu bisa dan yang kamu suka, sekarang bisa jadi penghasilan juga.</h2>
+                    <p>Taruh di tempat yang bikin orang lebih gampang lihat, percaya, dan beli.</p>
                 </div>
                 <div class="hero-stats">
                     <div class="stat-tile">
-                        <span class="label">Top Up Credit</span>
-                        <strong>Pembaca melakukan top up credit untuk membuka konten premium digital</strong>
+                        <span class="label">Penghasilan</span>
+                        <strong>Top up, royalti, dan affiliate jalan di satu tempat</strong>
                     </div>
                     <div class="stat-tile">
-                        <span class="label">Digital Only</span>
-                        <strong>Cerpen, novel, audio story, podcast, buku digital, dan konten edukasi</strong>
+                        <span class="label">Sebar</span>
+                        <strong>Bisa dibuka di web dan tetap nyaman buat konten audio</strong>
                     </div>
                     <div class="stat-tile">
-                        <span class="label">Support</span>
-                        <strong>Kontak bisnis, alamat usaha, dan jam operasional tampil jelas untuk pengguna</strong>
+                        <span class="label">Promosi</span>
+                        <strong>Lebih gampang dibagikan ke pembaca baru, komunitas, dan partner promosi</strong>
                     </div>
                 </div>
             </div>
@@ -58,143 +56,52 @@
     </div>
 </section>
 
-<section class="section" aria-label="Trust Elements">
+<section class="section">
     <div class="container">
         <div class="trust trust-premium">
-            <div class="item"><span class="ic">◆</span> Secure payment untuk transaksi digital</div>
-            <div class="item"><span class="ic">◆</span> Company identity jelas</div>
-            <div class="item"><span class="ic">◆</span> Customer support resmi</div>
-            <div class="item"><span class="ic">◆</span> Alamat usaha tampil terbuka</div>
+            <div class="item"><span class="ic">◆</span> Royalti otomatis</div>
+            <div class="item"><span class="ic">◆</span> Withdraw ke rekening</div>
+            <div class="item"><span class="ic">◆</span> Komisi affiliate</div>
+            <div class="item"><span class="ic">◆</span> Bisa bantu share karya</div>
         </div>
     </div>
 </section>
 
-<section class="section" aria-labelledby="how-it-works-title">
+<section class="section">
     <div class="container">
         <div class="section-head section-head-premium">
             <div>
-                <span class="section-kicker">Bagaimana DAYAKARYA Bekerja</span>
-                <h2 id="how-it-works-title">Alurnya jelas, baik untuk kreator maupun pembaca.</h2>
+                <span class="section-kicker">Kenapa Dayakarya</span>
+                <h2>Bukan cuma tempat upload karya</h2>
             </div>
         </div>
-        <div class="how-grid">
+        <div class="feature-grid">
             <article class="feature-card">
-                <span class="feature-icon">Untuk Kreator</span>
-                <h3>Monetisasi karya digital dalam satu alur.</h3>
-                <ol class="legal-steps">
-                    <li>Upload karya digital</li>
-                    <li>Publikasikan untuk pembaca dan pendengar</li>
-                    <li>Tentukan konten premium</li>
-                    <li>Dapatkan penghasilan dari unlock konten</li>
-                </ol>
+                <span class="feature-icon">01</span>
+                <h3>Karya terlihat lebih rapi</h3>
+                <p>Tampilan, info, dan alur belinya dibuat lebih enak dilihat.</p>
             </article>
             <article class="feature-card">
-                <span class="feature-icon">Untuk Pembaca</span>
-                <h3>Akses karya digital premium tanpa alur yang membingungkan.</h3>
-                <ol class="legal-steps">
-                    <li>Daftar akun pengguna</li>
-                    <li>Top Up Credit</li>
-                    <li>Unlock konten premium</li>
-                    <li>Nikmati karya digital di dalam platform</li>
-                </ol>
+                <span class="feature-icon">02</span>
+                <h3>Jual karya jadi lebih jelas</h3>
+                <p>Top up, unlock, royalti, dan affiliate sudah disusun biar tidak bikin bingung.</p>
+            </article>
+            <article class="feature-card">
+                <span class="feature-icon">03</span>
+                <h3>Lebih enak dibagikan</h3>
+                <p>Kalau mau dipromosikan atau dibantu sebar, tampilannya sudah lebih siap.</p>
             </article>
         </div>
     </div>
 </section>
 
-<section class="section" aria-labelledby="digital-content-title">
-    <div class="container">
-        <div class="showcase-panel">
-            <div class="section-head section-head-premium">
-                <div>
-                    <span class="section-kicker">Konten Digital Premium</span>
-                    <h2 id="digital-content-title">Jenis produk digital yang tersedia di DAYAKARYA.</h2>
-                </div>
-            </div>
-            <div class="content-grid">
-                <article class="content-card">
-                    <span class="content-card-kicker">Digital</span>
-                    <h3>Cerpen</h3>
-                    <p>Karya pendek yang bisa dibaca langsung dan dibuka bagian premium-nya dengan credit.</p>
-                </article>
-                <article class="content-card">
-                    <span class="content-card-kicker">Digital</span>
-                    <h3>Novel</h3>
-                    <p>Bab per bab dapat dipublikasikan dan dimonetisasi melalui sistem unlock premium.</p>
-                </article>
-                <article class="content-card">
-                    <span class="content-card-kicker">Audio</span>
-                    <h3>Audio Story</h3>
-                    <p>Cerita audio digital yang nyaman didengar dan dapat dibuka per episode atau bagian premium.</p>
-                </article>
-                <article class="content-card">
-                    <span class="content-card-kicker">Audio</span>
-                    <h3>Podcast</h3>
-                    <p>Konten audio digital yang bisa dipublikasikan untuk publik maupun akses premium.</p>
-                </article>
-                <article class="content-card">
-                    <span class="content-card-kicker">Digital</span>
-                    <h3>Buku Digital</h3>
-                    <p>Konten baca digital yang dapat dijual dan dinikmati langsung di dalam platform.</p>
-                </article>
-                <article class="content-card">
-                    <span class="content-card-kicker">Edukasi</span>
-                    <h3>Konten Edukasi</h3>
-                    <p>Materi belajar digital, seri pengetahuan, dan konten edukatif premium berbasis credit.</p>
-                </article>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section" aria-labelledby="about-dayakarya-title">
-    <div class="container">
-        <div class="support-identity-panel">
-            <div class="support-identity-copy">
-                <span class="section-kicker">Tentang DAYAKARYA</span>
-                <h2 id="about-dayakarya-title">Platform Creator Economy Indonesia yang dibangun untuk karya digital.</h2>
-                <p>DAYAKARYA merupakan platform Creator Economy Indonesia yang dikembangkan oleh PT Java Maya Studio bekerja sama dengan Yayasan Pondok Dayacipta Nusantara.</p>
-                <p>Platform ini bertujuan membantu kreator memperoleh penghasilan dari karya digital melalui sistem monetisasi berbasis Credit.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section" aria-labelledby="payment-model-title">
-    <div class="container">
-        <div class="section-head section-head-premium">
-            <div>
-                <span class="section-kicker">Cara Pembelian Konten</span>
-                <h2 id="payment-model-title">Model transaksi dibuat jelas dan sepenuhnya digital.</h2>
-            </div>
-        </div>
-        <div class="journey-grid">
-            <article class="journey-card">
-                <span class="journey-step">Langkah 1</span>
-                <h3>Pengguna melakukan Top Up Credit</h3>
-                <p>Saldo credit digunakan sebagai alat tukar digital di dalam platform untuk membuka konten premium.</p>
-            </article>
-            <article class="journey-card">
-                <span class="journey-step">Langkah 2</span>
-                <h3>Credit dipakai untuk unlock konten premium</h3>
-                <p>Bab premium, episode premium, audio premium, dan konten premium lainnya dibuka langsung di dalam akun pengguna.</p>
-            </article>
-            <article class="journey-card">
-                <span class="journey-step">Langkah 3</span>
-                <h3>Tidak ada penjualan barang fisik</h3>
-                <p>Seluruh transaksi dilakukan secara digital di dalam platform DAYAKARYA.</p>
-            </article>
-        </div>
-    </div>
-</section>
-
-<section class="section" aria-labelledby="trending-title">
+<section class="section">
     <div class="container">
         <div class="showcase-panel">
             <div class="section-head">
                 <div>
                     <span class="section-kicker">Pilihan Editor</span>
-                    <h2 id="trending-title">Sedang Tren</h2>
+                    <h2>Sedang Tren</h2>
                 </div>
                 <a href="{{ route('explore') }}">Lihat semua</a>
             </div>
@@ -203,8 +110,8 @@
                 <span class="chip">Cerpen</span>
                 <span class="chip">Novel</span>
                 <span class="chip">Podcast</span>
-                <span class="chip">Audio Story</span>
-                <span class="chip">Buku Digital</span>
+                <span class="chip">Dongeng</span>
+                <span class="chip">Audiobook</span>
             </div>
             <div style="height:14px"></div>
             <div class="work-grid" id="trending-grid">
@@ -219,49 +126,43 @@
 
 <section class="section">
     <div class="container">
-        <div class="cta-panel">
+        <div class="section-head section-head-premium">
             <div>
-                <span class="section-kicker">Mulai di DAYAKARYA</span>
-                <h2>Bangun karya digital, monetisasi audiens, dan kelola pengalaman premium dalam satu platform.</h2>
-                <p>DAYAKARYA membantu kreator tampil profesional, pembaca merasa aman, dan alur pembayaran terasa jelas sejak awal.</p>
+                <span class="section-kicker">Cara Mulainya</span>
+                <h2>Mulai dapat penghasilan dari karya, pelan-pelan tapi jelas.</h2>
             </div>
-            <div class="cta-actions">
-                <a href="{{ route('register') }}" class="btn btn-gold">Mulai Berkarya</a>
-                <a href="{{ route('explore') }}" class="btn btn-primary">Jelajahi Karya</a>
-            </div>
+        </div>
+        <div class="journey-grid">
+            <article class="journey-card">
+                <span class="journey-step">Langkah 1</span>
+                <h3>Upload karya dan rapikan tampilannya</h3>
+                <p>Bikin orang lebih gampang nemu dan tertarik baca karya kamu.</p>
+            </article>
+            <article class="journey-card">
+                <span class="journey-step">Langkah 2</span>
+                <h3>Buka akses berbayar kalau sudah siap</h3>
+                <p>Jual karya atau bagian premium tanpa alur yang ribet.</p>
+            </article>
+            <article class="journey-card">
+                <span class="journey-step">Langkah 3</span>
+                <h3>Besarkan jangkauan pelan-pelan</h3>
+                <p>Pakai affiliate atau kerja sama biar karya kamu makin banyak yang lihat.</p>
+            </article>
         </div>
     </div>
 </section>
 
-<section class="section" aria-labelledby="contact-support-title">
+<section class="section">
     <div class="container">
-        <div class="support-identity-panel">
-            <div class="support-identity-copy">
-                <span class="section-kicker">Kontak Support</span>
-                <h2 id="contact-support-title">PT Java Maya Studio siap melayani pengguna dan partner bisnis secara langsung.</h2>
-                <p>Informasi bisnis, kontak support, dan alamat usaha ditampilkan terbuka agar pengguna dan tim verifikasi memahami identitas operator DAYAKARYA dengan cepat.</p>
+        <div class="cta-panel">
+            <div>
+                <span class="section-kicker">Kalau Mau Mulai Serius</span>
+                <h2>Mulai dari tempat yang bikin karya kamu terasa lebih layak dilihat dan dibayar.</h2>
+                <p>Biar karya, pengalaman pembaca, dan penghasilan kamu tumbuh di tempat yang sama.</p>
             </div>
-            <div class="support-identity-grid">
-                <div class="support-identity-item">
-                    <strong>PT Java Maya Studio</strong>
-                    <span>Creator Economy Platform</span>
-                </div>
-                <div class="support-identity-item">
-                    <strong>Email</strong>
-                    <a href="mailto:admin@dayakarya.id">admin@dayakarya.id</a>
-                </div>
-                <div class="support-identity-item">
-                    <strong>Telepon</strong>
-                    <a href="tel:085722224391">085722224391</a>
-                </div>
-                <div class="support-identity-item support-identity-item-full">
-                    <strong>Alamat Kantor</strong>
-                    <span>Jl. Melati Utama No.18, Cipadung Kidul, Kecamatan Panyileukan, Kota Bandung, Jawa Barat, Indonesia</span>
-                </div>
-                <div class="support-identity-item support-identity-item-full">
-                    <strong>Jam Operasional</strong>
-                    <span>Senin - Jumat, 09.00 - 17.00 WIB</span>
-                </div>
+            <div class="cta-actions">
+                <a href="{{ route('register') }}" class="btn btn-gold">Mulai dari Sekarang</a>
+                <a href="{{ route('explore') }}" class="btn btn-primary">Lihat Contohnya</a>
             </div>
         </div>
     </div>

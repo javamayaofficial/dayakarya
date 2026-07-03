@@ -127,7 +127,7 @@ class IntegrationSettingsPage extends Page implements HasForms
                                     ->required(),
                                 TextInput::make('payment.manual.holder')
                                     ->label('Atas Nama')
-                                    ->placeholder('PT Java Maya Studio')
+                                    ->placeholder('Yayasan Pondok Daya Cipta Nusantara')
                                     ->required(),
                                 TextInput::make('payment.manual.qris_image_url')
                                     ->label('URL Gambar QRIS')
