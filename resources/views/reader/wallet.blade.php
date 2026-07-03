@@ -52,18 +52,40 @@
                         <h2>Isi credit sesuai kebutuhan</h2>
                     </div>
                 </div>
-                <p class="wallet-copy">Pilih nominal yang pas buat buka karya premium atau lanjut baca tanpa putus.</p>
-                <div class="chips chips-elevated" id="topup-options">
-                    <span class="chip" data-credit="50">50</span>
-                    <span class="chip active" data-credit="100">100</span>
-                    <span class="chip" data-credit="250">250</span>
-                    <span class="chip" data-credit="500">500</span>
-                    <span class="chip" data-credit="1000">1.000</span>
+                <p class="wallet-copy">Pilih paket yang paling pas. Paket menengah biasanya terasa lebih nyaman karena biaya transaksi tidak terlalu terasa.</p>
+                <div class="wallet-package-grid" id="topup-options">
+                    <button type="button" class="wallet-package-card" data-credit="50">
+                        <span class="wallet-package-value">50 Credit</span>
+                        <strong>Sekali Baca</strong>
+                        <span class="wallet-package-meta">Cocok untuk coba buka 1 karya premium.</span>
+                    </button>
+                    <button type="button" class="wallet-package-card" data-credit="100">
+                        <span class="wallet-package-value">100 Credit</span>
+                        <strong>Mulai Nyaman</strong>
+                        <span class="wallet-package-meta">Pas untuk isi saldo awal tanpa terlalu besar.</span>
+                    </button>
+                    <button type="button" class="wallet-package-card is-featured is-active" data-credit="250">
+                        <span class="wallet-package-badge">Lebih Hemat</span>
+                        <span class="wallet-package-value">250 Credit</span>
+                        <strong>Paling Efisien</strong>
+                        <span class="wallet-package-meta">Biaya transaksi terasa lebih ringan untuk lanjut baca beberapa karya.</span>
+                    </button>
+                    <button type="button" class="wallet-package-card" data-credit="500">
+                        <span class="wallet-package-badge">Favorit Kreator</span>
+                        <span class="wallet-package-value">500 Credit</span>
+                        <strong>Buat Marathon</strong>
+                        <span class="wallet-package-meta">Cocok kalau ingin baca, dengar, dan buka karya premium lebih lama.</span>
+                    </button>
+                    <button type="button" class="wallet-package-card" data-credit="1000">
+                        <span class="wallet-package-value">1.000 Credit</span>
+                        <strong>Stok Aman</strong>
+                        <span class="wallet-package-meta">Sekali isi untuk dipakai lebih tenang dalam jangka lebih panjang.</span>
+                    </button>
                 </div>
                 <div class="wallet-total-box">
                     <span>Total Pembayaran</span>
-                    <strong id="total-rp">Rp10.000</strong>
-                    <p>1 Credit = Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</p>
+                    <strong id="total-rp">Rp25.000</strong>
+                    <p id="wallet-package-note">Pilihan yang lebih efisien untuk lanjut baca beberapa karya tanpa terlalu sering top up.</p>
                 </div>
                 @if ($paymentProvider === 'duitku')
                     <div class="wallet-payment-method-box">
@@ -123,10 +145,18 @@
   const RATE = {{ (int) config('dayakarya.economy.credit_rate_rupiah') }};
   const PAYMENT_PROVIDER = @json($paymentProvider);
   const PAYMENT_LABEL = @json($paymentLabel);
-  let selected = 100;
+  const PACKAGE_COPY = {
+    50: 'Paket kecil untuk coba dulu. Cocok kalau hanya ingin buka 1 karya premium.',
+    100: 'Paket awal yang aman untuk isi saldo tanpa terasa terlalu besar.',
+    250: 'Pilihan yang lebih efisien untuk lanjut baca beberapa karya tanpa terlalu sering top up.',
+    500: 'Lebih nyaman buat lanjut baca atau dengar lebih lama dengan frekuensi top up yang lebih jarang.',
+    1000: 'Paket besar untuk stok saldo yang lebih tenang dan terasa paling siap dipakai jangka panjang.',
+  };
+  let selected = 250;
   const topupButton = document.querySelector('#topup-button');
   const topupMessage = document.querySelector('#topup-msg');
-  const chips = document.querySelectorAll('#topup-options .chip');
+  const chips = document.querySelectorAll('#topup-options [data-credit]');
+  const packageNote = document.querySelector('#wallet-package-note');
   const methodGrid = document.querySelector('#duitku-method-grid');
   const methodHint = document.querySelector('#duitku-method-hint');
   const methodCurrentName = document.querySelector('#duitku-method-current-name');
@@ -207,7 +237,12 @@
     return '';
   }
 
-  function renderTotal(){ document.querySelector('#total-rp').textContent = 'Rp' + (selected*RATE).toLocaleString('id-ID'); }
+  function renderTotal() {
+    document.querySelector('#total-rp').textContent = 'Rp' + (selected * RATE).toLocaleString('id-ID');
+    if (packageNote) {
+      packageNote.textContent = PACKAGE_COPY[selected] || `Top up ${selected.toLocaleString('id-ID')} credit siap dipakai sesuai kebutuhan Anda.`;
+    }
+  }
 
   function renderMethodOptions(methods = []) {
     if (!methodGrid) return;
@@ -315,8 +350,10 @@
 
   chips.forEach(c => c.addEventListener('click', () => {
     if (!DK.token()) return;
-    chips.forEach(x=>x.classList.remove('active'));
-    c.classList.add('active'); selected = +c.dataset.credit; renderTotal();
+    chips.forEach(x => x.classList.remove('is-active'));
+    c.classList.add('is-active');
+    selected = +c.dataset.credit;
+    renderTotal();
     if (PAYMENT_PROVIDER === 'duitku') {
       loadDuitkuPaymentMethods();
     }
