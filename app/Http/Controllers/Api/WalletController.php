@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Payment;
 use App\Services\Payment\PaymentManager;
+use App\Services\Payment\DuitkuService;
 use App\Support\IntegrationSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Client\RequestException;
@@ -33,14 +34,57 @@ class WalletController extends \App\Http\Controllers\Controller
         return response()->json($trx);
     }
 
+    public function paymentMethods(Request $request): JsonResponse
+    {
+        $provider = IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment'));
+
+        if ($provider !== 'duitku') {
+            return response()->json([
+                'provider' => $provider,
+                'methods' => [],
+            ]);
+        }
+
+        $data = $request->validate([
+            'credit_amount' => ['required', 'integer', 'min:10'],
+        ]);
+
+        $rate = (int) config('dayakarya.economy.credit_rate_rupiah');
+        $rupiah = $data['credit_amount'] * $rate;
+
+        try {
+            $methods = (new DuitkuService())->getPaymentMethods($rupiah);
+        } catch (RequestException $exception) {
+            $gatewayMessage = data_get($exception->response?->json(), 'Message')
+                ?? data_get($exception->response?->json(), 'message')
+                ?? 'Metode pembayaran Duitku belum bisa dimuat. Pastikan project aktif dan channel payment sudah tersedia.';
+
+            return response()->json([
+                'message' => $gatewayMessage,
+            ], 422);
+        } catch (Throwable $exception) {
+            return response()->json([
+                'message' => 'Metode pembayaran belum berhasil dimuat. Coba lagi sebentar.',
+            ], 500);
+        }
+
+        return response()->json([
+            'provider' => 'duitku',
+            'methods' => $methods,
+        ]);
+    }
+
     /**
      * Buat transaksi top up. Mengembalikan payment_url (redirect Duitku)
      * atau instruksi transfer manual bila provider = manual (fallback).
      */
     public function topup(Request $request): JsonResponse
     {
+        $provider = IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment'));
+
         $data = $request->validate([
             'credit_amount' => ['required', 'integer', 'min:10'],
+            'payment_method' => ['nullable', 'string', 'max:10'],
         ]);
 
         $rate   = (int) config('dayakarya.economy.credit_rate_rupiah');
@@ -49,9 +93,10 @@ class WalletController extends \App\Http\Controllers\Controller
         $payment = Payment::create([
             'user_id'       => $request->user()->id,
             'order_id'      => 'DK-' . strtoupper(Str::random(10)),
-            'provider'      => IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment')),
+            'provider'      => $provider,
             'amount_rupiah' => $rupiah,
             'credit_amount' => $data['credit_amount'],
+            'payment_method'=> $provider === 'duitku' ? ($data['payment_method'] ?? null) : null,
             'status'        => 'pending',
         ]);
 
@@ -88,6 +133,7 @@ class WalletController extends \App\Http\Controllers\Controller
 
         $payment->update([
             'reference'   => $result['reference'] ?? null,
+            'payment_method' => $result['payment_method'] ?? $payment->payment_method,
             'payment_url' => $result['payment_url'] ?? null,
             'meta'        => $result['raw'] ?? null,
         ]);

@@ -37,6 +37,7 @@ Route::prefix('v1')->group(function () {
         // Wallet & Credit
         Route::get('wallet', [WalletController::class, 'show']);
         Route::get('wallet/transactions', [WalletController::class, 'transactions']);
+        Route::get('wallet/payment-methods', [WalletController::class, 'paymentMethods']);
         Route::post('topup', [WalletController::class, 'topup']);
         Route::post('payments/{payment}/proof', [WalletController::class, 'uploadProof']);
 

@@ -65,6 +65,15 @@
                     <strong id="total-rp">Rp10.000</strong>
                     <p>1 Credit = Rp{{ number_format(config('dayakarya.economy.credit_rate_rupiah'),0,',','.') }}</p>
                 </div>
+                @if ($paymentProvider === 'duitku')
+                    <div class="wallet-payment-method-box">
+                        <span class="wallet-payment-method-label">Metode Pembayaran</span>
+                        <div class="chips chips-elevated" id="duitku-method-options">
+                            <span class="chip active">Memuat metode...</span>
+                        </div>
+                        <div class="hint" id="duitku-method-hint">Pilih channel pembayaran yang ingin dipakai untuk top up ini.</div>
+                    </div>
+                @endif
                 <button class="btn btn-gold btn-block" id="topup-button" onclick="doTopup()">{{ $paymentLabel }}</button>
                 <div id="topup-msg" style="margin-top:12px"></div>
             </div>
@@ -113,6 +122,10 @@
   const topupButton = document.querySelector('#topup-button');
   const topupMessage = document.querySelector('#topup-msg');
   const chips = document.querySelectorAll('#topup-options .chip');
+  const methodOptions = document.querySelector('#duitku-method-options');
+  const methodHint = document.querySelector('#duitku-method-hint');
+  let selectedPaymentMethod = null;
+  let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
 
   function defaultTopupMessage() {
     if (PAYMENT_PROVIDER === 'manual') {
@@ -127,10 +140,85 @@
   }
 
   function renderTotal(){ document.querySelector('#total-rp').textContent = 'Rp' + (selected*RATE).toLocaleString('id-ID'); }
+
+  function renderMethodOptions(methods = []) {
+    if (!methodOptions) return;
+
+    if (!methods.length) {
+      selectedPaymentMethod = null;
+      methodOptions.innerHTML = '<span class="chip active">Metode belum tersedia</span>';
+      if (methodHint) {
+        methodHint.textContent = 'Belum ada channel Duitku yang aktif untuk nominal ini. Cek pengaturan project Duitku Anda.';
+      }
+      topupButton.disabled = true;
+      return;
+    }
+
+    if (!methods.some((item) => item.code === selectedPaymentMethod)) {
+      selectedPaymentMethod = methods[0].code;
+    }
+
+    methodOptions.innerHTML = methods.map((item) => {
+      const feeLabel = Number(item.fee || 0) > 0
+        ? ` • Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}`
+        : '';
+
+      return `<button type="button" class="chip ${item.code === selectedPaymentMethod ? 'active' : ''}" data-payment-method="${item.code}">
+        ${item.name}${feeLabel}
+      </button>`;
+    }).join('');
+
+    methodOptions.querySelectorAll('[data-payment-method]').forEach((button) => {
+      button.addEventListener('click', () => {
+        selectedPaymentMethod = button.dataset.paymentMethod;
+        renderMethodOptions(methods);
+      });
+    });
+
+    const activeMethod = methods.find((item) => item.code === selectedPaymentMethod);
+    if (methodHint && activeMethod) {
+      methodHint.textContent = `Channel aktif: ${activeMethod.name}. Pilih metode lain kalau ingin mengganti cara bayar sebelum lanjut ke Duitku.`;
+    }
+
+    topupButton.disabled = false;
+  }
+
+  async function loadDuitkuPaymentMethods() {
+    if (PAYMENT_PROVIDER !== 'duitku' || !DK.token() || !methodOptions) return;
+
+    duitkuMethodsLoaded = false;
+    topupButton.disabled = true;
+    methodOptions.innerHTML = '<span class="chip active">Memuat metode...</span>';
+    if (methodHint) {
+      methodHint.textContent = 'Sedang mengambil channel pembayaran aktif dari proyek Duitku.';
+    }
+
+    try {
+      const methodsResponse = await DK.get('/wallet/payment-methods?credit_amount=' + selected);
+      if (!Array.isArray(methodsResponse.methods)) {
+        duitkuMethodsLoaded = false;
+        renderMethodOptions([]);
+        topupMessage.innerHTML = '<div class="alert alert-error">'+(methodsResponse.message || 'Metode pembayaran Duitku belum tersedia untuk nominal ini.')+'</div>';
+        return;
+      }
+
+      const methods = methodsResponse.methods ?? [];
+      duitkuMethodsLoaded = true;
+      renderMethodOptions(methods);
+    } catch (_) {
+      duitkuMethodsLoaded = false;
+      renderMethodOptions([]);
+      topupMessage.innerHTML = '<div class="alert alert-error">Metode pembayaran Duitku belum berhasil dimuat. Coba lagi sebentar.</div>';
+    }
+  }
+
   chips.forEach(c => c.addEventListener('click', () => {
     if (!DK.token()) return;
     chips.forEach(x=>x.classList.remove('active'));
     c.classList.add('active'); selected = +c.dataset.credit; renderTotal();
+    if (PAYMENT_PROVIDER === 'duitku') {
+      loadDuitkuPaymentMethods();
+    }
   }));
   renderTotal();
 
@@ -167,6 +255,9 @@
       topupButton.disabled = false;
       topupButton.textContent = PAYMENT_LABEL;
       topupMessage.innerHTML = defaultTopupMessage() ? `<div class="alert alert-success">${defaultTopupMessage()}</div>` : '';
+      if (PAYMENT_PROVIDER === 'duitku') {
+        await loadDuitkuPaymentMethods();
+      }
 
       const trx = await DK.get('/wallet/transactions');
       const items = trx.data ?? [];
@@ -193,7 +284,18 @@
     }
 
     const msg = topupMessage;
-    const { ok, data } = await DK.post('/topup', { credit_amount: selected });
+    if (PAYMENT_PROVIDER === 'duitku' && (!duitkuMethodsLoaded || !selectedPaymentMethod)) {
+      msg.innerHTML = '<div class="alert alert-error">Pilih dulu metode pembayaran Duitku yang ingin dipakai.</div>';
+      await loadDuitkuPaymentMethods();
+      return;
+    }
+
+    const payload = { credit_amount: selected };
+    if (PAYMENT_PROVIDER === 'duitku') {
+      payload.payment_method = selectedPaymentMethod;
+    }
+
+    const { ok, data } = await DK.post('/topup', payload);
     if (ok && data.payment_url) { location.href = data.payment_url; }
     else if (ok) { msg.innerHTML = '<div class="alert alert-success">'+(data.message||'Ikuti instruksi pembayaran.')+'</div>'; }
     else { msg.innerHTML = '<div class="alert alert-error">'+(data.message||'Gagal membuat transaksi.')+'</div>'; }
