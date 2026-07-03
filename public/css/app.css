@@ -45,6 +45,14 @@ body {
   overflow-x: hidden;
 }
 
+body.page-creator {
+  padding-bottom: calc(120px + env(safe-area-inset-bottom));
+}
+
+body.page-creator .section {
+  padding-bottom: calc(118px + env(safe-area-inset-bottom));
+}
+
 body.is-offline .topbar {
   box-shadow: 0 8px 28px rgba(20,34,60,.08);
 }
@@ -1807,7 +1815,7 @@ body.is-member-area .bottom-nav a.fab .ic {
   gap: 10px;
   margin-top: 8px;
   position: sticky;
-  bottom: calc(74px + env(safe-area-inset-bottom));
+  bottom: calc(92px + env(safe-area-inset-bottom));
   z-index: 12;
   padding: 12px;
   border-radius: 22px;
@@ -1872,7 +1880,7 @@ body.is-member-area .bottom-nav a.fab .ic {
 }
 #editor-content {
   min-height: 52vh;
-  padding: 18px 16px 128px;
+  padding: 18px 16px 168px;
   line-height: 1.9;
   font-size: 1.02rem;
   resize: vertical;
