@@ -1280,6 +1280,43 @@ body.is-member-area .bottom-nav a.fab .ic {
   font-size: .88rem;
   font-weight: 800;
 }
+.wallet-qris-spotlight {
+  width: 100%;
+  display: grid;
+  gap: 5px;
+  margin-bottom: 12px;
+  padding: 14px 16px;
+  text-align: left;
+  border-radius: 18px;
+  border: 1px solid rgba(45,126,120,.22);
+  background: linear-gradient(180deg, rgba(45,126,120,.12), rgba(255,255,255,.96));
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+.wallet-qris-spotlight.is-active {
+  border-color: rgba(45,126,120,.38);
+  box-shadow: 0 12px 26px rgba(45,126,120,.14);
+}
+.wallet-qris-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(45,126,120,.14);
+  color: var(--teal-deep);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.wallet-qris-spotlight strong {
+  font-size: .98rem;
+}
+.wallet-qris-spotlight span:last-child {
+  color: var(--ink-soft);
+  font-size: .84rem;
+  line-height: 1.55;
+}
 .wallet-method-select {
   width: 100%;
   min-height: 52px;

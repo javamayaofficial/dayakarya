@@ -68,6 +68,11 @@
                 @if ($paymentProvider === 'duitku')
                     <div class="wallet-payment-method-box">
                         <span class="wallet-payment-method-label">Metode Pembayaran</span>
+                        <button type="button" class="wallet-qris-spotlight" id="duitku-qris-spotlight" hidden>
+                            <span class="wallet-qris-badge">QRIS Direkomendasikan</span>
+                            <strong id="duitku-qris-name">QRIS akan tampil di sini</strong>
+                            <span id="duitku-qris-meta">Kalau QRIS aktif di Duitku, metode ini akan ditonjolkan di sini supaya lebih cepat dipilih.</span>
+                        </button>
                         <select id="duitku-method-select" class="wallet-method-select">
                             <option>Memuat metode pembayaran...</option>
                         </select>
@@ -130,9 +135,25 @@
   const methodHint = document.querySelector('#duitku-method-hint');
   const methodCurrentName = document.querySelector('#duitku-method-current-name');
   const methodCurrentMeta = document.querySelector('#duitku-method-current-meta');
+  const qrisSpotlight = document.querySelector('#duitku-qris-spotlight');
+  const qrisSpotlightName = document.querySelector('#duitku-qris-name');
+  const qrisSpotlightMeta = document.querySelector('#duitku-qris-meta');
   let selectedPaymentMethod = null;
   let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
   let availableDuitkuMethods = [];
+
+  function isQrisMethod(method = {}) {
+    const code = String(method.code || '').toUpperCase();
+    const name = String(method.name || '').toUpperCase();
+    return name.includes('QRIS')
+      || name.includes('SHOPEEPAY QRIS')
+      || ['DQ', 'GQ', 'LQ', 'NQ', 'SQ'].includes(code);
+  }
+
+  function formatMethodLabel(method = {}) {
+    const name = String(method.name || method.code || 'Metode pembayaran');
+    return isQrisMethod(method) ? `QRIS - ${name}` : name;
+  }
 
   function defaultTopupMessage() {
     if (PAYMENT_PROVIDER === 'manual') {
@@ -151,12 +172,25 @@
   function renderMethodOptions(methods = []) {
     if (!methodSelect) return;
 
+    methods = [...methods].sort((left, right) => {
+      const leftRank = isQrisMethod(left) ? 0 : 1;
+      const rightRank = isQrisMethod(right) ? 0 : 1;
+      if (leftRank !== rightRank) {
+        return leftRank - rightRank;
+      }
+
+      return String(left.name || '').localeCompare(String(right.name || ''), 'id');
+    });
+
     availableDuitkuMethods = methods;
 
     if (!methods.length) {
       selectedPaymentMethod = null;
       methodSelect.innerHTML = '<option value="">Metode belum tersedia</option>';
       methodSelect.disabled = true;
+      if (qrisSpotlight) {
+        qrisSpotlight.hidden = true;
+      }
       if (methodCurrentName) {
         methodCurrentName.textContent = 'Metode belum tersedia';
       }
@@ -174,25 +208,42 @@
       selectedPaymentMethod = methods[0].code;
     }
 
+    const qrisMethod = methods.find((item) => isQrisMethod(item));
+    if (qrisSpotlight) {
+      qrisSpotlight.hidden = !qrisMethod;
+      qrisSpotlight.classList.toggle('is-active', Boolean(qrisMethod) && qrisMethod.code === selectedPaymentMethod);
+    }
+    if (qrisMethod && qrisSpotlightName && qrisSpotlightMeta) {
+      qrisSpotlightName.textContent = formatMethodLabel(qrisMethod);
+      qrisSpotlightMeta.textContent = Number(qrisMethod.fee || 0) > 0
+        ? `Paling cepat dikenali dan tersedia dengan biaya Rp${Number(qrisMethod.fee || 0).toLocaleString('id-ID')}. Klik kartu ini kalau ingin langsung pakai QRIS.`
+        : 'Paling cepat dikenali dan cocok kalau Anda ingin langsung scan QRIS. Klik kartu ini untuk langsung memilih QRIS.';
+    }
+
     methodSelect.disabled = false;
     methodSelect.innerHTML = methods.map((item) => {
       const feeLabel = Number(item.fee || 0) > 0 ? ` - Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}` : '';
       const selectedAttr = item.code === selectedPaymentMethod ? 'selected' : '';
-      return `<option value="${item.code}" ${selectedAttr}>${item.name}${feeLabel}</option>`;
+      return `<option value="${item.code}" ${selectedAttr}>${formatMethodLabel(item)}${feeLabel}</option>`;
     }).join('');
 
     const activeMethod = methods.find((item) => item.code === selectedPaymentMethod);
     if (activeMethod) {
       if (methodCurrentName) {
-        methodCurrentName.textContent = activeMethod.name;
+        methodCurrentName.textContent = formatMethodLabel(activeMethod);
       }
       if (methodCurrentMeta) {
-        methodCurrentMeta.textContent = Number(activeMethod.fee || 0) > 0
+        const feeText = Number(activeMethod.fee || 0) > 0
           ? `Ada biaya Rp${Number(activeMethod.fee || 0).toLocaleString('id-ID')} untuk channel ini.`
           : 'Tidak ada biaya tambahan yang tercatat dari channel ini.';
+        methodCurrentMeta.textContent = isQrisMethod(activeMethod)
+          ? `Ini termasuk channel QRIS. ${feeText}`
+          : feeText;
       }
       if (methodHint) {
-        methodHint.textContent = 'Kalau channel ini sudah cocok, langsung lanjut bayar. Tidak perlu pilih terlalu banyak opsi.';
+        methodHint.textContent = isQrisMethod(activeMethod)
+          ? 'QRIS aktif. Kalau ini yang Anda cari, langsung lanjut bayar tanpa perlu pilih metode lain.'
+          : 'Kalau channel ini sudah cocok, langsung lanjut bayar. Tidak perlu pilih terlalu banyak opsi.';
       }
     }
 
@@ -245,6 +296,12 @@
   }));
   methodSelect?.addEventListener('change', () => {
     selectedPaymentMethod = methodSelect.value || null;
+    renderMethodOptions(availableDuitkuMethods);
+  });
+  qrisSpotlight?.addEventListener('click', () => {
+    const qrisMethod = availableDuitkuMethods.find((item) => isQrisMethod(item));
+    if (!qrisMethod) return;
+    selectedPaymentMethod = qrisMethod.code;
     renderMethodOptions(availableDuitkuMethods);
   });
   renderTotal();
