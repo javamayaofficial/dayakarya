@@ -1280,53 +1280,98 @@ body.is-member-area .bottom-nav a.fab .ic {
   font-size: .88rem;
   font-weight: 800;
 }
-.wallet-qris-spotlight {
-  width: 100%;
+.wallet-method-grid {
   display: grid;
-  gap: 5px;
-  margin-bottom: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.wallet-method-skeleton {
+  grid-column: 1 / -1;
   padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(20,34,60,.05);
+  color: var(--ink-soft);
+  font-size: .88rem;
+}
+.wallet-method-card {
+  position: relative;
+  min-height: 120px;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 14px 14px 12px;
   text-align: left;
   border-radius: 18px;
-  border: 1px solid rgba(45,126,120,.22);
-  background: linear-gradient(180deg, rgba(45,126,120,.12), rgba(255,255,255,.96));
+  border: 1px solid rgba(216, 201, 173, .95);
+  background: rgba(255,255,255,.98);
   color: var(--ink);
   box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
-.wallet-qris-spotlight.is-active {
-  border-color: rgba(45,126,120,.38);
-  box-shadow: 0 12px 26px rgba(45,126,120,.14);
+.wallet-method-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(45,126,120,.26);
 }
-.wallet-qris-badge {
-  display: inline-flex;
-  width: fit-content;
-  padding: 5px 10px;
+.wallet-method-card.is-active {
+  border-color: rgba(45,126,120,.44);
+  box-shadow: 0 12px 28px rgba(20,34,60,.12);
+  background: linear-gradient(180deg, rgba(255,255,255,.99), rgba(241,248,247,.92));
+}
+.wallet-method-card.is-qris {
+  border-color: rgba(45,126,120,.26);
+  background: linear-gradient(180deg, rgba(243,251,249,.98), rgba(255,255,255,.98));
+}
+.wallet-method-card-radio {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1.6px solid rgba(20,34,60,.22);
+  background: #fff;
+}
+.wallet-method-card.is-active .wallet-method-card-radio {
+  border-color: var(--teal-deep);
+  box-shadow: inset 0 0 0 3px #fff;
+  background: var(--teal-deep);
+}
+.wallet-method-card-badge {
+  justify-self: start;
+  margin-left: 18px;
+  padding: 4px 9px;
   border-radius: 999px;
   background: rgba(45,126,120,.14);
   color: var(--teal-deep);
-  font-size: .72rem;
+  font-size: .68rem;
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
 }
-.wallet-qris-spotlight strong {
-  font-size: .98rem;
+.wallet-method-card-visual {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.wallet-qris-spotlight span:last-child {
+.wallet-method-card-visual img {
+  max-width: 100%;
+  max-height: 34px;
+  object-fit: contain;
+}
+.wallet-method-card-text {
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: .02em;
+}
+.wallet-method-card strong {
+  font-size: .92rem;
+  line-height: 1.35;
+}
+.wallet-method-card > span:last-child {
   color: var(--ink-soft);
-  font-size: .84rem;
-  line-height: 1.55;
-}
-.wallet-method-select {
-  width: 100%;
-  min-height: 52px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  border: 1px solid rgba(231,221,202,.95);
-  background: rgba(255,255,255,.98);
-  color: var(--ink);
-  font-size: .95rem;
-  font-weight: 600;
+  font-size: .78rem;
+  line-height: 1.45;
 }
 .wallet-method-current {
   display: grid;
@@ -1343,6 +1388,16 @@ body.is-member-area .bottom-nav a.fab .ic {
   color: var(--ink-soft);
   font-size: .84rem;
   line-height: 1.55;
+}
+.wallet-method-note {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(45,126,120,.1);
+  color: var(--teal-deep);
+  font-size: .82rem;
+  line-height: 1.5;
+  border: 1px solid rgba(45,126,120,.14);
 }
 .wallet-info-list {
   display: grid;
@@ -1362,6 +1417,11 @@ body.is-member-area .bottom-nav a.fab .ic {
 .wallet-info-item span {
   color: var(--ink-soft);
   font-size: .88rem;
+}
+@media (min-width: 768px) {
+  .wallet-method-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 .wallet-trx-row {
   border-radius: 20px;

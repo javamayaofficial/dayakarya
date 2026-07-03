@@ -68,19 +68,15 @@
                 @if ($paymentProvider === 'duitku')
                     <div class="wallet-payment-method-box">
                         <span class="wallet-payment-method-label">Metode Pembayaran</span>
-                        <button type="button" class="wallet-qris-spotlight" id="duitku-qris-spotlight" hidden>
-                            <span class="wallet-qris-badge">QRIS Direkomendasikan</span>
-                            <strong id="duitku-qris-name">QRIS akan tampil di sini</strong>
-                            <span id="duitku-qris-meta">Kalau QRIS aktif di Duitku, metode ini akan ditonjolkan di sini supaya lebih cepat dipilih.</span>
-                        </button>
-                        <select id="duitku-method-select" class="wallet-method-select">
-                            <option>Memuat metode pembayaran...</option>
-                        </select>
+                        <div class="wallet-method-grid" id="duitku-method-grid" aria-live="polite">
+                            <div class="wallet-method-skeleton">Memuat metode pembayaran...</div>
+                        </div>
                         <div class="wallet-method-current" id="duitku-method-current">
                             <strong id="duitku-method-current-name">Metode belum dipilih</strong>
                             <span id="duitku-method-current-meta">Pilih satu channel yang paling nyaman dipakai, lalu lanjut ke checkout Duitku.</span>
                         </div>
                         <div class="hint" id="duitku-method-hint">Pilih channel pembayaran yang paling nyaman buat top up ini. Satu pilihan saja sudah cukup.</div>
+                        <div class="wallet-method-note" id="duitku-method-note" hidden>Untuk QRIS Duitku, barcode akan tampil setelah Anda lanjut ke halaman checkout Duitku.</div>
                     </div>
                 @endif
                 <button class="btn btn-gold btn-block" id="topup-button" onclick="doTopup()">{{ $paymentLabel }}</button>
@@ -131,13 +127,11 @@
   const topupButton = document.querySelector('#topup-button');
   const topupMessage = document.querySelector('#topup-msg');
   const chips = document.querySelectorAll('#topup-options .chip');
-  const methodSelect = document.querySelector('#duitku-method-select');
+  const methodGrid = document.querySelector('#duitku-method-grid');
   const methodHint = document.querySelector('#duitku-method-hint');
   const methodCurrentName = document.querySelector('#duitku-method-current-name');
   const methodCurrentMeta = document.querySelector('#duitku-method-current-meta');
-  const qrisSpotlight = document.querySelector('#duitku-qris-spotlight');
-  const qrisSpotlightName = document.querySelector('#duitku-qris-name');
-  const qrisSpotlightMeta = document.querySelector('#duitku-qris-meta');
+  const methodNote = document.querySelector('#duitku-method-note');
   let selectedPaymentMethod = null;
   let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
   let availableDuitkuMethods = [];
@@ -155,6 +149,52 @@
     return isQrisMethod(method) ? `QRIS - ${name}` : name;
   }
 
+  function getMethodShortLabel(method = {}) {
+    const label = String(method.name || method.code || 'Metode').trim();
+    if (isQrisMethod(method)) {
+      return 'QRIS';
+    }
+
+    return label;
+  }
+
+  function renderMethodGrid(methods = []) {
+    if (!methodGrid) return;
+
+    if (!methods.length) {
+      methodGrid.innerHTML = '<div class="wallet-method-skeleton">Metode pembayaran belum tersedia.</div>';
+      return;
+    }
+
+    methodGrid.innerHTML = methods.map((item) => {
+      const activeClass = item.code === selectedPaymentMethod ? 'is-active' : '';
+      const qrisClass = isQrisMethod(item) ? 'is-qris' : '';
+      const badge = isQrisMethod(item)
+        ? '<span class="wallet-method-card-badge">QRIS Disarankan</span>'
+        : '';
+      const fee = Number(item.fee || 0) > 0
+        ? `Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}`
+        : 'Tanpa biaya tambahan';
+      const image = item.image
+        ? `<img src="${item.image}" alt="${formatMethodLabel(item)}" loading="lazy">`
+        : `<span class="wallet-method-card-text">${getMethodShortLabel(item)}</span>`;
+
+      return `
+        <button
+          type="button"
+          class="wallet-method-card ${activeClass} ${qrisClass}"
+          data-code="${item.code}"
+          aria-pressed="${item.code === selectedPaymentMethod ? 'true' : 'false'}">
+          <span class="wallet-method-card-radio"></span>
+          ${badge}
+          <span class="wallet-method-card-visual">${image}</span>
+          <strong>${getMethodShortLabel(item)}</strong>
+          <span>${fee}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
   function defaultTopupMessage() {
     if (PAYMENT_PROVIDER === 'manual') {
       return 'Transfer manual akan menampilkan rekening tujuan dan detail verifikasi.';
@@ -170,7 +210,7 @@
   function renderTotal(){ document.querySelector('#total-rp').textContent = 'Rp' + (selected*RATE).toLocaleString('id-ID'); }
 
   function renderMethodOptions(methods = []) {
-    if (!methodSelect) return;
+    if (!methodGrid) return;
 
     methods = [...methods].sort((left, right) => {
       const leftRank = isQrisMethod(left) ? 0 : 1;
@@ -186,11 +226,7 @@
 
     if (!methods.length) {
       selectedPaymentMethod = null;
-      methodSelect.innerHTML = '<option value="">Metode belum tersedia</option>';
-      methodSelect.disabled = true;
-      if (qrisSpotlight) {
-        qrisSpotlight.hidden = true;
-      }
+      renderMethodGrid([]);
       if (methodCurrentName) {
         methodCurrentName.textContent = 'Metode belum tersedia';
       }
@@ -200,6 +236,10 @@
       if (methodHint) {
         methodHint.textContent = 'Belum ada channel Duitku yang aktif untuk nominal ini. Cek pengaturan project Duitku Anda.';
       }
+      if (methodNote) {
+        methodNote.hidden = true;
+      }
+      topupButton.textContent = PAYMENT_LABEL;
       topupButton.disabled = true;
       return;
     }
@@ -207,25 +247,7 @@
     if (!methods.some((item) => item.code === selectedPaymentMethod)) {
       selectedPaymentMethod = methods[0].code;
     }
-
-    const qrisMethod = methods.find((item) => isQrisMethod(item));
-    if (qrisSpotlight) {
-      qrisSpotlight.hidden = !qrisMethod;
-      qrisSpotlight.classList.toggle('is-active', Boolean(qrisMethod) && qrisMethod.code === selectedPaymentMethod);
-    }
-    if (qrisMethod && qrisSpotlightName && qrisSpotlightMeta) {
-      qrisSpotlightName.textContent = formatMethodLabel(qrisMethod);
-      qrisSpotlightMeta.textContent = Number(qrisMethod.fee || 0) > 0
-        ? `Paling cepat dikenali dan tersedia dengan biaya Rp${Number(qrisMethod.fee || 0).toLocaleString('id-ID')}. Klik kartu ini kalau ingin langsung pakai QRIS.`
-        : 'Paling cepat dikenali dan cocok kalau Anda ingin langsung scan QRIS. Klik kartu ini untuk langsung memilih QRIS.';
-    }
-
-    methodSelect.disabled = false;
-    methodSelect.innerHTML = methods.map((item) => {
-      const feeLabel = Number(item.fee || 0) > 0 ? ` - Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}` : '';
-      const selectedAttr = item.code === selectedPaymentMethod ? 'selected' : '';
-      return `<option value="${item.code}" ${selectedAttr}>${formatMethodLabel(item)}${feeLabel}</option>`;
-    }).join('');
+    renderMethodGrid(methods);
 
     const activeMethod = methods.find((item) => item.code === selectedPaymentMethod);
     if (activeMethod) {
@@ -245,18 +267,23 @@
           ? 'QRIS aktif. Kalau ini yang Anda cari, langsung lanjut bayar tanpa perlu pilih metode lain.'
           : 'Kalau channel ini sudah cocok, langsung lanjut bayar. Tidak perlu pilih terlalu banyak opsi.';
       }
+      if (methodNote) {
+        methodNote.hidden = !isQrisMethod(activeMethod);
+      }
+      topupButton.textContent = isQrisMethod(activeMethod)
+        ? 'Buka QRIS di Duitku'
+        : PAYMENT_LABEL;
     }
 
     topupButton.disabled = false;
   }
 
   async function loadDuitkuPaymentMethods() {
-    if (PAYMENT_PROVIDER !== 'duitku' || !DK.token() || !methodSelect) return;
+    if (PAYMENT_PROVIDER !== 'duitku' || !DK.token() || !methodGrid) return;
 
     duitkuMethodsLoaded = false;
     topupButton.disabled = true;
-    methodSelect.disabled = true;
-    methodSelect.innerHTML = '<option value="">Memuat metode pembayaran...</option>';
+    methodGrid.innerHTML = '<div class="wallet-method-skeleton">Memuat metode pembayaran...</div>';
     if (methodCurrentName) {
       methodCurrentName.textContent = 'Memuat metode pembayaran';
     }
@@ -294,14 +321,10 @@
       loadDuitkuPaymentMethods();
     }
   }));
-  methodSelect?.addEventListener('change', () => {
-    selectedPaymentMethod = methodSelect.value || null;
-    renderMethodOptions(availableDuitkuMethods);
-  });
-  qrisSpotlight?.addEventListener('click', () => {
-    const qrisMethod = availableDuitkuMethods.find((item) => isQrisMethod(item));
-    if (!qrisMethod) return;
-    selectedPaymentMethod = qrisMethod.code;
+  methodGrid?.addEventListener('click', (event) => {
+    const card = event.target.closest('.wallet-method-card[data-code]');
+    if (!card) return;
+    selectedPaymentMethod = card.dataset.code || null;
     renderMethodOptions(availableDuitkuMethods);
   });
   renderTotal();
