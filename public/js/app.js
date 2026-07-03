@@ -5,10 +5,135 @@
    ============================================================ */
 const DK = {
   api: '/api/v1',
+  intendedKey: 'dk_intended_url',
+  topupReturnKey: 'dk_post_topup_return_url',
 
   token() { return localStorage.getItem('dk_token'); },
   setToken(t) { localStorage.setItem('dk_token', t); },
   clearToken() { localStorage.removeItem('dk_token'); },
+
+  normalizeInternalUrl(target, fallback = '/') {
+    if (typeof target !== 'string' || target.trim() === '') {
+      return fallback;
+    }
+
+    try {
+      const url = new URL(target, window.location.origin);
+      if (url.origin !== window.location.origin) {
+        return fallback;
+      }
+
+      return `${url.pathname}${url.search}${url.hash}` || fallback;
+    } catch (_) {
+      return fallback;
+    }
+  },
+
+  currentUrl() {
+    return this.normalizeInternalUrl(window.location.href, '/');
+  },
+
+  setStoredUrl(key, target, fallback = '/') {
+    const resolved = this.normalizeInternalUrl(target, fallback);
+    localStorage.setItem(key, resolved);
+    return resolved;
+  },
+
+  getStoredUrl(key, fallback = '/') {
+    return this.normalizeInternalUrl(localStorage.getItem(key), fallback);
+  },
+
+  clearStoredUrl(key) {
+    localStorage.removeItem(key);
+  },
+
+  setIntendedUrl(target) {
+    const resolved = this.normalizeInternalUrl(target, this.currentUrl());
+    if (resolved.startsWith('/masuk') || resolved.startsWith('/auth/google')) {
+      return resolved;
+    }
+
+    return this.setStoredUrl(this.intendedKey, resolved, '/');
+  },
+
+  getIntendedUrl(fallback = '/creator') {
+    const params = new URLSearchParams(window.location.search);
+    const queryTarget = params.get('return');
+    if (queryTarget) {
+      return this.normalizeInternalUrl(queryTarget, fallback);
+    }
+
+    return this.getStoredUrl(this.intendedKey, fallback);
+  },
+
+  consumeIntendedUrl(fallback = '/creator') {
+    const target = this.getIntendedUrl(fallback);
+    this.clearStoredUrl(this.intendedKey);
+    return target;
+  },
+
+  clearIntendedUrl() {
+    this.clearStoredUrl(this.intendedKey);
+  },
+
+  setTopupReturnUrl(target) {
+    return this.setStoredUrl(this.topupReturnKey, target, '/wallet');
+  },
+
+  getTopupReturnUrl(fallback = '/wallet') {
+    const params = new URLSearchParams(window.location.search);
+    const queryTarget = params.get('return');
+    if (queryTarget) {
+      return this.normalizeInternalUrl(queryTarget, fallback);
+    }
+
+    return this.getStoredUrl(this.topupReturnKey, fallback);
+  },
+
+  consumeTopupReturnUrl(fallback = '/wallet') {
+    const target = this.getTopupReturnUrl(fallback);
+    this.clearStoredUrl(this.topupReturnKey);
+    return target;
+  },
+
+  clearTopupReturnUrl() {
+    this.clearStoredUrl(this.topupReturnKey);
+  },
+
+  loginUrl(target) {
+    const intended = this.setIntendedUrl(target || this.currentUrl());
+    const query = new URLSearchParams();
+
+    if (intended) {
+      query.set('return', intended);
+    }
+
+    return '/masuk' + (query.toString() ? `?${query.toString()}` : '');
+  },
+
+  redirectToLogin(target) {
+    window.location.href = this.loginUrl(target);
+  },
+
+  walletUrl(target, extraParams = {}) {
+    const query = new URLSearchParams();
+    const returnTarget = target ? this.setTopupReturnUrl(target) : null;
+
+    if (returnTarget && returnTarget !== '/wallet') {
+      query.set('return', returnTarget);
+    }
+
+    Object.entries(extraParams).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      query.set(key, String(value));
+    });
+
+    return '/wallet' + (query.toString() ? `?${query.toString()}` : '');
+  },
+
+  redirectToWallet(target, extraParams = {}) {
+    window.location.href = this.walletUrl(target, extraParams);
+  },
 
   headers() {
     const h = { 'Accept': 'application/json', 'Content-Type': 'application/json' };
@@ -54,6 +179,7 @@ const DK = {
     const coverStyle = w.cover
       ? `background-image:url('${w.cover}');background-size:cover;background-position:center;`
       : '';
+
     return `
       <a class="work-card work-card-premium" href="/karya/${w.slug}">
         <div class="work-cover" style="${coverStyle}">
@@ -252,7 +378,7 @@ function initCreditPill() {
   if (!pill) return;
 
   if (!DK.token()) {
-    pill.setAttribute('href', '/masuk');
+    pill.setAttribute('href', DK.loginUrl(DK.currentUrl()));
     pill.dataset.authState = 'guest';
   }
 
@@ -267,7 +393,7 @@ function initCreditPill() {
       duration: 3200,
     });
     window.setTimeout(() => {
-      window.location.href = '/masuk';
+      DK.redirectToLogin(DK.currentUrl());
     }, 260);
   });
 }

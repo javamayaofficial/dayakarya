@@ -209,12 +209,14 @@ Keterangan:
 - `PHP_BIN` dan `COMPOSER_BIN` bisa dibiarkan default jika perintah `php` dan `composer` tersedia global.
 - `COMPOSER_BIN` boleh berisi command lengkap. Contoh untuk Composer lokal di server:
   `php /var/www/dayakarya/data/www/dayakarya.id/composer`
+- Script deploy sekarang akan berhenti lebih awal dengan pesan error yang jelas bila `PHP_BIN` atau `COMPOSER_BIN` tidak valid.
 - `RUN_MIGRATIONS=false` bila Anda ingin migrasi dijalankan manual.
 - `RESTART_QUEUE=false` bila server tidak menjalankan queue worker persisten.
 - `RUN_FILAMENT_ASSETS=true` direkomendasikan agar aset panel admin selalu sinkron setelah deploy.
 - `RUN_SMOKE_CHECKS=true` bila Anda ingin deploy langsung memverifikasi route publik penting setelah selesai.
 - `APP_URL_PUBLIC` dipakai oleh smoke check untuk menentukan base URL yang diuji.
 - Smoke check saat ini mencakup halaman publik utama, legal page, asset PWA, tombol Google auth, dan API publik leaderboard.
+- Aset root PWA seperti `manifest.json`, `offline.html`, dan `sw.js` ikut disinkronkan dari folder `public/` saat deploy.
 
 Langkah setup SSH key:
 

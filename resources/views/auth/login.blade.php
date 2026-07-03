@@ -25,7 +25,7 @@
                     <input type="password" id="password" placeholder="Kata sandi" autocomplete="current-password">
                 </div>
                 <button class="btn btn-primary btn-block" onclick="doLogin()">Masuk ke Akun</button>
-                <a href="{{ route('auth.google.redirect') }}" class="btn btn-google btn-block auth-google-btn">
+                <a href="{{ route('auth.google.redirect') }}" class="btn btn-google btn-block auth-google-btn" id="google-login-link">
                     <span class="btn-google-mark">G</span>
                     <span>Masuk dengan Google</span>
                 </a>
@@ -41,6 +41,26 @@
 
 @push('scripts')
 <script>
+  const loginParams = new URLSearchParams(window.location.search);
+  const loginReturnTarget = loginParams.get('return');
+  const googleLoginLink = document.querySelector('#google-login-link');
+
+  function resolveLoginRedirectTarget() {
+    return loginReturnTarget ? DK.consumeIntendedUrl('/creator') : '/creator';
+  }
+
+  function prepareLoginEntry() {
+    if (loginReturnTarget) {
+      DK.setIntendedUrl(loginReturnTarget);
+      if (googleLoginLink) {
+        googleLoginLink.href = '/auth/google/redirect?return=' + encodeURIComponent(loginReturnTarget);
+      }
+      return;
+    }
+
+    DK.clearIntendedUrl();
+  }
+
   async function redirectAuthenticatedSession() {
     if (!DK.token()) return;
 
@@ -50,7 +70,7 @@
       return;
     }
 
-    location.href = '/creator';
+    location.href = resolveLoginRedirectTarget();
   }
 
   async function doLogin() {
@@ -62,13 +82,15 @@
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Berhasil masuk. Mengalihkan…</div>';
-      setTimeout(() => location.href = '/creator', 700);
+      const redirectTarget = resolveLoginRedirectTarget();
+      setTimeout(() => location.href = redirectTarget, 700);
     } else {
       const err = data.errors?.email?.[0] || data.message || 'Gagal masuk.';
       msg.innerHTML = `<div class="alert alert-error">${err}</div>`;
     }
   }
 
+  prepareLoginEntry();
   redirectAuthenticatedSession();
 </script>
 @endpush

@@ -24,6 +24,18 @@ fi
 read -r -a PHP_CMD <<< "$PHP_BIN"
 read -r -a COMPOSER_CMD <<< "$COMPOSER_BIN"
 
+if ! "${PHP_CMD[@]}" -v >/dev/null 2>&1; then
+  echo "!! ERROR: PHP_BIN tidak bisa dijalankan: ${PHP_BIN}" >&2
+  echo "   Pastikan secret PHP_BIN mengarah ke binary PHP yang valid di server FastPanel." >&2
+  exit 1
+fi
+
+if ! "${COMPOSER_CMD[@]}" --version >/dev/null 2>&1; then
+  echo "!! ERROR: COMPOSER_BIN tidak bisa dijalankan: ${COMPOSER_BIN}" >&2
+  echo "   Isi secret COMPOSER_BIN dengan command Composer yang valid, misalnya 'composer' atau 'php /path/to/composer'." >&2
+  exit 1
+fi
+
 "${COMPOSER_CMD[@]}" install --no-dev --optimize-autoloader --no-interaction
 
 if [ "$RUN_MIGRATIONS" = "true" ]; then
@@ -37,9 +49,9 @@ fi
 ln -sfn public/css css
 ln -sfn public/js js
 ln -sfn public/img img
+ln -sfn public/manifest.json manifest.json
+ln -sfn public/offline.html offline.html
 ln -sfn public/sw.js sw.js
-rm -f manifest.json
-cp public/offline.html offline.html
 
 if [ "$RUN_FILAMENT_ASSETS" = "true" ]; then
   "${PHP_CMD[@]}" artisan filament:assets

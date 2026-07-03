@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () {
         Route::post('payments/{payment}/proof', [WalletController::class, 'uploadProof']);
 
         // Unlock premium
+        Route::get('works/{work}/access', [WorkController::class, 'access']);
         Route::post('chapters/{chapter}/unlock', [UnlockController::class, 'store']);
 
         // Karya (creator)

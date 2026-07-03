@@ -36,8 +36,11 @@
 <script>
   localStorage.setItem('dk_token', @json($token));
   sessionStorage.setItem('dk_oauth_notice', @json($notice));
+  const redirectTarget = window.DK
+    ? DK.consumeIntendedUrl(@json($redirectTo))
+    : @json($redirectTo);
   setTimeout(() => {
-    window.location.href = @json($redirectTo);
+    window.location.href = redirectTarget;
   }, 600);
 </script>
 @endpush

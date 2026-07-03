@@ -145,6 +145,10 @@
   const RATE = {{ (int) config('dayakarya.economy.credit_rate_rupiah') }};
   const PAYMENT_PROVIDER = @json($paymentProvider);
   const PAYMENT_LABEL = @json($paymentLabel);
+  const walletUrl = new URL(window.location.href);
+  const walletReturnParam = walletUrl.searchParams.get('return');
+  const walletReturnTarget = walletReturnParam ? DK.setTopupReturnUrl(walletReturnParam) : null;
+  const hasTopupReturnTarget = Boolean(walletReturnTarget && walletReturnTarget !== '/wallet');
   const PACKAGE_COPY = {
     50: 'Paket kecil untuk coba dulu. Cocok kalau hanya ingin buka 1 karya premium.',
     100: 'Paket awal yang aman untuk isi saldo tanpa terasa terlalu besar.',
@@ -165,6 +169,18 @@
   let selectedPaymentMethod = null;
   let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
   let availableDuitkuMethods = [];
+
+  function contextualTopupMessage(baseMessage = '') {
+    const returnMessage = hasTopupReturnTarget
+      ? 'Setelah pembayaran selesai, kamu bisa balik lagi ke bagian karya yang tadi dipilih.'
+      : '';
+
+    if (returnMessage && baseMessage) {
+      return `${returnMessage} ${baseMessage}`;
+    }
+
+    return returnMessage || baseMessage;
+  }
 
   function isQrisMethod(method = {}) {
     const code = String(method.code || '').toUpperCase();
@@ -227,14 +243,14 @@
 
   function defaultTopupMessage() {
     if (PAYMENT_PROVIDER === 'manual') {
-      return 'Transfer manual akan menampilkan rekening tujuan dan detail verifikasi.';
+      return contextualTopupMessage('Transfer manual akan menampilkan rekening tujuan dan detail verifikasi.');
     }
 
     if (PAYMENT_PROVIDER === 'qris_manual') {
-      return 'QRIS manual akan menampilkan instruksi pembayaran dan verifikasi.';
+      return contextualTopupMessage('QRIS manual akan menampilkan instruksi pembayaran dan verifikasi.');
     }
 
-    return '';
+    return contextualTopupMessage();
   }
 
   function renderTotal() {
@@ -367,6 +383,7 @@
   renderTotal();
 
   function renderGuestWalletState(){
+    const loginHref = DK.loginUrl(DK.currentUrl());
     document.querySelector('#credit-balance').textContent = '0';
     document.querySelector('#rupiah-balance').textContent = 'Rp0';
     topupButton.disabled = true;
@@ -374,7 +391,7 @@
     topupMessage.innerHTML = `
       <div class="alert alert-success">
         Wallet ini pakai login akun pengguna, bukan session admin.
-        <a href="/masuk" style="font-weight:700;text-decoration:underline">Masuk sekarang</a>
+        <a href="${loginHref}" style="font-weight:700;text-decoration:underline">Masuk sekarang</a>
         untuk melihat saldo, histori, dan top up.
       </div>`;
     document.querySelector('#trx-list').innerHTML = `
@@ -382,7 +399,7 @@
         <div class="emoji">🔐</div>
         <h3>Wallet baru terbuka setelah kamu masuk</h3>
         <p>Masuk untuk melihat saldo, histori, dan top up.</p>
-        <a href="/masuk" class="btn btn-primary">Masuk ke Akun</a>
+        <a href="${loginHref}" class="btn btn-primary">Masuk ke Akun</a>
       </div>`;
   }
 
@@ -398,7 +415,8 @@
       document.querySelector('#rupiah-balance').textContent = 'Rp'+(w.rupiah_balance||0).toLocaleString('id-ID');
       topupButton.disabled = false;
       topupButton.textContent = PAYMENT_LABEL;
-      topupMessage.innerHTML = defaultTopupMessage() ? `<div class="alert alert-success">${defaultTopupMessage()}</div>` : '';
+      const helperMessage = defaultTopupMessage();
+      topupMessage.innerHTML = helperMessage ? `<div class="alert alert-success">${helperMessage}</div>` : '';
       if (PAYMENT_PROVIDER === 'duitku') {
         await loadDuitkuPaymentMethods();
       }
@@ -437,6 +455,12 @@
     const payload = { credit_amount: selected };
     if (PAYMENT_PROVIDER === 'duitku') {
       payload.payment_method = selectedPaymentMethod;
+    }
+
+    if (hasTopupReturnTarget) {
+      DK.setTopupReturnUrl(walletReturnTarget);
+    } else {
+      DK.clearTopupReturnUrl();
     }
 
     const { ok, data } = await DK.post('/topup', payload);

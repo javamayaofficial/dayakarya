@@ -59,6 +59,44 @@ class WorkController extends \App\Http\Controllers\Controller
         ]);
     }
 
+    public function access(Request $request, Work $work): JsonResponse
+    {
+        $this->authorizeMember($request);
+        abort_unless($work->status === 'published', 404);
+
+        $user = $request->user();
+        $work->load([
+            'chapters' => fn ($query) => $query->where('status', 'published')->orderBy('order'),
+        ]);
+
+        $premiumChapterIds = $work->chapters
+            ->where('is_premium', true)
+            ->pluck('id');
+
+        $unlockedChapterIds = $work->creator_id === $user->id
+            ? $premiumChapterIds->map(fn ($id) => (int) $id)->values()->all()
+            : $user->unlocks()
+                ->whereIn('chapter_id', $premiumChapterIds)
+                ->pluck('chapter_id')
+                ->map(fn ($id) => (int) $id)
+                ->values()
+                ->all();
+
+        $unlockedLookup = array_fill_keys($unlockedChapterIds, true);
+
+        return response()->json([
+            'work_id' => $work->id,
+            'unlocked_chapter_ids' => $unlockedChapterIds,
+            'chapters' => $work->chapters
+                ->map(fn (Chapter $chapter) => $this->serializeReaderChapter(
+                    $chapter,
+                    (bool) ($unlockedLookup[$chapter->id] ?? false),
+                    $work
+                ))
+                ->values(),
+        ]);
+    }
+
     public function creatorDashboard(Request $request): JsonResponse
     {
         $this->authorizeMember($request);
@@ -351,6 +389,27 @@ class WorkController extends \App\Http\Controllers\Controller
             'status' => $chapter->status ?: 'draft',
             'is_premium' => (bool) $chapter->is_premium,
             'price_credit' => (int) ($chapter->price_credit ?? 0),
+        ];
+    }
+
+    protected function serializeReaderChapter(Chapter $chapter, bool $isUnlocked = false, ?Work $work = null): array
+    {
+        $work ??= $chapter->work;
+        $isAudioWork = $work->isAudio();
+        $isVideoWork = $work->isVideo();
+        $canAccessPremium = ! $chapter->is_premium || $isUnlocked;
+
+        return [
+            'id' => $chapter->id,
+            'title' => $chapter->title,
+            'order' => $chapter->order,
+            'is_premium' => (bool) $chapter->is_premium,
+            'is_unlocked' => $canAccessPremium,
+            'price_credit' => (int) $chapter->price_credit,
+            'duration_seconds' => $chapter->duration_seconds,
+            'content' => ($canAccessPremium && ! $isAudioWork && ! $isVideoWork) ? $chapter->content : null,
+            'audio_url' => $canAccessPremium ? $chapter->audio_url : null,
+            'video_url' => $canAccessPremium ? $chapter->video_url : null,
         ];
     }
 

@@ -149,21 +149,31 @@
 
                     <div id="chapter-focus-feedback"></div>
 
+                    <div class="work-access-loading" id="chapter-access-loading" hidden>
+                        <span class="work-access-loading-dot" aria-hidden="true"></span>
+                        <div>
+                            <strong>Sedang menyiapkan akses bagian ini...</strong>
+                            <p id="chapter-access-loading-copy">Sebentar ya, kami cek dulu apakah bagian premium ini sudah pernah kamu buka.</p>
+                        </div>
+                    </div>
+
                     <div
                         class="work-locked-state"
                         id="chapter-lock-state"
                         @if(! $selectedChapter->is_premium) hidden @endif
                     >
-                        <span class="mini-label mini-label-dark">Butuh Akses</span>
-                        <h3>Bagian ini bisa langsung kamu buka saat siap lanjut.</h3>
-                        <p>Setelah dibuka, {{ $isVideoWork ? 'video' : ($isAudioWork ? 'audio' : 'isi karya') }} akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.</p>
+                        <span class="mini-label mini-label-dark" id="chapter-lock-kicker">Butuh Akses</span>
+                        <h3 id="chapter-lock-title">Bagian ini bisa langsung kamu buka saat siap lanjut.</h3>
+                        <p id="chapter-lock-copy">Setelah dibuka, {{ $isVideoWork ? 'video' : ($isAudioWork ? 'audio' : 'isi karya') }} akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.</p>
                         <button
                             type="button"
                             class="btn btn-gold"
                             id="chapter-focus-unlock"
                             data-chapter-id="{{ $selectedChapter->id }}"
-                            onclick="unlockSelectedChapter(this)"
+                            data-action="unlock"
+                            onclick="handleChapterPrimaryAction(this)"
                         >Buka Bagian Ini · {{ $selectedChapter->price_credit }} Credit</button>
+                        <p class="work-soft-note" id="chapter-lock-note">Kalau credit belum cukup, kamu bisa isi saldo lalu kembali ke bagian ini tanpa kehilangan posisi.</p>
                     </div>
 
                     <div
@@ -217,6 +227,7 @@
 @push('scripts')
 <script>
   DK.refreshCredit();
+  const WORK_ID = @json($work->id);
   const chapterMap = @json($chapterPayloads, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
   function escapeWorkHtml(value) {
@@ -233,6 +244,11 @@
       .split(/\n{2,}/)
       .map((paragraph) => `<p>${paragraph.replace(/\n/g, '<br>')}</p>`)
       .join('');
+  }
+
+  function getCurrentSelectedChapterId() {
+    const activeButton = document.querySelector('.chapter-row.is-active [data-chapter-id]');
+    return Number(activeButton?.dataset.chapterId || @json($selectedChapter?->id) || 0);
   }
 
   function setActiveChapter(chapterId) {
@@ -254,12 +270,82 @@
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
-  function syncUnlockButton(chapter) {
+  function getChapterReturnUrl(chapterId) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('bagian', chapterId);
+    url.hash = 'fokus-karya';
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  function syncLockState(chapter, mode = 'default') {
     const unlockButton = document.querySelector('#chapter-focus-unlock');
+    const lockTitle = document.querySelector('#chapter-lock-title');
+    const lockCopy = document.querySelector('#chapter-lock-copy');
+    const lockNote = document.querySelector('#chapter-lock-note');
+    const isAuthenticated = Boolean(DK.token());
+
     if (!unlockButton) return;
 
+    let action = 'unlock';
+    let label = `Buka Bagian Ini · ${chapter.price_credit} Credit`;
+    let title = 'Bagian ini bisa langsung kamu buka saat siap lanjut.';
+    let copy = 'Setelah dibuka, isi karya akan langsung tampil di sini supaya kamu tetap fokus ke bagian yang sedang dipilih.';
+    let note = `Bagian ini butuh ${chapter.price_credit} Credit. Kalau saldo belum cukup, kamu bisa isi credit dulu lalu kembali ke bagian yang sama.`;
+
+    if (!isAuthenticated) {
+      action = 'login';
+      label = 'Masuk Untuk Lanjut';
+      title = 'Bagian premium ini siap dibuka setelah kamu masuk.';
+      copy = 'Masuk dulu, lalu kamu akan kembali ke bagian ini tanpa kehilangan posisi baca.';
+      note = 'Setelah masuk, kamu bisa langsung lanjut buka bagian premium ini dengan credit dari akun yang sama.';
+    } else if (mode === 'needs_topup') {
+      action = 'topup';
+      label = 'Isi Credit Sekarang';
+      title = 'Credit kamu belum cukup untuk bagian ini.';
+      copy = 'Top up dulu, nanti kamu balik lagi ke bagian yang sama supaya tidak perlu cari part-nya lagi.';
+      note = `Bagian ini butuh ${chapter.price_credit} Credit. Setelah saldo masuk, cukup lanjutkan lagi dari bagian yang sama.`;
+    } else if (mode === 'already_unlocked') {
+      action = 'refresh';
+      label = 'Muat Ulang Bagian Ini';
+      title = 'Bagian ini sudah pernah kamu buka.';
+      copy = 'Kalau aksesnya belum tampil, muat ulang halaman ini untuk sinkron ulang isi bagian yang sudah terbuka.';
+      note = 'Akses premium tersimpan di akun yang sama, jadi kamu tidak perlu membayar ulang untuk bagian ini.';
+    }
+
     unlockButton.dataset.chapterId = chapter.id;
-    unlockButton.textContent = `Buka Bagian Ini · ${chapter.price_credit} Credit`;
+    unlockButton.dataset.action = action;
+    unlockButton.textContent = label;
+    if (lockTitle) lockTitle.textContent = title;
+    if (lockCopy) lockCopy.textContent = copy;
+    if (lockNote) lockNote.textContent = note;
+  }
+
+  function handleChapterPrimaryAction(button) {
+    const chapterId = Number(button.dataset.chapterId);
+    const action = button.dataset.action || 'unlock';
+    const chapter = chapterMap[chapterId];
+
+    if (!chapter) return;
+
+    if (action === 'login') {
+      DK.redirectToLogin(getChapterReturnUrl(chapterId));
+      return;
+    }
+
+    if (action === 'topup') {
+      DK.redirectToWallet(getChapterReturnUrl(chapterId), {
+        source: 'unlock',
+        chapter: chapterId,
+      });
+      return;
+    }
+
+    if (action === 'refresh') {
+      window.location.href = getChapterReturnUrl(chapterId);
+      return;
+    }
+
+    unlockSelectedChapter(button);
   }
 
   function updateReaderMeta(chapter, statusText) {
@@ -274,7 +360,42 @@
     if (meta) meta.innerHTML = metaParts.join('');
   }
 
-  function renderChapter(chapter, { unlocked = false, feedbackMessage = '' } = {}) {
+  function setReaderAccessLoading(isLoading, chapter = null) {
+    const loadingState = document.querySelector('#chapter-access-loading');
+    const loadingCopy = document.querySelector('#chapter-access-loading-copy');
+    const lockState = document.querySelector('#chapter-lock-state');
+    const textOutput = document.querySelector('#chapter-text-output');
+    const audioShell = document.querySelector('#chapter-audio-shell');
+    const videoShell = document.querySelector('#chapter-video-shell');
+
+    if (!loadingState) return;
+
+    if (isLoading) {
+      if (chapter) {
+        updateReaderMeta(chapter, 'Sedang cek akses');
+      }
+      loadingState.hidden = false;
+      if (loadingCopy) {
+        loadingCopy.textContent = chapter?.is_premium
+          ? 'Sebentar ya, kami cek dulu apakah bagian premium ini sudah pernah kamu buka.'
+          : 'Sebentar ya, kami sedang menyiapkan bagian yang kamu pilih.';
+      }
+      if (lockState) lockState.hidden = true;
+      if (textOutput) textOutput.hidden = true;
+      if (audioShell) audioShell.hidden = true;
+      if (videoShell) videoShell.hidden = true;
+      return;
+    }
+
+    loadingState.hidden = true;
+  }
+
+  function renderChapter(chapter, {
+    unlocked = false,
+    feedbackMessage = '',
+    scrollIntoView = true,
+    syncUrl = true,
+  } = {}) {
     if (!chapter) return;
 
     const reader = document.querySelector('.work-reader');
@@ -287,11 +408,14 @@
     const feedback = document.querySelector('#chapter-focus-feedback');
 
     if (titleNode) titleNode.textContent = chapter.title || 'Bagian terpilih';
+    setReaderAccessLoading(false);
 
-    if (chapter.is_premium && !unlocked) {
+    const chapterIsUnlocked = unlocked || Boolean(chapter.is_unlocked) || !chapter.is_premium;
+
+    if (chapter.is_premium && !chapterIsUnlocked) {
       updateReaderMeta(chapter, 'Perlu dibuka dengan Credit');
       if (lockState) lockState.hidden = false;
-      syncUnlockButton(chapter);
+      syncLockState(chapter);
       if (feedback) feedback.innerHTML = feedbackMessage ? `<div class="alert alert-success">${feedbackMessage}</div>` : '';
       if (audioShell) {
         audioShell.hidden = true;
@@ -306,7 +430,7 @@
         textOutput.innerHTML = '';
       }
     } else {
-      updateReaderMeta(chapter, unlocked ? 'Sudah dibuka dan siap dinikmati' : 'Siap dinikmati');
+      updateReaderMeta(chapter, chapter.is_premium ? 'Sudah dibuka dan siap dinikmati' : 'Siap dinikmati');
       if (lockState) lockState.hidden = true;
       if (feedback) {
         feedback.innerHTML = feedbackMessage ? `<div class="alert alert-success">${feedbackMessage}</div>` : '';
@@ -359,20 +483,23 @@
     }
 
     setActiveChapter(chapter.id);
-    if (window.history?.replaceState) {
+    if (syncUrl && window.history?.replaceState) {
       const url = new URL(window.location.href);
       url.searchParams.set('bagian', chapter.id);
       url.hash = 'fokus-karya';
       window.history.replaceState({}, '', url);
     }
 
-    document.querySelector('#fokus-karya')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (scrollIntoView) {
+      document.querySelector('#fokus-karya')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function renderUnlockedChapter(button, payload) {
     const chapterId = Number(button.dataset.chapterId);
     const chapter = {
       ...(chapterMap[chapterId] || {}),
+      is_unlocked: true,
       content: payload.content ?? null,
       audio_url: payload.audio_url ?? null,
       video_url: payload.video_url ?? null,
@@ -384,6 +511,51 @@
     });
   }
 
+  async function hydrateUnlockedChapters({ selectedChapterId = null, feedbackMessage = '' } = {}) {
+    if (!DK.token()) return null;
+
+    const targetChapter = chapterMap[Number(selectedChapterId || getCurrentSelectedChapterId())];
+    if (targetChapter?.is_premium) {
+      setReaderAccessLoading(true, targetChapter);
+    }
+
+    let response = null;
+    try {
+      response = await DK.get('/works/' + WORK_ID + '/access');
+    } catch (_) {
+      setReaderAccessLoading(false);
+      return null;
+    }
+
+    if (!Array.isArray(response?.chapters)) {
+      setReaderAccessLoading(false);
+      return null;
+    }
+
+    response.chapters.forEach((chapter) => {
+      const chapterId = Number(chapter.id);
+      if (!chapterId || !chapterMap[chapterId]) return;
+
+      chapterMap[chapterId] = {
+        ...chapterMap[chapterId],
+        ...chapter,
+        is_unlocked: Boolean(chapter.is_unlocked),
+      };
+    });
+
+    const chapterToRender = chapterMap[Number(selectedChapterId || getCurrentSelectedChapterId())];
+    if (chapterToRender) {
+      renderChapter(chapterToRender, {
+        unlocked: Boolean(chapterToRender.is_unlocked),
+        feedbackMessage,
+        scrollIntoView: false,
+        syncUrl: false,
+      });
+    }
+
+    return response;
+  }
+
   function selectChapterById(chapterId) {
     const chapter = chapterMap[Number(chapterId)];
     if (!chapter) return;
@@ -391,8 +563,13 @@
   }
 
   async function unlockSelectedChapter(button) {
-    if (!DK.token()) { location.href = '/masuk'; return; }
+    if (!DK.token()) {
+      DK.redirectToLogin(getChapterReturnUrl(button.dataset.chapterId));
+      return;
+    }
+
     const chapterId = button.dataset.chapterId;
+    const chapter = chapterMap[Number(chapterId)];
     const ref = (document.cookie.match(/dk_ref=([^;]+)/) || [])[1];
     const feedback = document.querySelector('#chapter-focus-feedback');
     button.disabled = true;
@@ -402,6 +579,19 @@
     button.disabled = false;
 
     if (!ok) {
+      if (chapter) {
+        if (data.reason === 'insufficient_credit') {
+          syncLockState(chapter, 'needs_topup');
+        } else if (data.reason === 'already_unlocked') {
+          await hydrateUnlockedChapters({
+            selectedChapterId: Number(chapterId),
+            feedbackMessage: data.message || 'Bagian ini sudah pernah kamu buka sebelumnya.',
+          });
+          return;
+        } else {
+          syncLockState(chapter);
+        }
+      }
       if (feedback) {
         feedback.innerHTML = `<div class="alert alert-error">${data.message || 'Bagian belum berhasil dibuka.'}</div>`;
       }
@@ -413,7 +603,10 @@
   }
 
   DK.follow = async function(creatorId) {
-    if (!DK.token()) { location.href = '/masuk'; return; }
+    if (!DK.token()) {
+      DK.redirectToLogin(DK.currentUrl());
+      return;
+    }
     alert('Kamu sekarang mengikuti kreator ini.');
   };
 
@@ -433,5 +626,18 @@
   });
 
   applyReadingSize(localStorage.getItem('dk_reading_size') || 'normal');
+
+  const initialChapter = chapterMap[Number(@json($selectedChapter?->id))];
+  if (initialChapter) {
+    renderChapter(initialChapter, {
+      unlocked: false,
+      scrollIntoView: false,
+      syncUrl: false,
+    });
+  }
+
+  if (DK.token()) {
+    hydrateUnlockedChapters();
+  }
 </script>
 @endpush

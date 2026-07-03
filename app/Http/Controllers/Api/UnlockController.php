@@ -9,6 +9,7 @@ use App\Services\NotificationService;
 use App\Services\WalletService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 /**
  * Unlock chapter/episode premium memakai Credit.
@@ -45,7 +46,17 @@ class UnlockController extends \App\Http\Controllers\Controller
         try {
             $unlock = $this->wallet->unlockChapter($user, $chapter, $affiliate);
         } catch (\RuntimeException $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
+            $message = $e->getMessage();
+            $reason = match (true) {
+                Str::contains(Str::lower($message), 'belum cukup') => 'insufficient_credit',
+                Str::contains(Str::lower($message), 'sudah kamu buka') => 'already_unlocked',
+                default => 'unlock_failed',
+            };
+
+            return response()->json([
+                'message' => $message,
+                'reason' => $reason,
+            ], 422);
         }
 
         if ($link) {
