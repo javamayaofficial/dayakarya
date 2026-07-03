@@ -68,10 +68,14 @@
                 @if ($paymentProvider === 'duitku')
                     <div class="wallet-payment-method-box">
                         <span class="wallet-payment-method-label">Metode Pembayaran</span>
-                        <div class="chips chips-elevated" id="duitku-method-options">
-                            <span class="chip active">Memuat metode...</span>
+                        <select id="duitku-method-select" class="wallet-method-select">
+                            <option>Memuat metode pembayaran...</option>
+                        </select>
+                        <div class="wallet-method-current" id="duitku-method-current">
+                            <strong id="duitku-method-current-name">Metode belum dipilih</strong>
+                            <span id="duitku-method-current-meta">Pilih satu channel yang paling nyaman dipakai, lalu lanjut ke checkout Duitku.</span>
                         </div>
-                        <div class="hint" id="duitku-method-hint">Pilih channel pembayaran yang ingin dipakai untuk top up ini.</div>
+                        <div class="hint" id="duitku-method-hint">Pilih channel pembayaran yang paling nyaman buat top up ini. Satu pilihan saja sudah cukup.</div>
                     </div>
                 @endif
                 <button class="btn btn-gold btn-block" id="topup-button" onclick="doTopup()">{{ $paymentLabel }}</button>
@@ -122,10 +126,13 @@
   const topupButton = document.querySelector('#topup-button');
   const topupMessage = document.querySelector('#topup-msg');
   const chips = document.querySelectorAll('#topup-options .chip');
-  const methodOptions = document.querySelector('#duitku-method-options');
+  const methodSelect = document.querySelector('#duitku-method-select');
   const methodHint = document.querySelector('#duitku-method-hint');
+  const methodCurrentName = document.querySelector('#duitku-method-current-name');
+  const methodCurrentMeta = document.querySelector('#duitku-method-current-meta');
   let selectedPaymentMethod = null;
   let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
+  let availableDuitkuMethods = [];
 
   function defaultTopupMessage() {
     if (PAYMENT_PROVIDER === 'manual') {
@@ -142,11 +149,20 @@
   function renderTotal(){ document.querySelector('#total-rp').textContent = 'Rp' + (selected*RATE).toLocaleString('id-ID'); }
 
   function renderMethodOptions(methods = []) {
-    if (!methodOptions) return;
+    if (!methodSelect) return;
+
+    availableDuitkuMethods = methods;
 
     if (!methods.length) {
       selectedPaymentMethod = null;
-      methodOptions.innerHTML = '<span class="chip active">Metode belum tersedia</span>';
+      methodSelect.innerHTML = '<option value="">Metode belum tersedia</option>';
+      methodSelect.disabled = true;
+      if (methodCurrentName) {
+        methodCurrentName.textContent = 'Metode belum tersedia';
+      }
+      if (methodCurrentMeta) {
+        methodCurrentMeta.textContent = 'Belum ada channel Duitku yang aktif untuk nominal ini.';
+      }
       if (methodHint) {
         methodHint.textContent = 'Belum ada channel Duitku yang aktif untuk nominal ini. Cek pengaturan project Duitku Anda.';
       }
@@ -158,37 +174,44 @@
       selectedPaymentMethod = methods[0].code;
     }
 
-    methodOptions.innerHTML = methods.map((item) => {
-      const feeLabel = Number(item.fee || 0) > 0
-        ? ` • Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}`
-        : '';
-
-      return `<button type="button" class="chip ${item.code === selectedPaymentMethod ? 'active' : ''}" data-payment-method="${item.code}">
-        ${item.name}${feeLabel}
-      </button>`;
+    methodSelect.disabled = false;
+    methodSelect.innerHTML = methods.map((item) => {
+      const feeLabel = Number(item.fee || 0) > 0 ? ` - Biaya Rp${Number(item.fee || 0).toLocaleString('id-ID')}` : '';
+      const selectedAttr = item.code === selectedPaymentMethod ? 'selected' : '';
+      return `<option value="${item.code}" ${selectedAttr}>${item.name}${feeLabel}</option>`;
     }).join('');
 
-    methodOptions.querySelectorAll('[data-payment-method]').forEach((button) => {
-      button.addEventListener('click', () => {
-        selectedPaymentMethod = button.dataset.paymentMethod;
-        renderMethodOptions(methods);
-      });
-    });
-
     const activeMethod = methods.find((item) => item.code === selectedPaymentMethod);
-    if (methodHint && activeMethod) {
-      methodHint.textContent = `Channel aktif: ${activeMethod.name}. Pilih metode lain kalau ingin mengganti cara bayar sebelum lanjut ke Duitku.`;
+    if (activeMethod) {
+      if (methodCurrentName) {
+        methodCurrentName.textContent = activeMethod.name;
+      }
+      if (methodCurrentMeta) {
+        methodCurrentMeta.textContent = Number(activeMethod.fee || 0) > 0
+          ? `Ada biaya Rp${Number(activeMethod.fee || 0).toLocaleString('id-ID')} untuk channel ini.`
+          : 'Tidak ada biaya tambahan yang tercatat dari channel ini.';
+      }
+      if (methodHint) {
+        methodHint.textContent = 'Kalau channel ini sudah cocok, langsung lanjut bayar. Tidak perlu pilih terlalu banyak opsi.';
+      }
     }
 
     topupButton.disabled = false;
   }
 
   async function loadDuitkuPaymentMethods() {
-    if (PAYMENT_PROVIDER !== 'duitku' || !DK.token() || !methodOptions) return;
+    if (PAYMENT_PROVIDER !== 'duitku' || !DK.token() || !methodSelect) return;
 
     duitkuMethodsLoaded = false;
     topupButton.disabled = true;
-    methodOptions.innerHTML = '<span class="chip active">Memuat metode...</span>';
+    methodSelect.disabled = true;
+    methodSelect.innerHTML = '<option value="">Memuat metode pembayaran...</option>';
+    if (methodCurrentName) {
+      methodCurrentName.textContent = 'Memuat metode pembayaran';
+    }
+    if (methodCurrentMeta) {
+      methodCurrentMeta.textContent = 'Sedang mengambil daftar channel yang aktif dari proyek Duitku.';
+    }
     if (methodHint) {
       methodHint.textContent = 'Sedang mengambil channel pembayaran aktif dari proyek Duitku.';
     }
@@ -220,6 +243,10 @@
       loadDuitkuPaymentMethods();
     }
   }));
+  methodSelect?.addEventListener('change', () => {
+    selectedPaymentMethod = methodSelect.value || null;
+    renderMethodOptions(availableDuitkuMethods);
+  });
   renderTotal();
 
   function renderGuestWalletState(){
