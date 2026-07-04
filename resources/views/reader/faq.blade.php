@@ -33,7 +33,7 @@
 
             <article class="support-panel legal-card">
                 <h2 class="support-title">Siapa operator platform ini?</h2>
-                <p class="support-copy">DAYAKARYA dikelola oleh Yayasan Pondok Daya Cipta Nusantara.</p>
+                <p class="support-copy">DAYAKARYA dikelola oleh tim operasional platform untuk mendukung layanan karya digital dan transaksi di dalam aplikasi.</p>
             </article>
 
             <article class="support-panel legal-card legal-card-highlight">

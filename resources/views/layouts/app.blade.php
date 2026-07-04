@@ -54,7 +54,7 @@
             'description' => $defaultDescription,
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'Yayasan Pondok Daya Cipta Nusantara',
+                'name' => 'DAYAKARYA',
             ],
         ];
     @endphp
@@ -133,7 +133,7 @@
                             <p>Platform Creator Economy Indonesia untuk karya digital, top up credit, dan unlock konten premium.</p>
                         </div>
                     </div>
-                    <p class="foot-copy">Dikelola oleh <strong>Yayasan Pondok Daya Cipta Nusantara</strong>.</p>
+                    <p class="foot-copy">Platform digital untuk karya premium, top up credit, dan pengalaman baca yang lebih nyaman.</p>
                 </div>
                 <div class="foot-column">
                     <strong class="foot-heading">Support</strong>
@@ -166,7 +166,7 @@
                     </div>
                 </div>
             </div>
-            <p class="foot-copy foot-copy-bottom">&copy; {{ date('Y') }} DAYAKARYA - Yayasan Pondok Daya Cipta Nusantara. Seluruh transaksi dilakukan secara digital di dalam platform.</p>
+            <p class="foot-copy foot-copy-bottom">&copy; {{ date('Y') }} DAYAKARYA. Seluruh transaksi dilakukan secara digital di dalam platform.</p>
         </div>
     </footer>
 

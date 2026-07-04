@@ -14,7 +14,7 @@
         <div class="legal-grid">
             <article class="support-panel legal-card">
                 <h2 class="support-title">Operator layanan</h2>
-                <p class="support-copy">DAYAKARYA dikelola oleh Yayasan Pondok Daya Cipta Nusantara. Kebijakan ini berlaku untuk seluruh layanan digital di dalam platform.</p>
+                <p class="support-copy">DAYAKARYA mengelola layanan digital ini untuk mendukung akses karya, transaksi, dan operasional platform secara aman. Kebijakan ini berlaku untuk seluruh layanan digital di dalam platform.</p>
             </article>
 
             <article class="support-panel legal-card">

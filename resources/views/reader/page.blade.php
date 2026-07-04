@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'About - DAYAKARYA')
-@section('desc', 'Tentang DAYAKARYA, platform Creator Economy Indonesia yang dikelola Yayasan Pondok Daya Cipta Nusantara.')
+@section('desc', 'Tentang DAYAKARYA, platform Creator Economy Indonesia untuk karya digital premium.')
 @section('body_class', 'page-support')
 @section('content')
 <section class="section">
@@ -14,7 +14,7 @@
         <div class="legal-grid">
             <article class="support-panel legal-card legal-card-highlight">
                 <h2 class="support-title">Identitas bisnis</h2>
-                <p class="support-copy">DAYAKARYA merupakan platform Creator Economy Indonesia yang dikelola oleh <strong>Yayasan Pondok Daya Cipta Nusantara</strong>.</p>
+                <p class="support-copy">DAYAKARYA merupakan platform Creator Economy Indonesia untuk karya digital premium, monetisasi kreator, dan pengalaman baca yang lebih nyaman.</p>
             </article>
 
             <article class="support-panel legal-card">
@@ -45,11 +45,11 @@
             <div class="support-identity-grid">
                 <div class="support-identity-item">
                     <strong>Managed By</strong>
-                    <span>Yayasan Pondok Daya Cipta Nusantara</span>
+                    <span>DAYAKARYA</span>
                 </div>
                 <div class="support-identity-item">
                     <strong>Collaboration</strong>
-                    <span>Yayasan Pondok Daya Cipta Nusantara</span>
+                    <span>Tim Operasional DAYAKARYA</span>
                 </div>
                 <div class="support-identity-item">
                     <strong>Email Support</strong>
