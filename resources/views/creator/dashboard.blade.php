@@ -7,19 +7,25 @@
     <div class="container creator-container">
         <div class="creator-hero">
             <div class="creator-hero-copy">
-                <span class="section-kicker">Area Member</span>
-                <h1>Satu tempat untuk nikmati karya, bikin karya, dan mulai cari cuan.</h1>
-                <p>Kalau mau nulis, podcast, atau bikin video series, mulainya dari sini. Kalau lagi cari bacaan, audio, atau tontonan yang bagus, semuanya juga ada di sini.</p>
+                <span class="section-kicker">Pusat Kerja Kreator</span>
+                <h1>Bikin, rapikan, lalu tayangkan karya tanpa muter-muter.</h1>
+                <p>Dashboard ini saya rapikan supaya kamu lebih cepat tahu harus mulai dari mana, draft mana yang perlu dibereskan, dan karya mana yang sudah siap didorong tayang.</p>
+                <div class="creator-hero-pills">
+                    <span class="creator-hero-pill">Mulai draft baru</span>
+                    <span class="creator-hero-pill">Pantau progres karya</span>
+                    <span class="creator-hero-pill">Cek hasil tayang</span>
+                </div>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
+                    <a href="#my-works" class="btn btn-ghost">Lihat Karya Saya</a>
                     <a href="{{ route('wallet') }}" class="btn btn-ghost">Wallet & Credit</a>
                     <button type="button" class="btn btn-ghost" id="creator-logout" onclick="logoutCreator()">Keluar</button>
                 </div>
             </div>
             <div class="creator-hero-note">
-                <span class="mini-label">Satu Tempat</span>
-                <h2>Masuk sekali, semua pintunya ada di sini.</h2>
-                <p>Lihat perkembangan karya, cek penghasilan, atau bantu sebar karya yang kamu suka dari panel yang sama.</p>
+                <span class="mini-label">Hari Ini</span>
+                <h2>Kerjakan yang paling dekat ke tayang dulu.</h2>
+                <p>Urutan yang paling nyaman: mulai draft seperlunya, isi part aktif sampai layak, lalu cek checklist sebelum publish.</p>
             </div>
         </div>
 
@@ -46,35 +52,31 @@
             </div>
         </div>
 
+        <div class="creator-priority-bar">
+            <div class="creator-priority-card">
+                <span class="section-kicker">Fokus Draft</span>
+                <strong id="creator-draft-focus">Belum ada data draft.</strong>
+                <p id="creator-draft-focus-copy">Buat draft baru atau buka draft lama untuk lanjut produksi inti karya.</p>
+            </div>
+            <div class="creator-priority-card creator-priority-card-highlight">
+                <span class="section-kicker">Siap Tayang</span>
+                <strong id="creator-ready-focus">Checklist tayang akan muncul di sini.</strong>
+                <p id="creator-ready-focus-copy">Begitu ada karya yang nyaris siap, dashboard ini akan kasih sinyal prioritasnya.</p>
+            </div>
+            <div class="creator-priority-card">
+                <span class="section-kicker">Karya Live</span>
+                <strong id="creator-live-focus">Belum ada karya tayang.</strong>
+                <p id="creator-live-focus-copy">Begitu ada karya live, kamu bisa langsung lanjut cek performanya dari sini.</p>
+            </div>
+        </div>
+
         <div class="creator-panel-grid">
             <div class="creator-panel card">
-                <div class="creator-production-guide">
-                    <div class="creator-guide-card">
-                        <span class="section-kicker">Alur Produksi</span>
-                        <h3>Mulai dari draft yang jelas, lalu pikirkan pengalaman orang yang menikmatinya.</h3>
-                        <p>Tujuannya bukan cuma karya tayang, tapi juga enak dibaca atau didengar sampai selesai.</p>
-                    </div>
-                    <div class="creator-guide-steps">
-                        <div class="creator-guide-step">
-                            <strong>1. Tentukan formatnya</strong>
-                            <span>Pilih apakah karya ini cocok dinikmati sebagai bacaan atau audio.</span>
-                        </div>
-                        <div class="creator-guide-step">
-                            <strong>2. Bikin pembukanya jelas</strong>
-                            <span>Judul dan sinopsis harus bikin orang paham mereka akan menikmati karya seperti apa.</span>
-                        </div>
-                        <div class="creator-guide-step">
-                            <strong>3. Jaga kenyamanan output</strong>
-                            <span>Teks perlu ringan di mata. Audio perlu tenang di telinga. Fokusnya selalu ke karya yang dipilih.</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="creator-quick-create" id="creator-quick-create">
                     <div class="section-head section-head-premium">
                         <div>
                             <span class="section-kicker">Quick Create</span>
-                            <h2>Kalau sudah siap, bikin draft baru dari sini</h2>
+                            <h2>Mulai draft baru tanpa pindah halaman</h2>
                         </div>
                     </div>
                     <div id="creator-msg"></div>
@@ -105,10 +107,11 @@
                     <button class="btn btn-gold" id="creator-submit" onclick="createWork()">Simpan Draft & Mulai Produksi</button>
                 </div>
 
-                <div class="section-head section-head-premium">
+                <div class="section-head section-head-premium creator-work-section-head">
                     <div>
-                        <span class="section-kicker">Katalog Saya</span>
+                        <span class="section-kicker">Antrian Kerja</span>
                         <h2>Karya Saya</h2>
+                        <p>Buka lagi draft yang belum aman, lanjutkan yang siap tayang, lalu cek hasil karya yang sudah live.</p>
                     </div>
                 </div>
                 <div class="work-grid work-grid-premium" id="my-works">
@@ -119,18 +122,40 @@
                         <a href="#creator-quick-create" class="btn btn-gold">Buat Karya Pertama</a>
                     </div>
                 </div>
+
+                <div class="creator-production-guide creator-production-guide-compact">
+                    <div class="creator-guide-card">
+                        <span class="section-kicker">Alur Singkat</span>
+                        <h3>Dashboard ini sekarang sengaja dibuat lebih operasional.</h3>
+                        <p>Supaya kamu tidak tenggelam di penjelasan, cukup pegang tiga urutan ini setiap kali masuk.</p>
+                    </div>
+                    <div class="creator-guide-steps">
+                        <div class="creator-guide-step">
+                            <strong>1. Buat judul dan sinopsis seperlunya</strong>
+                            <span>Tidak perlu sempurna dulu, yang penting punya draft dan arah karya.</span>
+                        </div>
+                        <div class="creator-guide-step">
+                            <strong>2. Buka lagi karya yang paling dekat jadi</strong>
+                            <span>Prioritaskan draft yang tinggal isi part, cover, atau cek publish checklist.</span>
+                        </div>
+                        <div class="creator-guide-step">
+                            <strong>3. Setelah tayang, cek performa dan lanjutkan</strong>
+                            <span>Begitu satu karya live, kembali ke dashboard untuk pilih langkah berikutnya.</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <aside class="creator-side">
                 <div class="creator-side-card">
-                    <span class="section-kicker">Output Nyaman</span>
-                    <h3>Bacaan enak di layar kecil. Audio enak didengar tanpa bikin capek.</h3>
-                    <p>Pakai kalimat pembuka yang jelas, ritme yang rapi, dan jangan ganggu fokus orang dari karya yang sedang mereka pilih.</p>
+                    <span class="section-kicker">Pegangan Cepat</span>
+                    <h3>Kalau bingung mau ngapain, kerjakan karya yang paling dekat ke tayang.</h3>
+                    <p>Judul, sinopsis, isi part, lalu checklist. Kalau urutan ini rapi, pengalaman kreator terasa jauh lebih ringan.</p>
                 </div>
                 <div class="creator-side-card creator-side-card-soft">
-                    <span class="section-kicker">Setelah Tayang</span>
-                    <h3>Begitu karya tayang, cek lagi pengalaman pembaca dan pendengarnya.</h3>
-                    <p>Lihat apakah halaman karya sudah langsung fokus ke isi, bagian yang dipilih, dan alurnya nyaman sampai selesai.</p>
+                    <span class="section-kicker">Setelah Publish</span>
+                    <h3>Karya yang sudah live sebaiknya langsung dicek lagi dari sisi pembaca.</h3>
+                    <p>Pastikan halaman karya enak dibuka, cover-nya kuat, dan pembukanya cukup bikin orang lanjut baca atau dengar.</p>
                 </div>
             </aside>
         </div>
@@ -169,6 +194,8 @@
     const chapterCount = Number(work.chapters_count ?? 0);
     const readyChapterCount = Number(work.ready_chapters_count ?? 0);
     const publishedChapterCount = Number(work.published_chapters_count ?? 0);
+    const likeCount = Number(work.likes_count ?? 0);
+    const viewCount = Number(work.views ?? 0);
 
     const publishState = (() => {
       if (work.status === 'published') {
@@ -208,6 +235,13 @@
       };
     })();
 
+    const progressChips = [
+      `<span class="creator-card-chip">${chapterCount} part</span>`,
+      `<span class="creator-card-chip ${readyChapterCount > 0 ? 'is-highlight' : ''}">${readyChapterCount} siap tayang</span>`,
+      `<span class="creator-card-chip">${viewCount.toLocaleString('id-ID')} views</span>`,
+      `<span class="creator-card-chip">${likeCount.toLocaleString('id-ID')} suka</span>`,
+    ].join('');
+
     const actionHref = `/creator/works/${work.id}`;
     const previewDraftHref = `/creator/works/${work.id}#creator-preview-card`;
     const publicHref = work.status === 'published' && work.slug ? `/karya/${work.slug}` : '';
@@ -223,30 +257,66 @@
     return `
       <article class="work-card work-card-premium">
         <div class="card-cover" style="${coverStyle}">
-          <div class="card-badge">${escapeHtml(publishState.badge)}</div>
+          <div class="card-badge card-badge-${publishState.tone}">${escapeHtml(publishState.badge)}</div>
         </div>
         <div class="card-body">
           <div class="eyebrow">${escapeHtml(work.category?.name ?? 'Tanpa kategori')} · ${escapeHtml(DK.typeLabel(work.type || ''))}</div>
           <h3>${escapeHtml(work.title)}</h3>
-          <div class="work-meta">
-            <span>${(work.views ?? 0).toLocaleString('id-ID')} views</span>
-            <span>${(work.likes_count ?? 0).toLocaleString('id-ID')} suka</span>
-          </div>
-          <div class="work-meta">
-            <span>${chapterCount} part</span>
-            <span>${readyChapterCount} siap tayang</span>
-          </div>
+          <div class="creator-card-note">${escapeHtml(publishState.note)}</div>
+          <div class="creator-card-progress">${progressChips}</div>
           <div class="work-meta">${work.published_at ? 'Tayang sejak ' + new Date(work.published_at).toLocaleDateString('id-ID') : 'Belum dipublikasikan'}</div>
-          <div class="work-meta">${escapeHtml(publishState.note)}</div>
-          <div class="work-card-footer">
-            <a class="read-link" href="${actionHref}">${publishState.actionLabel}</a>
+          <div class="work-card-footer creator-card-footer">
+            <a class="btn btn-primary creator-card-action" href="${actionHref}">${publishState.actionLabel}</a>
             ${publicHref
-              ? `<a class="read-stat" href="${publicHref}">Lihat Tayang</a>`
-              : `<a class="read-stat" href="${previewDraftHref}">Preview Draft</a>`}
+              ? `<a class="read-stat creator-card-secondary" href="${publicHref}">Lihat Tayang</a>`
+              : `<a class="read-stat creator-card-secondary" href="${previewDraftHref}">Preview Draft</a>`}
           </div>
         </div>
       </article>
     `;
+  }
+
+  function updatePriorityBar(works = []) {
+    const draftFocus = document.querySelector('#creator-draft-focus');
+    const draftFocusCopy = document.querySelector('#creator-draft-focus-copy');
+    const readyFocus = document.querySelector('#creator-ready-focus');
+    const readyFocusCopy = document.querySelector('#creator-ready-focus-copy');
+    const liveFocus = document.querySelector('#creator-live-focus');
+    const liveFocusCopy = document.querySelector('#creator-live-focus-copy');
+
+    if (!draftFocus || !draftFocusCopy || !readyFocus || !readyFocusCopy || !liveFocus || !liveFocusCopy) {
+      return;
+    }
+
+    const draftWorks = works.filter((work) => work.status !== 'published');
+    const readyWorks = works.filter((work) => Number(work.ready_chapters_count ?? 0) > 0);
+    const liveWorks = works.filter((work) => work.status === 'published');
+
+    if (!draftWorks.length) {
+      draftFocus.textContent = 'Belum ada draft yang menunggu.';
+      draftFocusCopy.textContent = 'Kalau ide baru muncul, bikin draft baru dari quick create lalu lanjutkan nanti di editor.';
+    } else {
+      draftFocus.textContent = `${draftWorks.length} draft masih butuh perhatian.`;
+      draftFocusCopy.textContent = 'Buka lagi draft yang belum aman supaya progresnya tidak dingin terlalu lama.';
+    }
+
+    if (!readyWorks.length) {
+      readyFocus.textContent = 'Belum ada karya yang dekat ke publish.';
+      readyFocusCopy.textContent = 'Begitu satu part sudah rapi, dashboard ini akan menandai karya yang pantas diprioritaskan tayang.';
+    } else {
+      readyFocus.textContent = `${readyWorks.length} karya sudah dekat ke publish.`;
+      readyFocusCopy.textContent = 'Prioritaskan karya yang sudah punya part siap tayang agar cepat berubah jadi katalog live.';
+    }
+
+    if (!liveWorks.length) {
+      liveFocus.textContent = 'Belum ada karya live.';
+      liveFocusCopy.textContent = 'Setelah karya pertama tayang, balik ke sini untuk cek performa dan tentukan kelanjutan part berikutnya.';
+      return;
+    }
+
+    const liveViews = liveWorks.reduce((total, work) => total + Number(work.views ?? 0), 0);
+    liveFocus.textContent = `${liveWorks.length} karya live dengan ${liveViews.toLocaleString('id-ID')} total views.`;
+    liveFocusCopy.textContent = 'Karya yang sudah tayang sebaiknya dicek lagi dari sisi pembaca sambil lanjut menyiapkan update berikutnya.';
   }
 
   function renderCreatorEmptyState() {
@@ -318,6 +388,7 @@
       document.querySelector('#s-followers').textContent = (data.stats?.followers ?? 0).toLocaleString('id-ID');
 
       const works = data.works ?? [];
+      updatePriorityBar(works);
       if (!works.length) {
         renderCreatorEmptyState();
         return;

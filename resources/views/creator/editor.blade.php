@@ -8,16 +8,16 @@
         <div class="creator-hero">
             <div class="creator-hero-copy">
                 <span class="section-kicker">Editor Draft</span>
-                <h1>Lanjutkan karya yang tadi sempat kamu simpan.</h1>
-                <p>Di sini kamu bisa terus rapikan judul, sinopsis, dan isi karya tanpa harus mulai dari awal lagi.</p>
+                <h1>Lanjutkan draft tanpa kehilangan fokus kerja.</h1>
+                <p>Editor ini saya padatkan supaya kamu lebih cepat tahu progres draft, lompat ke bagian penting, lalu simpan atau tayangkan tanpa bingung.</p>
                 <div class="creator-hero-actions">
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Kembali ke Dashboard</a>
                 </div>
             </div>
             <div class="creator-hero-note">
                 <span class="mini-label">Fokus Produksi</span>
-                <h2>Simpan perubahan kapan pun kamu butuh.</h2>
-                <p>Untuk sekarang editor ini difokuskan agar draft cerpen dan karya dasar bisa lanjut dikerjakan dengan nyaman.</p>
+                <h2>Tulis inti karya dulu, finishing belakangan.</h2>
+                <p>Urutan ternyaman di editor ini: ringkasan, part aktif, isi karya, lalu cek readiness sebelum publish.</p>
             </div>
         </div>
 
@@ -30,21 +30,58 @@
                     </div>
                 </div>
                 <div id="editor-msg"></div>
+                <div class="creator-editor-command">
+                    <div class="creator-editor-command-head">
+                        <div>
+                            <span class="section-kicker">Status Draft</span>
+                            <strong id="creator-editor-status-label">Memuat status draft…</strong>
+                            <p id="creator-editor-status-copy">Editor akan menampilkan prioritas kerja setelah draft selesai dimuat.</p>
+                        </div>
+                        <div class="creator-editor-command-meta">
+                            <span id="creator-editor-mode-pill">Mode karya</span>
+                            <span id="creator-editor-part-pill">Part aktif</span>
+                            <span id="creator-editor-access-pill">Akses part</span>
+                        </div>
+                    </div>
+                    <div class="creator-editor-jump-links">
+                        <a href="#editor-section-summary">Ringkasan</a>
+                        <a href="#editor-section-parts">Part</a>
+                        <a href="#editor-section-content">Isi Karya</a>
+                        <a href="#editor-section-finish">Finishing</a>
+                        <a href="#editor-section-monetization">Monetisasi</a>
+                        <a href="#editor-section-readiness">Checklist</a>
+                    </div>
+                </div>
                 <div class="creator-production-focus">
                     <div class="creator-production-focus-head">
                         <strong>Fokus Produksi Cerpen</strong>
-                        <span>Biar tidak pecah fokus, kerjakan editor ini dengan urutan: isi inti karya dulu, lalu rapikan akses dan tayangnya.</span>
+                        <span>Supaya tidak pecah fokus, pakai editor ini dengan urutan kerja yang pendek dan berulang.</span>
                     </div>
                     <div class="creator-production-focus-steps">
-                        <span class="creator-production-step is-active">1. Ringkasan karya</span>
+                        <span class="creator-production-step is-active">1. Rapikan ringkasan</span>
                         <span class="creator-production-step">2. Pilih part aktif</span>
-                        <span class="creator-production-step">3. Tulis isi part</span>
-                        <span class="creator-production-step">4. Atur akses dan harga</span>
-                        <span class="creator-production-step">5. Cek siap tayang</span>
+                        <span class="creator-production-step">3. Tulis inti konten</span>
+                        <span class="creator-production-step">4. Cek readiness</span>
                     </div>
                 </div>
 
-                <div class="creator-cover-panel">
+                <div class="creator-publish-checklist" id="editor-section-readiness">
+                    <div class="creator-publish-checklist-head">
+                        <strong>Checklist Siap Tayang</strong>
+                        <span id="creator-publish-summary">Lengkapi dulu poin penting sebelum karya ditayangkan.</span>
+                    </div>
+                    <div class="creator-publish-checklist-grid" id="creator-publish-checklist">
+                        <span class="creator-publish-item is-pending">Cover belum dicek</span>
+                        <span class="creator-publish-item is-pending">Sinopsis belum dicek</span>
+                        <span class="creator-publish-item is-pending">Part aktif belum dicek</span>
+                        <span class="creator-publish-item is-pending">Akses belum dicek</span>
+                    </div>
+                </div>
+                <div class="creator-finish-note" id="creator-publish-note">
+                    Checklist siap tayang akan muncul saat draft mulai matang atau saat kamu membuka tahap monetisasi dan finishing.
+                </div>
+
+                <div class="creator-cover-panel" id="editor-section-finish">
                     <div class="creator-collapsible-head">
                         <div>
                             <span class="section-kicker">Finishing</span>
@@ -147,7 +184,7 @@
                     </div>
                 </div>
 
-                <div class="creator-part-panel">
+                <div class="creator-part-panel" id="editor-section-parts">
                     <div class="creator-part-panel-head">
                         <div>
                             <span class="section-kicker">Kelanjutan Part</span>
@@ -161,42 +198,41 @@
                     </div>
                 </div>
 
-                <div class="creator-writing-guide field-text-content">
+                <div class="creator-writing-guide creator-writing-guide-compact field-text-content">
                     <div class="creator-writing-guide-head">
-                        <strong>Format menulis yang enak dibaca</strong>
-                        <span>Ikuti pola ini supaya cerpen tidak terasa padat dan melelahkan.</span>
+                        <strong>Panduan cepat biar enak dibaca</strong>
+                        <span>Pegangan singkat ini cukup buat menjaga ritme tulisan tetap nyaman di layar HP.</span>
                     </div>
                     <div class="creator-writing-guide-grid">
                         <div class="creator-writing-tip">
-                            <strong>1. Satu aksi, satu paragraf</strong>
-                            <span>Kalau ada perpindahan suasana, tokoh bicara, atau aksi baru, pindah paragraf.</span>
+                            <strong>1. Satu momen, satu paragraf</strong>
+                            <span>Begitu ada aksi baru atau tokoh bicara, pindah paragraf supaya napas cerita tetap lega.</span>
                         </div>
                         <div class="creator-writing-tip">
-                            <strong>2. Kasih jeda napas</strong>
-                            <span>Gunakan satu baris kosong antar paragraf. Jangan numpuk jadi satu blok panjang.</span>
+                            <strong>2. Jaga pembuka tetap cepat</strong>
+                            <span>Dua sampai empat paragraf pertama sebaiknya sudah bikin pembaca merasa ada sesuatu yang sedang berjalan.</span>
                         </div>
                         <div class="creator-writing-tip">
-                            <strong>3. Pembuka jangan muter</strong>
-                            <span>Usahakan 2-4 paragraf awal sudah bikin pembaca merasa ada sesuatu yang sedang terjadi.</span>
-                        </div>
-                        <div class="creator-writing-tip">
-                            <strong>4. Dialog dipisah</strong>
-                            <span>Kalau tokoh bicara, lebih enak dibaca kalau dialog berdiri sendiri, tidak dicampur paragraf panjang.</span>
+                            <strong>3. Dialog berdiri sendiri</strong>
+                            <span>Kalau dialog dicampur paragraf panjang, pembaca lebih cepat lelah. Pisahkan supaya iramanya lebih enteng.</span>
                         </div>
                     </div>
-                    <div class="creator-writing-example">
-                        <span class="section-kicker">Contoh Format</span>
-                        <pre id="writing-example">Hujan turun sejak magrib. Di teras rumah itu, Damar masih duduk sendirian.
+                    <details class="creator-writing-example-shell">
+                        <summary>Lihat contoh format paragraf yang ringan dibaca</summary>
+                        <div class="creator-writing-example">
+                            <span class="section-kicker">Contoh Format</span>
+                            <pre id="writing-example">Hujan turun sejak magrib. Di teras rumah itu, Damar masih duduk sendirian.
 
 Ia menatap jalan yang basah, seolah sedang menunggu sesuatu yang entah akan datang atau tidak.
 
 "Ayah belum pulang?" tanya adiknya pelan.
 
 Damar menoleh sebentar, lalu menggeleng.</pre>
-                    </div>
+                        </div>
+                    </details>
                 </div>
 
-                <div class="creator-form-grid">
+                <div class="creator-form-grid" id="editor-section-summary">
                     <div class="creator-form-divider" style="grid-column:1/-1">
                         <strong>Ringkasan karya</strong>
                         <span>Isi identitas karya dulu supaya arah cerpennya jelas sebelum lanjut ke part aktif.</span>
@@ -231,7 +267,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <input id="editor-chapter-title" placeholder="Contoh: Ketika Hujan Datang">
                         <div class="hint" id="editor-active-part-copy">Pilih part yang ingin kamu lanjutkan, lalu isi judul dan kontennya di sini.</div>
                     </div>
-                    <div class="field field-text-content" style="grid-column:1/-1">
+                    <div class="field field-text-content" style="grid-column:1/-1" id="editor-section-content">
                         <label>Isi karya</label>
                         <div class="creator-inline-actions">
                             <button class="btn btn-ghost" type="button" onclick="autoFormatContent()">Rapikan Otomatis</button>
@@ -269,7 +305,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <label>URL video</label>
                         <input id="editor-video-url" placeholder="https://...">
                     </div>
-                    <div class="creator-monetization-panel" style="grid-column:1/-1">
+                    <div class="creator-monetization-panel" style="grid-column:1/-1" id="editor-section-monetization">
                         <div class="creator-collapsible-head creator-collapsible-head-soft">
                             <div>
                                 <span class="section-kicker">Monetisasi</span>
@@ -306,28 +342,17 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                 </div>
 
                 <div class="creator-editor-actions">
-                    <button class="btn btn-gold" id="editor-save" onclick="saveDraft()">Simpan Perubahan</button>
-                    <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Sekarang</button>
+                    <div class="creator-editor-actions-copy">
+                        <strong>Simpan aman dulu, publish setelah checklist hijau.</strong>
+                        <span>Auto-save tetap aktif, tapi simpan manual saat kamu selesai blok kerja penting.</span>
+                    </div>
+                    <button class="btn btn-gold" id="editor-save" onclick="saveDraft()">Simpan Draft</button>
+                    <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Karya</button>
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Nanti Lanjut Lagi</a>
                 </div>
                 <div class="creator-autosave-status-wrap">
                     <div class="creator-autosave-status" id="creator-autosave-status">Semua perubahan sudah tersimpan.</div>
                     <div class="creator-autosave-meta" id="creator-autosave-meta">Belum ada riwayat simpan.</div>
-                </div>
-                <div class="creator-finish-note" id="creator-publish-note">
-                    Checklist siap tayang akan muncul saat draft mulai matang atau saat kamu membuka tahap monetisasi dan finishing.
-                </div>
-                <div class="creator-publish-checklist">
-                    <div class="creator-publish-checklist-head">
-                        <strong>Checklist Siap Tayang</strong>
-                        <span id="creator-publish-summary">Lengkapi dulu poin penting sebelum karya ditayangkan.</span>
-                    </div>
-                    <div class="creator-publish-checklist-grid" id="creator-publish-checklist">
-                        <span class="creator-publish-item is-pending">Cover belum dicek</span>
-                        <span class="creator-publish-item is-pending">Sinopsis belum dicek</span>
-                        <span class="creator-publish-item is-pending">Part aktif belum dicek</span>
-                        <span class="creator-publish-item is-pending">Akses belum dicek</span>
-                    </div>
                 </div>
                 <div class="creator-title-guard field-text-content" id="creator-content-guard">
                     <strong id="creator-content-guard-label">Isi part masih aman</strong>
@@ -441,6 +466,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       if (summary) {
         summary.textContent = 'Mode gratis aktif. Bagian ini bisa dibuka saat part sudah siap dijual.';
       }
+      updateEditorCommandCenter();
       return;
     }
 
@@ -451,6 +477,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
         ? `Mode premium aktif dengan harga ${price} credit.`
         : 'Mode premium aktif. Lengkapi harga credit sebelum part dijual.';
     }
+    updateEditorCommandCenter();
   }
 
   function setEditorSectionState(section, expanded) {
@@ -534,6 +561,8 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     if (mediaNote) {
       mediaNote.hidden = mode === 'text';
     }
+
+    updateEditorCommandCenter();
   }
 
   function shouldShowPublishChecklist() {
@@ -979,13 +1008,66 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     if (!missingItems.length) {
       summary.textContent = 'Semua poin penting sudah siap. Karya bisa ditayangkan kapan saja.';
       button?.removeAttribute('data-readiness');
-        syncPublishChecklistVisibility();
+      syncPublishChecklistVisibility();
+      updateEditorCommandCenter();
       return;
     }
 
     summary.textContent = `${readyCount}/${items.length} poin sudah siap. Lengkapi dulu yang masih kurang sebelum tayang.`;
     button?.setAttribute('data-readiness', 'needs-review');
-      syncPublishChecklistVisibility();
+    syncPublishChecklistVisibility();
+    updateEditorCommandCenter();
+  }
+
+  function updateEditorCommandCenter() {
+    const label = document.querySelector('#creator-editor-status-label');
+    const copy = document.querySelector('#creator-editor-status-copy');
+    const modePill = document.querySelector('#creator-editor-mode-pill');
+    const partPill = document.querySelector('#creator-editor-part-pill');
+    const accessPill = document.querySelector('#creator-editor-access-pill');
+
+    if (!label || !copy || !modePill || !partPill || !accessPill) {
+      return;
+    }
+
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const checklist = getPublishChecklist();
+    const missingItems = checklist.filter((item) => !item.ok);
+    const activeChapter = getCurrentChapterMeta();
+    const chapterNumber = activeChapter?.order || 1;
+    const accessLabel = document.querySelector('#editor-is-premium')?.value === '1' ? 'Premium' : 'Gratis';
+
+    modePill.textContent = `Mode ${DK.typeLabel(type)}`;
+    partPill.textContent = `Part ${chapterNumber} aktif`;
+    accessPill.textContent = `Akses ${accessLabel}`;
+
+    if (!editorState.isLoaded) {
+      label.textContent = 'Memuat prioritas draft…';
+      copy.textContent = 'Begitu data draft masuk, editor ini akan menandai langkah paling penting yang perlu kamu kerjakan.';
+      return;
+    }
+
+    if (!missingItems.length) {
+      label.textContent = 'Draft ini sudah siap tayang.';
+      copy.textContent = 'Checklist sudah hijau. Kamu bisa publish sekarang atau cek sekali lagi preview dan cover sebelum tayang.';
+      return;
+    }
+
+    if (missingItems.length <= 2) {
+      label.textContent = 'Draft ini tinggal sedikit lagi.';
+      copy.textContent = `Yang masih perlu dibereskan: ${missingItems.map((item) => item.label.toLowerCase()).join(', ')}.`;
+      return;
+    }
+
+    if (mode === 'text') {
+      label.textContent = 'Fokus dulu ke isi part aktif.';
+      copy.textContent = 'Begitu judul part, isi, dan sinopsis cukup kuat, barulah finishing dan monetisasi terasa lebih ringan dikerjakan.';
+      return;
+    }
+
+    label.textContent = 'Pastikan media utama benar-benar siap.';
+    copy.textContent = 'Untuk audio atau video, prioritas terbesarnya adalah link media, durasi, dan akses part sebelum publish.';
   }
 
   async function attemptLeaveEditor(targetUrl) {
@@ -1040,6 +1122,8 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     if (hint) {
       hint.textContent = `Kamu sedang mengerjakan Part ${chapterNumber}. Simpan dulu sebelum pindah ke part lain.`;
     }
+
+    updateEditorCommandCenter();
   }
 
   function clearPreviewObjectUrl() {
@@ -1344,6 +1428,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     updateSynopsisGuard();
     updateContentGuard();
     renderPublishChecklist();
+    updateEditorCommandCenter();
   }
 
   function formatFileSize(bytes) {
