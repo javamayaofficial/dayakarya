@@ -12,7 +12,7 @@
                 <p>Kalau mau nulis, podcast, atau bikin video series, mulainya dari sini. Kalau lagi cari bacaan, audio, atau tontonan yang bagus, semuanya juga ada di sini.</p>
                 <div class="creator-hero-actions">
                     <a href="#creator-quick-create" class="btn btn-gold">＋ Karya Baru</a>
-                    <a href="{{ route('wallet') }}" class="btn btn-ghost">Tarik Penghasilan</a>
+                    <a href="{{ route('wallet') }}" class="btn btn-ghost">Wallet & Credit</a>
                     <button type="button" class="btn btn-ghost" id="creator-logout" onclick="logoutCreator()">Keluar</button>
                 </div>
             </div>
@@ -209,7 +209,8 @@
     })();
 
     const actionHref = `/creator/works/${work.id}`;
-    const publicHref = work.slug ? `/karya/${work.slug}` : '';
+    const previewDraftHref = `/creator/works/${work.id}#creator-preview-card`;
+    const publicHref = work.status === 'published' && work.slug ? `/karya/${work.slug}` : '';
 
     const coverUrl = String(work.cover_url ?? work.cover ?? '').trim();
     const safeCoverUrl = coverUrl
@@ -239,7 +240,9 @@
           <div class="work-meta">${escapeHtml(publishState.note)}</div>
           <div class="work-card-footer">
             <a class="read-link" href="${actionHref}">${publishState.actionLabel}</a>
-            ${publicHref ? `<a class="read-stat" href="${publicHref}">Lihat Tayang</a>` : `<span class="read-stat">${publishState.badge}</span>`}
+            ${publicHref
+              ? `<a class="read-stat" href="${publicHref}">Lihat Tayang</a>`
+              : `<a class="read-stat" href="${previewDraftHref}">Preview Draft</a>`}
           </div>
         </div>
       </article>

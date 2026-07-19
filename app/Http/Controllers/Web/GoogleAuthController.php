@@ -87,7 +87,7 @@ class GoogleAuthController extends Controller
                 'google_id' => $googleId,
                 'email_verified_at' => Carbon::now(),
             ]);
-            $user->assignRole('creator');
+            $user->assignRole(User::DEFAULT_ROLE);
         } else {
             $user->forceFill([
                 'auth_provider' => 'google',
@@ -98,7 +98,7 @@ class GoogleAuthController extends Controller
             ])->save();
 
             if ($user->getRoleNames()->isEmpty()) {
-                $user->assignRole('creator');
+                $user->assignRole(User::DEFAULT_ROLE);
             }
         }
 
@@ -107,7 +107,7 @@ class GoogleAuthController extends Controller
 
         return response()->view('auth.google-callback', [
             'token' => $token,
-            'redirectTo' => route('creator.dashboard'),
+            'redirectTo' => $user->defaultInternalPath(),
             'notice' => $user->phone
                 ? 'Akun Google berhasil terhubung. Anda sedang dialihkan ke Dayakarya.'
                 : 'Akun Google berhasil terhubung. Nomor WhatsApp bisa Anda lengkapi nanti saat mulai memakai fitur finansial.',

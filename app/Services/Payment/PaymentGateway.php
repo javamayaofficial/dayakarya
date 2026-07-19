@@ -18,8 +18,8 @@ interface PaymentGateway
     public function createTransaction(Payment $payment): array;
 
     /**
-     * Verifikasi callback/webhook dari provider.
-     * Return true bila pembayaran sah & sukses.
+     * Verifikasi keaslian callback/webhook dari provider.
+     * Return true bila payload callback sah.
      */
     public function verifyCallback(array $payload): bool;
 

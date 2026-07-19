@@ -30,97 +30,120 @@
                     </div>
                 </div>
                 <div id="editor-msg"></div>
+                <div class="creator-production-focus">
+                    <div class="creator-production-focus-head">
+                        <strong>Fokus Produksi Cerpen</strong>
+                        <span>Biar tidak pecah fokus, kerjakan editor ini dengan urutan: isi inti karya dulu, lalu rapikan akses dan tayangnya.</span>
+                    </div>
+                    <div class="creator-production-focus-steps">
+                        <span class="creator-production-step is-active">1. Ringkasan karya</span>
+                        <span class="creator-production-step">2. Pilih part aktif</span>
+                        <span class="creator-production-step">3. Tulis isi part</span>
+                        <span class="creator-production-step">4. Atur akses dan harga</span>
+                        <span class="creator-production-step">5. Cek siap tayang</span>
+                    </div>
+                </div>
 
                 <div class="creator-cover-panel">
-                    <div class="creator-cover-copy">
-                        <span class="section-kicker">Cover Karya</span>
-                        <h3>Pasang mockup cerpen atau cover utama karya di sini.</h3>
-                        <p>Satu cover dipakai untuk seluruh karya, jadi Part 1 sampai Part berikutnya tetap punya wajah yang sama di katalog dan halaman detail.</p>
-                        <p>Ukuran yang disarankan: <strong>1080 x 1440 piksel</strong> dengan rasio <strong>3:4</strong>. Minimal tetap aman di <strong>900 x 1200 piksel</strong> supaya hasilnya tidak pecah.</p>
-                        <div class="creator-cover-specs">
-                            <span class="creator-cover-spec">Rasio ideal: 3:4</span>
-                            <span class="creator-cover-spec">Rekomendasi: 1080 x 1440 px</span>
-                            <span class="creator-cover-spec">Minimal: 900 x 1200 px</span>
-                            <span class="creator-cover-spec">Maks file: 4 MB</span>
+                    <div class="creator-collapsible-head">
+                        <div>
+                            <span class="section-kicker">Finishing</span>
+                            <strong>Cover dan tampilan karya</strong>
+                            <span id="creator-cover-section-summary">Belum ada cover. Buka bagian ini saat kamu masuk tahap finishing.</span>
                         </div>
+                        <button class="btn btn-ghost creator-collapsible-toggle" id="creator-cover-toggle" type="button" aria-expanded="false" onclick="toggleEditorSection('cover')">Buka Finishing</button>
                     </div>
-                    <div class="creator-cover-layout">
-                        <div class="creator-cover-preview-shell">
-                            <div class="creator-cover-ratio-badge">Template 3:4</div>
-                            <div class="creator-cover-safe-area" aria-hidden="true">
-                                <span>Area aman judul dan objek utama</span>
-                            </div>
-                            <img id="creator-cover-preview" class="creator-cover-preview" alt="Preview cover karya" hidden>
-                            <div id="creator-cover-empty" class="creator-cover-empty">Belum ada cover. Upload mockup cerpen biar tampilan karya lebih meyakinkan.</div>
-                        </div>
-                        <div class="creator-cover-actions">
-                            <label class="proof-upload-field creator-cover-field">
-                                <span>Pilih gambar cover</span>
-                                <input id="editor-cover-file" type="file" accept="image/png,image/jpeg,image/webp">
-                            </label>
-                            <button class="btn btn-ghost" id="editor-upload-cover" type="button" onclick="uploadWorkCover()">Upload Cover</button>
-                            <div class="hint">Format yang disarankan: JPG, PNG, atau WEBP. Pakai ukuran 1080 x 1440 px atau 900 x 1200 px dengan rasio tegak 3:4 seperti cover novel atau cerpen.</div>
-                            <div class="hint">Tips cepat: judul jangan terlalu mepet ke pinggir, pakai gambar yang tetap jelas saat dipotong kecil, dan simpan file di bawah 4 MB agar upload lebih lancar.</div>
-                        </div>
-                    </div>
-                    <div class="creator-cover-card-preview">
-                        <span class="section-kicker">Preview di Katalog</span>
-                        <div class="creator-cover-card-shell">
-                            <article class="work-card work-card-premium creator-cover-card-mockup">
-                                <div class="work-cover" id="creator-cover-card-cover">
-                                    <span class="type-tag" id="creator-cover-card-type">Cerpen</span>
-                                    <span class="free-tag" id="creator-cover-card-access">Gratis</span>
-                                    <div class="cover-fade"></div>
-                                    <div class="cover-meta">
-                                        <span class="cover-pill">Preview katalog</span>
-                                    </div>
-                                </div>
-                                <div class="work-body">
-                                    <h3 id="creator-cover-card-title">Judul karya akan tampil di sini</h3>
-                                    <div class="work-meta">Tampilan contoh di katalog Dayakarya</div>
-                                    <div class="work-card-footer">
-                                        <span class="read-link">Masuk ke karya</span>
-                                        <span class="read-stat">Preview</span>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="creator-cover-detail-preview">
-                        <span class="section-kicker">Preview di Halaman Karya</span>
-                        <div class="creator-cover-detail-shell">
-                            <div class="work-hero creator-work-hero-mockup">
-                                <div class="work-hero-cover work-cover" id="creator-detail-cover">
-                                    <span class="type-tag" id="creator-detail-type">Cerpen</span>
-                                    <div class="cover-fade"></div>
-                                    <div class="cover-meta">
-                                        <span class="cover-pill">Preview hero karya</span>
-                                    </div>
-                                </div>
-                                <div class="work-hero-copy">
-                                    <span class="section-kicker">Fokus Karya</span>
-                                    <h3 id="creator-detail-title">Judul karya akan tampil di sini</h3>
-                                    <div class="work-meta work-meta-rich">
-                                        <span>✍️ Nama kreator</span>
-                                        <span>•</span>
-                                        <span id="creator-detail-access">Gratis untuk pembaca</span>
-                                    </div>
-                                    <p class="work-synopsis" id="creator-detail-synopsis">Sinopsis karya akan tampil di sini supaya kreator bisa lihat apakah cover dan copy-nya terasa cocok saat masuk ke halaman detail.</p>
-                                    <div class="work-badges">
-                                        <span class="work-badge" id="creator-detail-badge">Mode baca yang lebih fokus</span>
-                                        <span class="work-badge">Preview halaman karya</span>
-                                    </div>
-                                </div>
+                    <div class="creator-collapsible-body" id="creator-cover-section-body" hidden>
+                        <div class="creator-cover-copy">
+                            <span class="section-kicker">Cover Karya</span>
+                            <h3>Pasang mockup cerpen atau cover utama karya di sini.</h3>
+                            <p>Satu cover dipakai untuk seluruh karya, jadi Part 1 sampai Part berikutnya tetap punya wajah yang sama di katalog dan halaman detail.</p>
+                            <p>Ukuran yang disarankan: <strong>1080 x 1440 piksel</strong> dengan rasio <strong>3:4</strong>. Minimal tetap aman di <strong>900 x 1200 piksel</strong> supaya hasilnya tidak pecah.</p>
+                            <div class="creator-cover-specs">
+                                <span class="creator-cover-spec">Rasio ideal: 3:4</span>
+                                <span class="creator-cover-spec">Rekomendasi: 1080 x 1440 px</span>
+                                <span class="creator-cover-spec">Minimal: 900 x 1200 px</span>
+                                <span class="creator-cover-spec">Maks file: 4 MB</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="creator-title-guard" id="creator-title-guard">
-                        <strong id="creator-title-guard-label">Judul masih aman</strong>
-                        <p id="creator-title-guard-copy">Panjang judul saat ini masih nyaman untuk kartu katalog dan hero halaman karya.</p>
-                    </div>
-                    <div class="creator-title-guard" id="creator-synopsis-guard">
-                        <strong id="creator-synopsis-guard-label">Sinopsis masih aman</strong>
-                        <p id="creator-synopsis-guard-copy">Panjang sinopsis saat ini masih nyaman untuk hero halaman karya dan tidak terasa sesak.</p>
+                        <div class="creator-cover-layout">
+                            <div class="creator-cover-preview-shell">
+                                <div class="creator-cover-ratio-badge">Template 3:4</div>
+                                <div class="creator-cover-safe-area" aria-hidden="true">
+                                    <span>Area aman judul dan objek utama</span>
+                                </div>
+                                <img id="creator-cover-preview" class="creator-cover-preview" alt="Preview cover karya" hidden>
+                                <div id="creator-cover-empty" class="creator-cover-empty">Belum ada cover. Upload mockup cerpen biar tampilan karya lebih meyakinkan.</div>
+                            </div>
+                            <div class="creator-cover-actions">
+                                <label class="proof-upload-field creator-cover-field">
+                                    <span>Pilih gambar cover</span>
+                                    <input id="editor-cover-file" type="file" accept="image/png,image/jpeg,image/webp">
+                                </label>
+                                <button class="btn btn-ghost" id="editor-upload-cover" type="button" onclick="uploadWorkCover()">Upload Cover</button>
+                                <div class="hint">Format yang disarankan: JPG, PNG, atau WEBP. Pakai ukuran 1080 x 1440 px atau 900 x 1200 px dengan rasio tegak 3:4 seperti cover novel atau cerpen.</div>
+                                <div class="hint">Tips cepat: judul jangan terlalu mepet ke pinggir, pakai gambar yang tetap jelas saat dipotong kecil, dan simpan file di bawah 4 MB agar upload lebih lancar.</div>
+                            </div>
+                        </div>
+                        <div class="creator-cover-card-preview">
+                            <span class="section-kicker">Preview di Katalog</span>
+                            <div class="creator-cover-card-shell">
+                                <article class="work-card work-card-premium creator-cover-card-mockup">
+                                    <div class="work-cover" id="creator-cover-card-cover">
+                                        <span class="type-tag" id="creator-cover-card-type">Cerpen</span>
+                                        <span class="free-tag" id="creator-cover-card-access">Gratis</span>
+                                        <div class="cover-fade"></div>
+                                        <div class="cover-meta">
+                                            <span class="cover-pill">Preview katalog</span>
+                                        </div>
+                                    </div>
+                                    <div class="work-body">
+                                        <h3 id="creator-cover-card-title">Judul karya akan tampil di sini</h3>
+                                        <div class="work-meta">Tampilan contoh di katalog Dayakarya</div>
+                                        <div class="work-card-footer">
+                                            <span class="read-link">Masuk ke karya</span>
+                                            <span class="read-stat">Preview</span>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                        <div class="creator-cover-detail-preview">
+                            <span class="section-kicker">Preview di Halaman Karya</span>
+                            <div class="creator-cover-detail-shell">
+                                <div class="work-hero creator-work-hero-mockup">
+                                    <div class="work-hero-cover work-cover" id="creator-detail-cover">
+                                        <span class="type-tag" id="creator-detail-type">Cerpen</span>
+                                        <div class="cover-fade"></div>
+                                        <div class="cover-meta">
+                                            <span class="cover-pill">Preview hero karya</span>
+                                        </div>
+                                    </div>
+                                    <div class="work-hero-copy">
+                                        <span class="section-kicker">Fokus Karya</span>
+                                        <h3 id="creator-detail-title">Judul karya akan tampil di sini</h3>
+                                        <div class="work-meta work-meta-rich">
+                                            <span>✍️ Nama kreator</span>
+                                            <span>•</span>
+                                            <span id="creator-detail-access">Gratis untuk pembaca</span>
+                                        </div>
+                                        <p class="work-synopsis" id="creator-detail-synopsis">Sinopsis karya akan tampil di sini supaya kreator bisa lihat apakah cover dan copy-nya terasa cocok saat masuk ke halaman detail.</p>
+                                        <div class="work-badges">
+                                            <span class="work-badge" id="creator-detail-badge">Mode baca yang lebih fokus</span>
+                                            <span class="work-badge">Preview halaman karya</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="creator-title-guard" id="creator-title-guard">
+                            <strong id="creator-title-guard-label">Judul masih aman</strong>
+                            <p id="creator-title-guard-copy">Panjang judul saat ini masih nyaman untuk kartu katalog dan hero halaman karya.</p>
+                        </div>
+                        <div class="creator-title-guard" id="creator-synopsis-guard">
+                            <strong id="creator-synopsis-guard-label">Sinopsis masih aman</strong>
+                            <p id="creator-synopsis-guard-copy">Panjang sinopsis saat ini masih nyaman untuk hero halaman karya dan tidak terasa sesak.</p>
+                        </div>
                     </div>
                 </div>
 
@@ -174,6 +197,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                 </div>
 
                 <div class="creator-form-grid">
+                    <div class="creator-form-divider" style="grid-column:1/-1">
+                        <strong>Ringkasan karya</strong>
+                        <span>Isi identitas karya dulu supaya arah cerpennya jelas sebelum lanjut ke part aktif.</span>
+                    </div>
                     <div class="field">
                         <label>Judul karya</label>
                         <input id="editor-title" placeholder="Judul karya">
@@ -194,6 +221,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                     <div class="field" style="grid-column:1/-1">
                         <label>Sinopsis</label>
                         <textarea id="editor-synopsis" rows="4" placeholder="Ringkas isi karya kamu di sini."></textarea>
+                    </div>
+                    <div class="creator-form-divider" style="grid-column:1/-1">
+                        <strong>Produksi part aktif</strong>
+                        <span>Fokus utama penulis ada di sini: pilih part, tulis isi, lalu rapikan sampai enak dibaca.</span>
                     </div>
                     <div class="field" style="grid-column:1/-1">
                         <label id="editor-chapter-label">Judul bagian aktif</label>
@@ -238,20 +269,39 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <label>URL video</label>
                         <input id="editor-video-url" placeholder="https://...">
                     </div>
-                    <div class="field field-media-duration">
-                        <label>Durasi (detik)</label>
-                        <input id="editor-duration" type="number" min="0" placeholder="Contoh: 180">
-                    </div>
-                    <div class="field field-premium-toggle">
-                        <label>Akses</label>
-                        <select id="editor-is-premium">
-                            <option value="0">Gratis</option>
-                            <option value="1">Premium</option>
-                        </select>
-                    </div>
-                    <div class="field field-price-credit">
-                        <label>Harga credit</label>
-                        <input id="editor-price-credit" type="number" min="0" placeholder="0">
+                    <div class="creator-monetization-panel" style="grid-column:1/-1">
+                        <div class="creator-collapsible-head creator-collapsible-head-soft">
+                            <div>
+                                <span class="section-kicker">Monetisasi</span>
+                                <strong>Akses dan harga part</strong>
+                                <span id="creator-monetization-summary">Mode gratis aktif. Bagian ini bisa dibuka saat part sudah siap dijual.</span>
+                            </div>
+                            <button class="btn btn-ghost creator-collapsible-toggle" id="creator-monetization-toggle" type="button" aria-expanded="false" onclick="toggleEditorSection('monetization')">Buka Monetisasi</button>
+                        </div>
+                        <div class="creator-collapsible-body creator-monetization-body" id="creator-monetization-body" hidden>
+                            <div class="creator-form-divider creator-form-divider-soft">
+                                <strong>Akses dan harga</strong>
+                                <span>Bagian ini sengaja dipisah supaya kamu bisa fokus menulis dulu. Atur premium hanya saat part memang sudah siap dijual.</span>
+                            </div>
+                            <div class="creator-monetization-grid">
+                                <div class="field field-media-duration">
+                                    <label>Durasi (detik)</label>
+                                    <input id="editor-duration" type="number" min="0" placeholder="Contoh: 180">
+                                </div>
+                                <div class="field field-premium-toggle">
+                                    <label>Akses</label>
+                                    <select id="editor-is-premium">
+                                        <option value="0">Gratis</option>
+                                        <option value="1">Premium</option>
+                                    </select>
+                                </div>
+                                <div class="field field-price-credit">
+                                    <label>Harga credit</label>
+                                    <input id="editor-price-credit" type="number" min="0" placeholder="0">
+                                    <div class="hint" id="editor-price-hint">Kalau karya masih gratis, biarkan harga tetap 0 dulu biar fokus kamu tetap ke produksi naskah.</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -263,6 +313,9 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                 <div class="creator-autosave-status-wrap">
                     <div class="creator-autosave-status" id="creator-autosave-status">Semua perubahan sudah tersimpan.</div>
                     <div class="creator-autosave-meta" id="creator-autosave-meta">Belum ada riwayat simpan.</div>
+                </div>
+                <div class="creator-finish-note" id="creator-publish-note">
+                    Checklist siap tayang akan muncul saat draft mulai matang atau saat kamu membuka tahap monetisasi dan finishing.
                 </div>
                 <div class="creator-publish-checklist">
                     <div class="creator-publish-checklist-head">
@@ -283,7 +336,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
             </div>
 
             <aside class="creator-side">
-                <div class="creator-side-card creator-side-card-soft field-text-content">
+                <div class="creator-side-card creator-side-card-soft field-text-content creator-side-card-preview" id="creator-preview-card">
                     <span class="section-kicker">Preview Baca</span>
                     <h3>Lihat dulu hasil baca sebelum tayang.</h3>
                     <p>Kalau preview terasa sesak, biasanya paragrafnya masih terlalu rapat atau kalimatnya terlalu panjang.</p>
@@ -295,12 +348,12 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <p>Tulis isi karya dulu, nanti preview baca akan tampil di sini.</p>
                     </div>
                 </div>
-                <div class="creator-side-card">
+                <div class="creator-side-card" id="creator-text-note">
                     <span class="section-kicker">Biar Enak Dibaca</span>
                     <h3>Buat pembuka yang cepat masuk dan paragraf yang tidak bikin capek.</h3>
                     <p>Kalau ini cerpen, isi bagian pertamanya harus sudah cukup kuat bikin orang mau lanjut.</p>
                 </div>
-                <div class="creator-side-card creator-side-card-soft">
+                <div class="creator-side-card creator-side-card-soft" id="creator-media-note">
                     <span class="section-kicker">Biar Enak Dinikmati</span>
                     <h3>Kalau audio atau video, pastikan file utamanya benar-benar siap diputar.</h3>
                     <p>Jangan sampai user sudah bayar tapi ketemu link media yang kosong atau pengalaman yang patah-patah.</p>
@@ -332,6 +385,8 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     lastSaveMode: 'manual',
     skipLeaveGuard: false,
     lastSavedAt: null,
+    coverSectionOpen: null,
+    monetizationSectionOpen: null,
   };
 
   // #region debug-point A:frontend-debug-report
@@ -368,6 +423,155 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     document.querySelector('.field-video-url').hidden = mode !== 'video';
     document.querySelector('.field-media-duration').hidden = mode === 'text';
     updateReadingPreview();
+  }
+
+  function syncAccessPricingState() {
+    const accessField = document.querySelector('#editor-is-premium');
+    const priceField = document.querySelector('#editor-price-credit');
+    const priceHint = document.querySelector('#editor-price-hint');
+    const summary = document.querySelector('#creator-monetization-summary');
+    if (!accessField || !priceField || !priceHint) return;
+
+    const isPremium = accessField.value === '1';
+    priceField.disabled = !isPremium;
+
+    if (!isPremium) {
+      priceField.value = '0';
+      priceHint.textContent = 'Mode gratis aktif. Harga dikunci di 0 supaya kamu bisa fokus ke produksi naskah dulu.';
+      if (summary) {
+        summary.textContent = 'Mode gratis aktif. Bagian ini bisa dibuka saat part sudah siap dijual.';
+      }
+      return;
+    }
+
+    priceHint.textContent = 'Mode premium aktif. Isi harga credit hanya saat part ini memang sudah siap dijual.';
+    if (summary) {
+      const price = Number(priceField.value || 0);
+      summary.textContent = price > 0
+        ? `Mode premium aktif dengan harga ${price} credit.`
+        : 'Mode premium aktif. Lengkapi harga credit sebelum part dijual.';
+    }
+  }
+
+  function setEditorSectionState(section, expanded) {
+    const body = document.querySelector(`#creator-${section}-body`) || document.querySelector(`#creator-${section}-section-body`);
+    const toggle = document.querySelector(`#creator-${section}-toggle`);
+    if (!body || !toggle) return;
+
+    body.hidden = !expanded;
+    toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+
+    if (section === 'cover') {
+      editorState.coverSectionOpen = expanded;
+      toggle.textContent = expanded ? 'Tutup Finishing' : 'Buka Finishing';
+      return;
+    }
+
+    if (section === 'monetization') {
+      editorState.monetizationSectionOpen = expanded;
+      toggle.textContent = expanded ? 'Tutup Monetisasi' : 'Buka Monetisasi';
+    }
+  }
+
+  function toggleEditorSection(section) {
+    if (section === 'cover') {
+      setEditorSectionState(section, !editorState.coverSectionOpen);
+      syncPublishChecklistVisibility();
+      return;
+    }
+
+    if (section === 'monetization') {
+      setEditorSectionState(section, !editorState.monetizationSectionOpen);
+      syncPublishChecklistVisibility();
+    }
+  }
+
+  function syncCoverSectionSummary() {
+    const summary = document.querySelector('#creator-cover-section-summary');
+    if (!summary) return;
+
+    if (editorState.cover) {
+      summary.textContent = 'Cover sudah ada. Buka bagian ini kalau kamu mau ganti gambar atau cek preview katalog.';
+      return;
+    }
+
+    summary.textContent = 'Belum ada cover. Buka bagian ini saat kamu masuk tahap finishing.';
+  }
+
+  function syncEditorFocusSections(forceDefault = false) {
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const isPremium = document.querySelector('#editor-is-premium')?.value === '1';
+
+    if (forceDefault || editorState.coverSectionOpen === null) {
+      editorState.coverSectionOpen = mode !== 'text';
+    }
+
+    if (forceDefault || editorState.monetizationSectionOpen === null) {
+      editorState.monetizationSectionOpen = mode !== 'text' || isPremium;
+    }
+
+    if (isPremium && !editorState.monetizationSectionOpen) {
+      editorState.monetizationSectionOpen = true;
+    }
+
+    setEditorSectionState('cover', Boolean(editorState.coverSectionOpen));
+    setEditorSectionState('monetization', Boolean(editorState.monetizationSectionOpen));
+    syncCoverSectionSummary();
+    syncPublishChecklistVisibility();
+  }
+
+  function syncEditorModeNotes() {
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const textNote = document.querySelector('#creator-text-note');
+    const mediaNote = document.querySelector('#creator-media-note');
+
+    if (textNote) {
+      textNote.hidden = mode !== 'text';
+    }
+
+    if (mediaNote) {
+      mediaNote.hidden = mode === 'text';
+    }
+  }
+
+  function shouldShowPublishChecklist() {
+    const type = document.querySelector('#editor-type')?.value || 'cerpen';
+    const mode = editorMode(type);
+    const synopsis = document.querySelector('#editor-synopsis')?.value || '';
+    const content = document.querySelector('#editor-content')?.value || '';
+    const isPremium = document.querySelector('#editor-is-premium')?.value === '1';
+    const synopsisWords = synopsis.trim().split(/\s+/).filter(Boolean).length;
+    const contentWords = content.trim().split(/\s+/).filter(Boolean).length;
+
+    if (editorState.coverSectionOpen || editorState.monetizationSectionOpen) {
+      return true;
+    }
+
+    if (editorState.cover || isPremium) {
+      return true;
+    }
+
+    if (synopsisWords >= 12) {
+      return true;
+    }
+
+    if (mode === 'text') {
+      return contentWords >= 60;
+    }
+
+    return false;
+  }
+
+  function syncPublishChecklistVisibility() {
+    const checklist = document.querySelector('.creator-publish-checklist');
+    const note = document.querySelector('#creator-publish-note');
+    if (!checklist || !note) return;
+
+    const show = shouldShowPublishChecklist();
+    checklist.hidden = !show;
+    note.hidden = show;
   }
 
   function escapePreviewHtml(value) {
@@ -775,11 +979,13 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     if (!missingItems.length) {
       summary.textContent = 'Semua poin penting sudah siap. Karya bisa ditayangkan kapan saja.';
       button?.removeAttribute('data-readiness');
+        syncPublishChecklistVisibility();
       return;
     }
 
     summary.textContent = `${readyCount}/${items.length} poin sudah siap. Lengkapi dulu yang masih kurang sebelum tayang.`;
     button?.setAttribute('data-readiness', 'needs-review');
+      syncPublishChecklistVisibility();
   }
 
   async function attemptLeaveEditor(targetUrl) {
@@ -1120,6 +1326,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
       empty.hidden = true;
       refreshCoverCardPreview();
       refreshCoverDetailPreview();
+      syncCoverSectionSummary();
       updateTitleGuard();
       updateSynopsisGuard();
       updateContentGuard();
@@ -1132,6 +1339,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     empty.hidden = false;
     refreshCoverCardPreview();
     refreshCoverDetailPreview();
+    syncCoverSectionSummary();
     updateTitleGuard();
     updateSynopsisGuard();
     updateContentGuard();
@@ -1283,6 +1491,9 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     renderChapterList();
     updateActivePartHint();
     toggleEditorFields();
+    syncAccessPricingState();
+    syncEditorFocusSections();
+    syncEditorModeNotes();
     updateReadingPreview();
     refreshCoverCardPreview();
     refreshCoverDetailPreview();
@@ -1613,10 +1824,14 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   document.querySelector('#editor-title')?.addEventListener('input', queueAutoSave);
   document.querySelector('#editor-type')?.addEventListener('change', refreshCoverCardPreview);
   document.querySelector('#editor-type')?.addEventListener('change', refreshCoverDetailPreview);
+  document.querySelector('#editor-type')?.addEventListener('change', syncEditorFocusSections);
+  document.querySelector('#editor-type')?.addEventListener('change', syncEditorModeNotes);
   document.querySelector('#editor-type')?.addEventListener('change', renderPublishChecklist);
   document.querySelector('#editor-type')?.addEventListener('change', queueAutoSave);
   document.querySelector('#editor-is-premium')?.addEventListener('change', refreshCoverCardPreview);
   document.querySelector('#editor-is-premium')?.addEventListener('change', refreshCoverDetailPreview);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', syncAccessPricingState);
+  document.querySelector('#editor-is-premium')?.addEventListener('change', syncEditorFocusSections);
   document.querySelector('#editor-is-premium')?.addEventListener('change', renderPublishChecklist);
   document.querySelector('#editor-is-premium')?.addEventListener('change', queueAutoSave);
   document.querySelector('#editor-synopsis')?.addEventListener('input', refreshCoverDetailPreview);
@@ -1638,6 +1853,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   document.querySelector('#editor-duration')?.addEventListener('input', renderPublishChecklist);
   document.querySelector('#editor-duration')?.addEventListener('input', queueAutoSave);
   document.querySelector('#editor-price-credit')?.addEventListener('input', renderPublishChecklist);
+  document.querySelector('#editor-price-credit')?.addEventListener('input', syncAccessPricingState);
   document.querySelector('#editor-price-credit')?.addEventListener('input', queueAutoSave);
 
   window.addEventListener('beforeunload', (event) => {

@@ -17,6 +17,10 @@ class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    public const DEFAULT_ROLE = 'reader';
+
+    public const CREATOR_ROLES = ['creator', 'listener', 'admin', 'operator'];
+
     protected $fillable = [
         'name', 'username', 'email', 'phone', 'password',
         'avatar', 'bio', 'status', 'auth_provider', 'google_id', 'referral_code', 'referred_by',
@@ -79,6 +83,33 @@ class User extends Authenticatable implements FilamentUser
     public function following(): HasMany
     {
         return $this->hasMany(Follow::class, 'follower_id');
+    }
+
+    public function primaryRoleName(): string
+    {
+        $roles = $this->getRoleNames();
+
+        if ($roles->isEmpty()) {
+            return self::DEFAULT_ROLE;
+        }
+
+        foreach (self::CREATOR_ROLES as $role) {
+            if ($roles->contains($role)) {
+                return $role;
+            }
+        }
+
+        return (string) $roles->first();
+    }
+
+    public function hasCreatorAccess(): bool
+    {
+        return $this->hasAnyRole(self::CREATOR_ROLES);
+    }
+
+    public function defaultInternalPath(): string
+    {
+        return $this->hasCreatorAccess() ? '/creator' : '/explore';
     }
 
     /** Akses ke panel admin Filament */

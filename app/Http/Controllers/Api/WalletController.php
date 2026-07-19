@@ -34,6 +34,22 @@ class WalletController extends \App\Http\Controllers\Controller
         return response()->json($trx);
     }
 
+    public function paymentStatus(Request $request, Payment $payment): JsonResponse
+    {
+        abort_unless($payment->user_id === $request->user()->id, 404);
+
+        return response()->json([
+            'payment_id' => $payment->id,
+            'order_id' => $payment->order_id,
+            'provider' => $payment->provider,
+            'status' => $payment->status,
+            'credit_amount' => (int) $payment->credit_amount,
+            'amount_rupiah' => (int) $payment->amount_rupiah,
+            'paid_at' => optional($payment->paid_at)?->toIso8601String(),
+            'payment_url' => $payment->payment_url,
+        ]);
+    }
+
     public function paymentMethods(Request $request): JsonResponse
     {
         $provider = IntegrationSettings::get('providers.payment', config('dayakarya.providers.payment'));
@@ -140,6 +156,7 @@ class WalletController extends \App\Http\Controllers\Controller
 
         return response()->json([
             'message'     => 'Silakan selesaikan pembayaran.',
+            'payment_id'  => $payment->id,
             'order_id'    => $payment->order_id,
             'amount'      => $rupiah,
             'payment_url' => $result['payment_url'] ?? null,

@@ -192,10 +192,16 @@ class WorkController extends \App\Http\Controllers\Controller
             'synopsis'    => ['nullable', 'string'],
         ]);
 
-        $work = $request->user()->works()->create([
+        $user = $request->user();
+        $work = $user->works()->create([
             ...$data,
             'status' => 'draft',
         ]);
+
+        if (! $user->hasCreatorAccess()) {
+            $starterRole = in_array($data['type'], config('dayakarya.audio_types', []), true) ? 'listener' : 'creator';
+            $user->assignRole($starterRole);
+        }
 
         return response()->json([
             'message' => 'Karya tersimpan sebagai draft.',
@@ -337,12 +343,22 @@ class WorkController extends \App\Http\Controllers\Controller
 
         $chapter = $chapter ?: $work->chapters()->orderBy('order')->first();
         abort_unless($chapter !== null, 422, 'Buat dulu minimal satu part sebelum ditayangkan.');
+        abort_unless(filled($work->synopsis), 422, 'Sinopsis karya masih kosong. Lengkapi dulu sebelum ditayangkan.');
+        abort_unless(filled($work->getRawOriginal('cover')), 422, 'Cover karya belum ada. Upload dulu sebelum ditayangkan.');
 
-        $hasContent = filled($chapter->content)
-            || filled($chapter->audio_url)
-            || filled($chapter->video_url);
+        if ($work->isAudio()) {
+            abort_unless(filled($chapter->audio_url), 422, 'URL audio untuk part aktif masih kosong. Lengkapi dulu sebelum ditayangkan.');
+            abort_unless((int) $chapter->duration_seconds > 0, 422, 'Durasi audio untuk part aktif belum diisi.');
+        } elseif ($work->isVideo()) {
+            abort_unless(filled($chapter->video_url), 422, 'URL video untuk part aktif masih kosong. Lengkapi dulu sebelum ditayangkan.');
+            abort_unless((int) $chapter->duration_seconds > 0, 422, 'Durasi video untuk part aktif belum diisi.');
+        } else {
+            abort_unless(filled($chapter->content), 422, 'Isi part aktif masih kosong. Lengkapi dulu sebelum ditayangkan.');
+        }
 
-        abort_unless($hasContent, 422, 'Isi part aktif masih kosong. Lengkapi dulu sebelum ditayangkan.');
+        if ($chapter->is_premium) {
+            abort_unless((int) $chapter->price_credit > 0, 422, 'Harga credit untuk part premium belum diisi.');
+        }
 
         $publishTime = Carbon::now();
 

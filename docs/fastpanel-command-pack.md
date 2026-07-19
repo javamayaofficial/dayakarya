@@ -165,6 +165,12 @@ Smoke check ini sekarang memverifikasi:
 - asset PWA
 - tombol Google login/register
 - API publik `/api/v1/leaderboard`
+- script `sw.js` dengan marker versi generik `const VERSION = 'dayakarya-v`
+
+Catatan release:
+
+- aset upload publik seperti cover karya dan bukti transfer harus terbuka dari URL root `/storage/...`
+- jika masih muncul `/public/storage/...`, anggap parity live belum beres dan tahan release dulu
 
 ---
 

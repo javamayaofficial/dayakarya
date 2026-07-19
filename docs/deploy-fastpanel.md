@@ -197,7 +197,7 @@ RUN_MIGRATIONS=true
 RUN_STORAGE_LINK=true
 RESTART_QUEUE=true
 RUN_FILAMENT_ASSETS=true
-RUN_SMOKE_CHECKS=false
+RUN_SMOKE_CHECKS=true
 APP_URL_PUBLIC=https://dayakarya.id
 ```
 
@@ -213,10 +213,12 @@ Keterangan:
 - `RUN_MIGRATIONS=false` bila Anda ingin migrasi dijalankan manual.
 - `RESTART_QUEUE=false` bila server tidak menjalankan queue worker persisten.
 - `RUN_FILAMENT_ASSETS=true` direkomendasikan agar aset panel admin selalu sinkron setelah deploy.
-- `RUN_SMOKE_CHECKS=true` bila Anda ingin deploy langsung memverifikasi route publik penting setelah selesai.
+- `RUN_SMOKE_CHECKS=true` direkomendasikan agar deploy langsung gagal bila route publik penting atau aset PWA rusak setelah release.
 - `APP_URL_PUBLIC` dipakai oleh smoke check untuk menentukan base URL yang diuji.
 - Smoke check saat ini mencakup halaman publik utama, legal page, asset PWA, tombol Google auth, dan API publik leaderboard.
+- Validasi `sw.js` sengaja memakai marker generik `const VERSION = 'dayakarya-v` agar tetap lolos saat versi cache dinaikkan dari `v4` ke versi berikutnya.
 - Aset root PWA seperti `manifest.json`, `offline.html`, dan `sw.js` ikut disinkronkan dari folder `public/` saat deploy.
+- URL aset upload publik seperti cover karya dan bukti transfer harus tampil dari path root `/storage/...`, bukan `/public/storage/...`, karena setup FastPanel repo ini memakai root proxy ke `public/`.
 
 Langkah setup SSH key:
 

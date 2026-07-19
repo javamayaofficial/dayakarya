@@ -132,14 +132,21 @@ class DuitkuService implements PaymentGateway
             $this->apiKey
         );
 
-        $valid = hash_equals($expected, $payload['signature'] ?? '');
-        $success = ($payload['resultCode'] ?? '') === '00'; // 00 = sukses
-
-        return $valid && $success;
+        return hash_equals($expected, $payload['signature'] ?? '');
     }
 
     public function extractOrderId(array $payload): ?string
     {
         return $payload['merchantOrderId'] ?? null;
+    }
+
+    public function resolveCallbackStatus(array $payload): string
+    {
+        return match ((string) ($payload['resultCode'] ?? '')) {
+            '00' => 'paid',
+            '01' => 'pending',
+            '02' => 'expired',
+            default => 'failed',
+        };
     }
 }

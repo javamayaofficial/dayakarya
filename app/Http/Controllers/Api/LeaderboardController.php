@@ -8,12 +8,18 @@ use App\Models\User;
 use App\Models\Work;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class LeaderboardController extends \App\Http\Controllers\Controller
 {
     public function index(): JsonResponse
     {
         $payload = Cache::remember('dayakarya.leaderboard.public.v1', now()->addMinutes(10), function (): array {
+            $driver = DB::connection()->getDriverName();
+            $royaltyScoreExpression = $driver === 'sqlite'
+                ? 'CAST(COALESCE(royalty_agg.total_royalty, 0) / 1000 AS INTEGER)'
+                : 'FLOOR(COALESCE(royalty_agg.total_royalty, 0) / 1000)';
+
             $topWorks = Work::query()
                 ->published()
                 ->with('creator:id,name', 'category:id,name')
@@ -64,7 +70,7 @@ class LeaderboardController extends \App\Http\Controllers\Controller
                 ->selectRaw('work_agg.total_likes')
                 ->selectRaw('COALESCE(royalty_agg.total_royalty, 0) as total_royalty')
                 ->selectRaw('COALESCE(follow_agg.total_followers, 0) as total_followers')
-                ->selectRaw('(work_agg.total_views + (work_agg.total_likes * 20) + (COALESCE(follow_agg.total_followers, 0) * 40) + FLOOR(COALESCE(royalty_agg.total_royalty, 0) / 1000) + (work_agg.works_count * 80)) as leaderboard_score')
+                ->selectRaw("(work_agg.total_views + (work_agg.total_likes * 20) + (COALESCE(follow_agg.total_followers, 0) * 40) + {$royaltyScoreExpression} + (work_agg.works_count * 80)) as leaderboard_score")
                 ->orderByDesc('leaderboard_score')
                 ->orderByDesc('work_agg.total_views')
                 ->limit(12)

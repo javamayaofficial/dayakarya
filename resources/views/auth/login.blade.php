@@ -45,8 +45,12 @@
   const loginReturnTarget = loginParams.get('return');
   const googleLoginLink = document.querySelector('#google-login-link');
 
-  function resolveLoginRedirectTarget() {
-    return loginReturnTarget ? DK.consumeIntendedUrl('/creator') : '/creator';
+  function memberFallbackTarget(roles = [], fallback = '/explore') {
+    return DK.memberHomeFromRoles(roles, fallback);
+  }
+
+  function resolveLoginRedirectTarget(defaultTarget = '/explore') {
+    return loginReturnTarget ? DK.consumeIntendedUrl(defaultTarget) : defaultTarget;
   }
 
   function prepareLoginEntry() {
@@ -70,7 +74,7 @@
       return;
     }
 
-    location.href = resolveLoginRedirectTarget();
+    location.href = resolveLoginRedirectTarget(memberFallbackTarget(me.roles, '/explore'));
   }
 
   async function doLogin() {
@@ -82,7 +86,7 @@
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Berhasil masuk. Mengalihkan…</div>';
-      const redirectTarget = resolveLoginRedirectTarget();
+      const redirectTarget = resolveLoginRedirectTarget(data.redirect_to || memberFallbackTarget(data.roles, '/explore'));
       setTimeout(() => location.href = redirectTarget, 700);
     } else {
       const err = data.errors?.email?.[0] || data.message || 'Gagal masuk.';

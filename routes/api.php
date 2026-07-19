@@ -25,6 +25,9 @@ Route::prefix('v1')->group(function () {
     Route::get('works', [WorkController::class, 'index']);
     Route::get('works/{work}', [WorkController::class, 'show']);
 
+    // Leaderboard publik — dapat diakses tanpa login (guest)
+    Route::get('leaderboard', [LeaderboardController::class, 'index']);
+
     // Callback pembayaran (dipanggil server Duitku)
     Route::post('payments/duitku/callback', [PaymentCallbackController::class, 'duitku']);
 
@@ -32,12 +35,12 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('auth/me', [AuthController::class, 'me']);
         Route::post('auth/logout', [AuthController::class, 'logout']);
-        Route::get('leaderboard', [LeaderboardController::class, 'index']);
 
         // Wallet & Credit
         Route::get('wallet', [WalletController::class, 'show']);
         Route::get('wallet/transactions', [WalletController::class, 'transactions']);
         Route::get('wallet/payment-methods', [WalletController::class, 'paymentMethods']);
+        Route::get('payments/{payment}', [WalletController::class, 'paymentStatus']);
         Route::post('topup', [WalletController::class, 'topup']);
         Route::post('payments/{payment}/proof', [WalletController::class, 'uploadProof']);
 

@@ -464,7 +464,17 @@
     }
 
     const { ok, data } = await DK.post('/topup', payload);
-    if (ok && data.payment_url) { location.href = data.payment_url; }
+    if (ok && data.payment_url) {
+      DK.setPendingTopup({
+        payment_id: data.payment_id,
+        order_id: data.order_id,
+        amount: data.amount,
+        credit_amount: selected,
+        provider: PAYMENT_PROVIDER,
+        return_to: hasTopupReturnTarget ? walletReturnTarget : '/wallet',
+      });
+      location.href = data.payment_url;
+    }
     else if (ok) { msg.innerHTML = '<div class="alert alert-success">'+(data.message||'Ikuti instruksi pembayaran.')+'</div>'; }
     else { msg.innerHTML = '<div class="alert alert-error">'+(data.message||'Gagal membuat transaksi.')+'</div>'; }
   }

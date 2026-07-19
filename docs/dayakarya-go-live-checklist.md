@@ -75,6 +75,7 @@ Dokumen pendukung:
 - [ ] Halaman beranda terbuka normal
 - [ ] Explore atau katalog karya tampil normal
 - [ ] Detail karya terbuka normal
+- [ ] Cover karya yang diupload tampil dari URL root `/storage/...` dan tidak mengarah ke `/public/storage/...`
 - [ ] Chapter gratis dapat diakses
 - [ ] Unlock chapter premium berjalan normal
 - [ ] Riwayat baca atau interaksi dasar tidak error
@@ -93,12 +94,13 @@ Dokumen pendukung:
 
 ## 7. Leaderboard
 
-- [ ] Halaman `/leaderboard` dapat dibuka publik
+- [ ] Halaman `/leaderboard` dapat dibuka **tanpa login** (guest tidak di-redirect ke `/masuk`)
+- [ ] Endpoint `GET /api/v1/leaderboard` merespons `200` tanpa token (akses publik)
+- [ ] Endpoint `GET /api/v1/leaderboard` tetap `200` saat dipanggil dengan token user login
 - [ ] Top karya tampil normal
 - [ ] Top kreator tampil normal
 - [ ] Summary statistik tampil normal
-- [ ] API leaderboard merespons tanpa error
-- [ ] Data leaderboard tetap masuk akal setelah cache aktif
+- [ ] Data leaderboard tetap masuk akal setelah cache aktif (`dayakarya.leaderboard.public.v1`, TTL 10 menit)
 
 ---
 
@@ -151,6 +153,7 @@ Dokumen pendukung:
 - [ ] Tidak ada error 500 pada route utama
 - [ ] Tidak ada route publik penting yang mengarah ke 404 tidak sengaja
 - [ ] Tidak ada mismatch antara login admin dan auth frontend yang menyesatkan user
+- [ ] Smoke check pasca deploy berjalan dan lolos untuk homepage, auth, legal pages, PWA asset, dan API publik leaderboard
 
 ---
 

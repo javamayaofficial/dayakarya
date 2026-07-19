@@ -40,6 +40,32 @@
                 <div class="field"><label>Nama lengkap</label><input id="name" placeholder="Nama kamu"></div>
                 <div class="field"><label>Email</label><input type="email" id="email" placeholder="nama@email.com"></div>
                 <div class="field">
+                    <label>Pilih mode awal akun</label>
+                    <div class="auth-persona-grid" id="persona-options">
+                        <label class="auth-persona-option">
+                            <input type="radio" name="persona" value="reader" checked>
+                            <span class="auth-persona-card">
+                                <strong>Pengguna / Pembaca</strong>
+                                <span>Masuk untuk jelajah karya, buka konten premium, dan pakai wallet saat dibutuhkan.</span>
+                            </span>
+                        </label>
+                        <label class="auth-persona-option">
+                            <input type="radio" name="persona" value="writer">
+                            <span class="auth-persona-card">
+                                <strong>Penulis / Kreator Teks</strong>
+                                <span>Langsung masuk ke area produksi untuk bikin cerpen, novel, atau karya premium.</span>
+                            </span>
+                        </label>
+                        <label class="auth-persona-option">
+                            <input type="radio" name="persona" value="listener_creator">
+                            <span class="auth-persona-card">
+                                <strong>Pendengar / Kreator Audio</strong>
+                                <span>Cocok kalau fokusnya menikmati audio atau mulai bikin podcast, audio story, dan audiobook.</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
                     <label>Nomor WhatsApp</label>
                     <input id="phone" placeholder="08xxxxxxxxxx">
                     <div class="hint">Untuk notifikasi royalti, top up, dan penarikan.</div>
@@ -66,6 +92,10 @@
 
 @push('scripts')
 <script>
+  function resolveMemberHome(roles = [], fallback = '/explore') {
+    return DK.memberHomeFromRoles(roles, fallback);
+  }
+
   async function redirectAuthenticatedSession() {
     if (!DK.token()) return;
 
@@ -75,18 +105,20 @@
       return;
     }
 
-    location.href = '/creator';
+    location.href = resolveMemberHome(me.roles, '/explore');
   }
 
   async function doRegister() {
     const msg = document.querySelector('#msg');
+    const persona = document.querySelector('input[name="persona"]:checked')?.value || 'reader';
     const body = ['name','email','phone','password','password_confirmation']
-      .reduce((o,k)=>(o[k]=document.querySelector('#'+k).value,o),{});
+      .reduce((o,k)=>(o[k]=document.querySelector('#'+k).value,o),{ persona });
     const { ok, data } = await DK.post('/auth/register', body);
     if (ok) {
       DK.setToken(data.token);
       msg.innerHTML = '<div class="alert alert-success">Akun dibuat! Mengalihkan…</div>';
-      setTimeout(() => location.href = '/creator', 800);
+      const redirectTarget = data.redirect_to || resolveMemberHome(data.roles, '/explore');
+      setTimeout(() => location.href = redirectTarget, 800);
     } else {
       const first = data.errors ? Object.values(data.errors)[0][0] : (data.message || 'Gagal mendaftar.');
       msg.innerHTML = `<div class="alert alert-error">${first}</div>`;

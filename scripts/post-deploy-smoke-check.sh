@@ -86,7 +86,7 @@ check_route "/terms" "Syarat Layanan"
 check_route "/hapus-akun" "Penghapusan Akun"
 check_route "/manifest.webmanifest" "\"name\": \"Dayakarya\""
 check_route "/offline.html" "Koneksi sedang tidak tersedia."
-check_route "/sw.js" "const VERSION = 'dayakarya-v2';"
+check_route "/sw.js" "const VERSION = 'dayakarya-v"
 check_json_route "/api/v1/leaderboard" "\"top_works\""
 
 echo "==> Smoke check selesai: ${pass_count} route lolos"

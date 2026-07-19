@@ -17,6 +17,12 @@ class AuthController extends \App\Http\Controllers\Controller
 {
     public function __construct(protected NotificationService $notifier) {}
 
+    protected const PERSONA_ROLE_MAP = [
+        'reader' => 'reader',
+        'writer' => 'creator',
+        'listener_creator' => 'listener',
+    ];
+
     public function register(Request $request): JsonResponse
     {
         $data = $request->validate([
@@ -24,6 +30,7 @@ class AuthController extends \App\Http\Controllers\Controller
             'email'    => ['required', 'email', 'unique:users,email'],
             'phone'    => ['required', 'string', 'max:20', 'unique:users,phone'],
             'password' => ['required', 'confirmed', Password::min(8)],
+            'persona'  => ['required', 'in:' . implode(',', array_keys(self::PERSONA_ROLE_MAP))],
         ]);
 
         $user = User::create([
@@ -33,18 +40,26 @@ class AuthController extends \App\Http\Controllers\Controller
             'password' => $data['password'],
             'status'   => 'active',
         ]);
-        $user->assignRole('creator');
+
+        $role = self::PERSONA_ROLE_MAP[$data['persona']] ?? User::DEFAULT_ROLE;
+        $user->assignRole($role);
+
+        $welcomeMessage = match ($role) {
+            'creator' => "Selamat datang di Dayakarya, {$user->name}! Akunmu sudah aktif. Sekarang kamu bisa mulai bikin draft, merapikan karya, dan menayangkannya saat siap.",
+            'listener' => "Selamat datang di Dayakarya, {$user->name}! Akunmu sudah aktif. Kamu bisa menikmati audio, bikin konten dengar, lalu mulai membangun audiens dari tempat yang sama.",
+            default => "Selamat datang di Dayakarya, {$user->name}! Akunmu sudah aktif. Sekarang kamu bisa jelajah karya, buka konten premium, dan masuk ke wallet kapan pun dibutuhkan.",
+        };
 
         // Kirim salam verifikasi via WhatsApp (Fonnte)
-        $this->notifier->whatsapp($user,
-            "Selamat datang di Dayakarya, {$user->name}! Akunmu sudah aktif. " .
-            "Sekarang kamu bisa baca karya, bikin karya, dan mulai cari cuan dari satu tempat.");
+        $this->notifier->whatsapp($user, $welcomeMessage);
 
         $token = $user->createToken('dayakarya')->plainTextToken;
 
         return response()->json([
             'message' => 'Registrasi berhasil.',
             'user'    => $user->only(['id', 'name', 'email', 'phone']),
+            'roles'   => $user->getRoleNames(),
+            'redirect_to' => $user->defaultInternalPath(),
             'token'   => $token,
         ], 201);
     }
@@ -76,6 +91,7 @@ class AuthController extends \App\Http\Controllers\Controller
             'message' => 'Login berhasil.',
             'user'    => $user->only(['id', 'name', 'email', 'phone']),
             'roles'   => $user->getRoleNames(),
+            'redirect_to' => $user->defaultInternalPath(),
             'token'   => $token,
         ]);
     }

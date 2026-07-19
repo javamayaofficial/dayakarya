@@ -7,6 +7,8 @@ const DK = {
   api: '/api/v1',
   intendedKey: 'dk_intended_url',
   topupReturnKey: 'dk_post_topup_return_url',
+  pendingTopupKey: 'dk_pending_topup',
+  creatorRoles: ['creator', 'listener', 'admin', 'operator'],
 
   token() { return localStorage.getItem('dk_token'); },
   setToken(t) { localStorage.setItem('dk_token', t); },
@@ -100,6 +102,51 @@ const DK = {
     this.clearStoredUrl(this.topupReturnKey);
   },
 
+  setPendingTopup(payload = {}) {
+    try {
+      const nextPayload = {
+        payment_id: payload.payment_id ? Number(payload.payment_id) : null,
+        order_id: payload.order_id ? String(payload.order_id) : '',
+        amount: payload.amount ? Number(payload.amount) : 0,
+        credit_amount: payload.credit_amount ? Number(payload.credit_amount) : 0,
+        provider: payload.provider ? String(payload.provider) : '',
+        return_to: this.normalizeInternalUrl(payload.return_to || '/wallet', '/wallet'),
+        created_at: payload.created_at ? Number(payload.created_at) : Date.now(),
+      };
+
+      localStorage.setItem(this.pendingTopupKey, JSON.stringify(nextPayload));
+      return nextPayload;
+    } catch (_) {
+      return null;
+    }
+  },
+
+  getPendingTopup() {
+    try {
+      const raw = localStorage.getItem(this.pendingTopupKey);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return null;
+
+      return {
+        payment_id: parsed.payment_id ? Number(parsed.payment_id) : null,
+        order_id: parsed.order_id ? String(parsed.order_id) : '',
+        amount: parsed.amount ? Number(parsed.amount) : 0,
+        credit_amount: parsed.credit_amount ? Number(parsed.credit_amount) : 0,
+        provider: parsed.provider ? String(parsed.provider) : '',
+        return_to: this.normalizeInternalUrl(parsed.return_to || '/wallet', '/wallet'),
+        created_at: parsed.created_at ? Number(parsed.created_at) : 0,
+      };
+    } catch (_) {
+      return null;
+    }
+  },
+
+  clearPendingTopup() {
+    localStorage.removeItem(this.pendingTopupKey);
+  },
+
   loginUrl(target) {
     const intended = this.setIntendedUrl(target || this.currentUrl());
     const query = new URLSearchParams();
@@ -133,6 +180,22 @@ const DK = {
 
   redirectToWallet(target, extraParams = {}) {
     window.location.href = this.walletUrl(target, extraParams);
+  },
+
+  roleList(source) {
+    if (Array.isArray(source)) {
+      return source.map((role) => String(role));
+    }
+
+    return [];
+  },
+
+  hasCreatorAccessFromRoles(roles) {
+    return this.roleList(roles).some((role) => this.creatorRoles.includes(role));
+  },
+
+  memberHomeFromRoles(roles, fallback = '/explore') {
+    return this.hasCreatorAccessFromRoles(roles) ? '/creator' : fallback;
   },
 
   headers() {
@@ -411,9 +474,10 @@ async function resolveInternalArea() {
 
   return {
     authenticated: true,
-    href: '/creator',
+    href: DK.memberHomeFromRoles(me.roles, '/explore'),
     label: 'Akun',
-    roles: Array.isArray(me.roles) ? me.roles : [],
+    roles: DK.roleList(me.roles),
+    creatorAccess: DK.hasCreatorAccessFromRoles(me.roles),
     user: me.user,
   };
 }
@@ -535,7 +599,9 @@ function initGuestNavigation() {
 }
 
 function initMemberNavigation(session) {
-  const dashboardHref = '/creator';
+  const dashboardHref = session?.href || '/explore';
+  const creatorHref = '/creator';
+  const creatorAccess = Boolean(session?.creatorAccess);
   const brandLink = document.querySelector('#brand-link');
   const primaryNav = document.querySelector('#primary-nav');
   const secondaryNav = document.querySelector('#secondary-nav');
@@ -551,26 +617,26 @@ function initMemberNavigation(session) {
 
   setNavItem(primaryNav, {
     href: dashboardHref,
-    icon: '◫',
-    label: 'Dashboard',
-    matchPrefix: '/creator',
+    icon: creatorAccess ? '◫' : '⌂',
+    label: creatorAccess ? 'Dashboard' : 'Jelajah',
+    matchPrefix: creatorAccess ? '/creator' : '/explore',
   });
 
   setNavItem(secondaryNav, {
-    href: '/leaderboard',
-    icon: '🏆',
-    label: 'Leaderboard',
-    matchPrefix: '/leaderboard',
+    href: creatorAccess ? '/explore' : '/leaderboard',
+    icon: creatorAccess ? '🔍' : '🏆',
+    label: creatorAccess ? 'Jelajah' : 'Leaderboard',
+    matchPrefix: creatorAccess ? '/explore' : '/leaderboard',
   });
 
   setNavItem(middleNav, {
-    href: '/explore',
-    icon: '📚',
-    label: 'Karya',
+    href: creatorAccess ? `${creatorHref}#creator-quick-create` : creatorHref,
+    icon: '＋',
+    label: creatorAccess ? 'Buat' : 'Mulai',
     hidden: false,
-    fab: false,
-    matchPrefix: '/explore',
-    title: 'Jelajahi Karya',
+    fab: true,
+    matchPrefix: '/creator',
+    title: creatorAccess ? 'Buat Karya Baru' : 'Mulai Berkarya',
   });
 
   if (walletNav) {
