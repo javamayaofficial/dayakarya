@@ -67,7 +67,23 @@ jobs:
             export RUN_SMOKE_CHECKS="${{ secrets.RUN_SMOKE_CHECKS }}"
             export APP_URL_PUBLIC="${{ secrets.APP_URL_PUBLIC }}"
 
+            if [ -z "$APP_DIR" ]; then
+              echo "APP_DIR secret belum diisi."
+              exit 1
+            fi
+
+            if [ ! -d "$APP_DIR" ]; then
+              echo "APP_DIR tidak ditemukan di server: $APP_DIR"
+              exit 1
+            fi
+
             cd "$APP_DIR"
+
+            if [ ! -d .git ]; then
+              echo "Folder deploy bukan repo Git yang valid: $APP_DIR"
+              exit 1
+            fi
+
             git pull --ff-only origin "$DEPLOY_BRANCH"
             chmod +x scripts/deploy-fastpanel.sh
             bash scripts/deploy-fastpanel.sh

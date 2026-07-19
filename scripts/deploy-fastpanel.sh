@@ -12,7 +12,19 @@ RUN_FILAMENT_ASSETS="${RUN_FILAMENT_ASSETS:-true}"
 RUN_SMOKE_CHECKS="${RUN_SMOKE_CHECKS:-false}"
 APP_URL_PUBLIC="${APP_URL_PUBLIC:-${APP_URL:-}}"
 
+if [ ! -d "$APP_DIR" ]; then
+  echo "!! ERROR: APP_DIR tidak ditemukan: ${APP_DIR}" >&2
+  echo "   Pastikan secret APP_DIR mengarah ke root proyek Laravel di server FastPanel." >&2
+  exit 1
+fi
+
 cd "$APP_DIR"
+
+if [ ! -d .git ]; then
+  echo "!! ERROR: ${APP_DIR} bukan working tree Git yang valid." >&2
+  echo "   Pastikan secret APP_DIR mengarah ke folder repo Dayakarya di server." >&2
+  exit 1
+fi
 
 echo "==> Deploy branch: ${DEPLOY_BRANCH}"
 echo "==> App dir: ${APP_DIR}"
@@ -21,20 +33,75 @@ if [ ! -f composer.lock ]; then
   echo "!! WARNING: composer.lock tidak ditemukan. Dependency yang terpasang bisa berbeda antar deploy." >&2
 fi
 
-read -r -a PHP_CMD <<< "$PHP_BIN"
-read -r -a COMPOSER_CMD <<< "$COMPOSER_BIN"
+resolve_php_cmd() {
+  local candidates=()
+  local candidate
+  local cmd=()
 
-if ! "${PHP_CMD[@]}" -v >/dev/null 2>&1; then
+  if [ -n "${PHP_BIN:-}" ]; then
+    candidates+=("$PHP_BIN")
+  fi
+
+  candidates+=("php" "/usr/bin/php" "/usr/local/bin/php")
+
+  for candidate in "${candidates[@]}"; do
+    read -r -a cmd <<< "$candidate"
+    if "${cmd[@]}" -v >/dev/null 2>&1; then
+      PHP_CMD=("${cmd[@]}")
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+resolve_composer_cmd() {
+  local candidates=()
+  local candidate
+  local cmd=()
+  local php_joined="${PHP_CMD[*]}"
+
+  if [ -n "${COMPOSER_BIN:-}" ]; then
+    candidates+=("$COMPOSER_BIN")
+  fi
+
+  candidates+=("composer")
+
+  if [ -f "$APP_DIR/composer" ]; then
+    candidates+=("${php_joined} $APP_DIR/composer")
+  fi
+
+  if [ -f "$APP_DIR/composer.phar" ]; then
+    candidates+=("${php_joined} $APP_DIR/composer.phar")
+  fi
+
+  candidates+=("${php_joined} /usr/local/bin/composer" "${php_joined} /usr/bin/composer")
+
+  for candidate in "${candidates[@]}"; do
+    read -r -a cmd <<< "$candidate"
+    if "${cmd[@]}" --version >/dev/null 2>&1; then
+      COMPOSER_CMD=("${cmd[@]}")
+      return 0
+    fi
+  done
+
+  return 1
+}
+
+if ! resolve_php_cmd; then
   echo "!! ERROR: PHP_BIN tidak bisa dijalankan: ${PHP_BIN}" >&2
   echo "   Pastikan secret PHP_BIN mengarah ke binary PHP yang valid di server FastPanel." >&2
   exit 1
 fi
 
-if ! "${COMPOSER_CMD[@]}" --version >/dev/null 2>&1; then
+if ! resolve_composer_cmd; then
   echo "!! ERROR: COMPOSER_BIN tidak bisa dijalankan: ${COMPOSER_BIN}" >&2
   echo "   Isi secret COMPOSER_BIN dengan command Composer yang valid, misalnya 'composer' atau 'php /path/to/composer'." >&2
   exit 1
 fi
+
+echo "==> PHP command: ${PHP_CMD[*]}"
+echo "==> Composer command: ${COMPOSER_CMD[*]}"
 
 "${COMPOSER_CMD[@]}" install --no-dev --optimize-autoloader --no-interaction
 
