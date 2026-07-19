@@ -2379,7 +2379,7 @@ body.is-member-area .bottom-nav a.fab .ic {
 }
 .creator-editor-actions-copy {
   width: 100%;
-  display: grid;
+  display: none;
   gap: 4px;
   padding: 2px 2px 8px;
 }
@@ -2395,6 +2395,11 @@ body.is-member-area .bottom-nav a.fab .ic {
 .creator-editor-actions a.btn {
   flex: 1 1 100%;
   width: 100%;
+}
+.page-creator.is-editor-typing .creator-editor-actions {
+  transform: translateY(calc(100% + 18px));
+  opacity: 0;
+  pointer-events: none;
 }
 .creator-autosave-status-wrap {
   order: 10;
@@ -2603,6 +2608,8 @@ body.is-member-area .bottom-nav a.fab .ic {
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
 }
 .creator-inline-actions .hint {
   margin-top: 0;
@@ -3419,6 +3426,7 @@ body.is-member-area .bottom-nav a.fab .ic {
     backdrop-filter: none;
   }
   .creator-editor-actions-copy {
+    display: grid;
     flex: 1 1 240px;
     width: auto;
     padding: 0;

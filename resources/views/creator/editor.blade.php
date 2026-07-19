@@ -392,7 +392,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 @push('scripts')
 <script>
   const workId = '{{ request()->route('work') }}';
-  const debugEndpoint = 'http://127.0.0.1:7777/event';
+  const debugEndpoint = @json(app()->environment('local') ? 'http://127.0.0.1:7777/event' : null);
   const COVER_MIN_WIDTH = 900;
   const COVER_MIN_HEIGHT = 1200;
   const COVER_RECOMMENDED_RATIO = 3 / 4;
@@ -416,6 +416,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
   // #region debug-point A:frontend-debug-report
   function reportDraftSaveDebug(hypothesisId, msg, data = {}) {
+    if (!debugEndpoint) {
+      return;
+    }
+
     fetch(debugEndpoint, {
       method: 'POST',
       body: JSON.stringify({
@@ -817,6 +821,10 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     const meta = document.querySelector('#creator-autosave-meta');
     if (!meta) return;
     meta.textContent = message;
+  }
+
+  function setTypingFocusMode(active) {
+    document.body.classList.toggle('is-editor-typing', Boolean(active));
   }
 
   function markLastSaved(value = null, source = 'save') {
@@ -1927,6 +1935,8 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   document.querySelector('#editor-content')?.addEventListener('input', updateContentGuard);
   document.querySelector('#editor-content')?.addEventListener('input', renderPublishChecklist);
   document.querySelector('#editor-content')?.addEventListener('input', queueAutoSave);
+  document.querySelector('#editor-content')?.addEventListener('focus', () => setTypingFocusMode(true));
+  document.querySelector('#editor-content')?.addEventListener('blur', () => setTypingFocusMode(false));
   document.querySelector('#editor-type')?.addEventListener('change', updateReadingPreview);
   document.querySelector('#editor-type')?.addEventListener('change', updateContentGuard);
   document.querySelector('#editor-chapter-title')?.addEventListener('input', renderPublishChecklist);
@@ -1975,6 +1985,12 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     event.preventDefault();
     attemptLeaveEditor(url.href);
   }, true);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') {
+      setTypingFocusMode(false);
+    }
+  });
 
   loadDraftEditor();
 </script>
