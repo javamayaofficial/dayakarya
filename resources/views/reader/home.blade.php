@@ -22,10 +22,10 @@
                 <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="home-genre-rail">
                     <a href="#home-trending" class="home-genre-pill">Sedang Ramai</a>
+                    <a href="#home-latest" class="home-genre-pill">Baru Terbit</a>
                     <a href="#home-cerpen" class="home-genre-pill">Cerpen</a>
                     <a href="#home-novel" class="home-genre-pill">Novel Berseri</a>
-                    <a href="#home-audio" class="home-genre-pill">Audio</a>
-                    <a href="#home-creator" class="home-genre-pill">Untuk Kreator</a>
+                    <a href="#home-creator" class="home-genre-pill">Kreator</a>
                 </div>
                 <div class="hero-proof home-hero-proof">
                     <div class="proof-item">
@@ -44,50 +44,30 @@
             </div>
             <div class="hero-showcase home-hero-showcase">
                 <div class="hero-card hero-card-primary home-spotlight-card">
-                    <span class="mini-label">Spotlight Beranda</span>
-                    <h2>Nuansanya saya geser ke arah rak cerita populer, bukan landing yang cuma bicara soal platform.</h2>
-                    <p>Tujuannya supaya pembaca merasa Dayakarya punya stok karya yang hidup, sementara kreator merasa karya mereka tampil lebih layak dan lebih mudah ditemukan.</p>
-                    <div class="home-spotlight-points">
-                        <div class="home-spotlight-point">
-                            <strong>Discovery lebih cepat</strong>
-                            <span>Rak karya langsung terlihat dari atas halaman.</span>
-                        </div>
-                        <div class="home-spotlight-point">
-                            <strong>Genre lebih jelas</strong>
-                            <span>Cerpen, novel, dan audio punya shelf masing-masing.</span>
-                        </div>
-                        <div class="home-spotlight-point">
-                            <strong>Lebih siap tumbuh</strong>
-                            <span>Bisa menampung all-free sekarang dan premium nanti.</span>
-                        </div>
+                    <span class="mini-label">Pilihan Cepat</span>
+                    <h2>Begitu mendarat, pembaca langsung melihat rak yang hidup, bukan dibiarkan menebak ada apa di Dayakarya.</h2>
+                    <p>Saya padatkan home ini seperti bookshelf modern: ada rak ramai, rak baru terbit, rak genre, lalu pintu masuk ke kreator.</p>
+                    <div class="home-quick-links">
+                        <a href="{{ route('explore', ['trending' => 1]) }}" class="home-quick-link">Lihat yang lagi ramai</a>
+                        <a href="{{ route('explore', ['type' => 'cerpen']) }}" class="home-quick-link">Masuk rak cerpen</a>
+                        <a href="{{ route('explore', ['type' => 'novel']) }}" class="home-quick-link">Masuk rak novel</a>
                     </div>
                 </div>
                 <div class="hero-stats home-hero-stats">
                     <div class="stat-tile">
                         <span class="label">Rak 01</span>
-                        <strong>Sedang Ramai untuk karya yang paling cepat menarik perhatian pembaca.</strong>
+                        <strong>Sedang Ramai untuk karya yang paling cepat menarik klik pertama.</strong>
                     </div>
                     <div class="stat-tile">
                         <span class="label">Rak 02</span>
-                        <strong>Genre Shelf untuk mempercepat browsing tanpa harus masuk explore dulu.</strong>
+                        <strong>Baru Terbit untuk memberi rasa stok karya aktif dan terus bertambah.</strong>
                     </div>
                     <div class="stat-tile">
                         <span class="label">Rak 03</span>
-                        <strong>Creator Funnel untuk meyakinkan penulis bahwa Dayakarya lebih dari tempat upload biasa.</strong>
+                        <strong>Kreator Spotlight untuk membuat nama kreator ikut hidup di homepage.</strong>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="section">
-    <div class="container">
-        <div class="trust trust-premium">
-            <div class="item"><span class="ic">◆</span> Tampilan lebih content-first</div>
-            <div class="item"><span class="ic">◆</span> Rak genre lebih cepat discan</div>
-            <div class="item"><span class="ic">◆</span> Cocok untuk karya gratis dan premium</div>
-            <div class="item"><span class="ic">◆</span> Lebih siap mendorong explore dan unlock</div>
         </div>
     </div>
 </section>
@@ -100,7 +80,7 @@
                     <span class="section-kicker">Sedang Ramai</span>
                     <h2>Rak utama yang langsung menunjukkan karya paling cepat menarik perhatian.</h2>
                 </div>
-                <a href="{{ route('explore') }}">Buka explore</a>
+                <a href="{{ route('explore', ['trending' => 1]) }}">Buka explore</a>
             </div>
             <p class="home-section-copy">Bagian ini saya posisikan seperti shelf populer di aplikasi baca: begitu landing, pembaca langsung tahu apa yang sedang aktif dibaca dan layak diklik duluan.</p>
             <div class="work-grid work-grid-premium home-work-grid" id="home-trending-grid">
@@ -113,30 +93,23 @@
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="home-latest">
     <div class="container">
-        <div class="section-head section-head-premium">
-            <div>
-                <span class="section-kicker">Arah Beranda</span>
-                <h2>Bukan lagi landing generik, tapi discovery page yang lebih terasa seperti rumah bacaan modern.</h2>
+        <div class="showcase-panel home-showcase-panel home-showcase-emphasis">
+            <div class="section-head">
+                <div>
+                    <span class="section-kicker">Baru Terbit</span>
+                    <h2>Rak ini bikin homepage terasa terus bergerak, bukan katalog yang diam.</h2>
+                </div>
+                <a href="{{ route('explore') }}">Lihat yang terbaru</a>
             </div>
-        </div>
-        <div class="feature-grid home-direction-grid">
-            <article class="feature-card home-direction-card">
-                <span class="feature-icon">01</span>
-                <h3>Genre jadi pintu masuk</h3>
-                <p>Pembaca bisa lompat ke rak cerita favorit tanpa harus menyaring terlalu banyak dari awal.</p>
-            </article>
-            <article class="feature-card home-direction-card">
-                <span class="feature-icon">02</span>
-                <h3>Karya yang ramai terlihat duluan</h3>
-                <p>Rak utama memberi rasa bahwa Dayakarya hidup, bukan sekadar tempat simpan karya statis.</p>
-            </article>
-            <article class="feature-card home-direction-card">
-                <span class="feature-icon">03</span>
-                <h3>Kreator lebih percaya diri</h3>
-                <p>Homepage yang lebih editorial membuat karya terasa lebih layak ditemukan, dibaca, dan dipromosikan.</p>
-            </article>
+            <p class="home-section-copy">Begitu karya baru tayang, pembaca bisa langsung melihat stok yang segar. Ini membantu Dayakarya terasa aktif walau jumlah katalog belum sebesar marketplace besar.</p>
+            <div class="work-grid work-grid-premium home-work-grid" id="home-latest-grid">
+                <div class="state" style="grid-column:1/-1">
+                    <div class="emoji">✨</div>
+                    <p>Memuat karya terbaru…</p>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -150,7 +123,7 @@
                         <span class="section-kicker">Cerpen Pilihan</span>
                         <h2>Bacaan singkat yang cepat memancing klik dan rasa penasaran.</h2>
                     </div>
-                    <a href="{{ route('explore') }}">Lihat semua</a>
+                    <a href="{{ route('explore', ['type' => 'cerpen']) }}">Lihat semua</a>
                 </div>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-cerpen-grid">
                     <div class="state" style="grid-column:1/-1">
@@ -166,7 +139,7 @@
                         <span class="section-kicker">Novel Berseri</span>
                         <h2>Rak untuk cerita yang paling pas dibangun jadi kebiasaan balik baca.</h2>
                     </div>
-                    <a href="{{ route('explore') }}">Lihat semua</a>
+                    <a href="{{ route('explore', ['type' => 'novel']) }}">Lihat semua</a>
                 </div>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-novel-grid">
                     <div class="state" style="grid-column:1/-1">
@@ -182,7 +155,7 @@
                         <span class="section-kicker">Audio & Dongeng</span>
                         <h2>Rak untuk karya yang nyaman dikonsumsi sambil bergerak, santai, atau sebelum tidur.</h2>
                     </div>
-                    <a href="{{ route('explore') }}">Lihat semua</a>
+                    <a href="{{ route('explore', ['type' => 'dongeng']) }}">Lihat semua</a>
                 </div>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-audio-grid">
                     <div class="state" style="grid-column:1/-1">
@@ -200,27 +173,17 @@
         <div class="showcase-panel home-showcase-panel">
             <div class="section-head">
                 <div>
-                    <span class="section-kicker">Untuk Kreator</span>
-                    <h2>Homepage ini juga saya siapkan agar karya kreator terasa lebih layak tampil di etalase publik.</h2>
+                    <span class="section-kicker">Kreator Spotlight</span>
+                    <h2>Nama kreator ikut saya hidupkan, supaya homepage terasa seperti ekosistem karya, bukan rak anonim.</h2>
                 </div>
                 <a href="{{ route('register') }}">Jadi kreator</a>
             </div>
-            <div class="journey-grid home-creator-grid">
-                <article class="journey-card">
-                    <span class="journey-step">Etalase</span>
-                    <h3>Karya lebih mudah dilihat dari atas halaman</h3>
-                    <p>Begitu ada karya yang menarik, homepage baru ini lebih siap menaruhnya di rak populer, genre, atau shelf pilihan.</p>
-                </article>
-                <article class="journey-card">
-                    <span class="journey-step">Monetisasi</span>
-                    <h3>Lebih siap mendorong unlock saat premium makin aktif</h3>
-                    <p>Struktur berandanya kini mendukung alur dari lihat karya, masuk ke detail, lalu lanjut ke unlock dan top up.</p>
-                </article>
-                <article class="journey-card">
-                    <span class="journey-step">Komunitas</span>
-                    <h3>Lebih cocok untuk event, leaderboard, dan spotlight kreator</h3>
-                    <p>Bagian bawah homepage bisa tumbuh menjadi ruang komunitas tanpa merusak rak karya utama.</p>
-                </article>
+            <p class="home-section-copy">Saya ambil kreator yang muncul dari rak-rak di atas lalu tampilkan lagi sebagai spotlight ringan. Tujuannya sederhana: pembaca mulai mengingat orang di balik karya, bukan cuma judulnya.</p>
+            <div class="home-creator-spotlight" id="home-creator-spotlight">
+                <div class="state" style="grid-column:1/-1">
+                    <div class="emoji">🪄</div>
+                    <p>Menyusun spotlight kreator…</p>
+                </div>
             </div>
         </div>
     </div>
@@ -245,10 +208,103 @@
 
 @push('scripts')
 <script>
-  DK.loadWorks({ trending: 1, target: '#home-trending-grid' });
-  DK.loadWorks({ trending: 1, type: 'cerpen', target: '#home-cerpen-grid' });
-  DK.loadWorks({ trending: 1, type: 'novel', target: '#home-novel-grid' });
-  DK.loadWorks({ trending: 1, type: 'dongeng', target: '#home-audio-grid' });
+  const homeCreatorMap = new Map();
+
+  function rememberCreators(items = []) {
+    items.forEach((work) => {
+      const creatorId = work.creator?.id || work.creator?.name;
+      if (!creatorId || !work.creator?.name) return;
+
+      const current = homeCreatorMap.get(creatorId) || {
+        name: work.creator.name,
+        workCount: 0,
+        types: new Set(),
+      };
+
+      current.workCount += 1;
+      if (work.type) current.types.add(DK.typeLabel(work.type));
+      homeCreatorMap.set(creatorId, current);
+    });
+  }
+
+  function renderHomeCreators() {
+    const spotlight = document.querySelector('#home-creator-spotlight');
+    if (!spotlight) return;
+
+    const items = Array.from(homeCreatorMap.values())
+      .sort((a, b) => b.workCount - a.workCount)
+      .slice(0, 4);
+
+    if (!items.length) {
+      spotlight.innerHTML = `<div class="state" style="grid-column:1/-1">
+        <div class="emoji">✍️</div>
+        <p>Kreator spotlight akan muncul seiring rak karya mulai terisi lebih ramai.</p>
+      </div>`;
+      return;
+    }
+
+    spotlight.innerHTML = items.map((creator, index) => {
+      const typeList = Array.from(creator.types).slice(0, 2).join(' • ') || 'Karya pilihan';
+      return `
+        <article class="home-creator-card">
+          <span class="home-creator-rank">Spotlight ${index + 1}</span>
+          <h3>${creator.name}</h3>
+          <p>${typeList}</p>
+          <div class="home-creator-meta">
+            <span>${creator.workCount} karya tampil di homepage</span>
+            <span>Siap dijelajahi pembaca</span>
+          </div>
+          <a href="{{ route('explore') }}" class="home-creator-link">Lihat karya di explore</a>
+        </article>
+      `;
+    }).join('');
+  }
+
+  async function loadHomeShelves() {
+    rememberCreators(await DK.loadWorks({
+      trending: 1,
+      target: '#home-trending-grid',
+      variant: 'compact-home',
+      limit: 6,
+    }));
+
+    rememberCreators(await DK.loadWorks({
+      target: '#home-latest-grid',
+      variant: 'compact-home',
+      limit: 6,
+    }));
+
+    rememberCreators(await DK.loadWorks({
+      type: 'cerpen',
+      target: '#home-cerpen-grid',
+      variant: 'compact-home',
+      limit: 4,
+    }));
+
+    rememberCreators(await DK.loadWorks({
+      type: 'novel',
+      target: '#home-novel-grid',
+      variant: 'compact-home',
+      limit: 4,
+      emptyCopy: `<div class="state" style="grid-column:1/-1">
+        <div class="emoji">📖</div><h3>Rak novel belum seramai yang lain</h3>
+        <p>Begitu novel berseri mulai bertambah, rak ini akan jadi ruang balik baca paling penting.</p></div>`,
+    }));
+
+    rememberCreators(await DK.loadWorks({
+      type: 'dongeng',
+      target: '#home-audio-grid',
+      variant: 'compact-home',
+      limit: 4,
+      emptyCopy: `<div class="state" style="grid-column:1/-1">
+        <div class="emoji">🎧</div><h3>Rak audio masih menunggu isi</h3>
+        <p>Area ini sudah disiapkan untuk dongeng, audio story, dan karya dengar lainnya.</p></div>`,
+    }));
+
+    renderHomeCreators();
+  }
+
+  loadHomeShelves();
   DK.refreshCredit();
 </script>
 @endpush

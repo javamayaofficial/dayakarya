@@ -235,13 +235,50 @@ const DK = {
     })[t] || t;
   },
 
-  workCard(w) {
+  workCard(w, options = {}) {
+    const variant = options.variant || 'default';
     const free = (w.chapters_free_count ?? 0) > 0 ? '<span class="free-tag">Gratis</span>' : '';
     const creator = w.creator?.name ?? 'Kreator';
     const views = (w.views ?? 0).toLocaleString('id-ID');
+    const viewCount = Number(w.views ?? 0);
+    const publishedChapters = Number(w.published_chapters_count ?? 0);
+    const hasFreeAccess = Number(w.chapters_free_count ?? 0) > 0;
     const coverStyle = w.cover
       ? `background-image:url('${w.cover}');background-size:cover;background-position:center;`
       : '';
+
+    if (variant === 'compact-home') {
+      const socialProof = viewCount > 0
+        ? `${views} pembaca`
+        : (publishedChapters > 1 ? `${publishedChapters} bagian siap dibaca` : 'Baru tayang di Dayakarya');
+      const accessLabel = hasFreeAccess
+        ? (publishedChapters > 1 ? `${w.chapters_free_count} bagian gratis` : 'Coba gratis dulu')
+        : 'Siap premium';
+      const bodyMeta = [this.typeLabel(w.type), socialProof].filter(Boolean).join(' • ');
+
+      return `
+        <a class="work-card work-card-premium work-card-home-compact" href="/karya/${w.slug}">
+          <div class="work-cover" style="${coverStyle}">
+            <span class="type-tag">${this.typeLabel(w.type)}</span>${free}
+            <div class="cover-fade"></div>
+            <div class="cover-meta">
+              <span class="cover-pill">Oleh ${creator}</span>
+            </div>
+          </div>
+          <div class="work-body">
+            <div class="work-home-kicker">${bodyMeta}</div>
+            <h3>${w.title}</h3>
+            <div class="work-meta work-meta-home">
+              <span>${publishedChapters > 1 ? `${publishedChapters} bagian tayang` : 'Format ringkas'}</span>
+              <span>${accessLabel}</span>
+            </div>
+            <div class="work-card-footer">
+              <span class="read-link">Baca detailnya</span>
+              <span class="read-stat">${hasFreeAccess ? 'Mulai sekarang' : 'Lihat akses'}</span>
+            </div>
+          </div>
+        </a>`;
+    }
 
     return `
       <a class="work-card work-card-premium" href="/karya/${w.slug}">
@@ -263,32 +300,34 @@ const DK = {
       </a>`;
   },
 
-  async loadWorks({ trending = 0, type = '', search = '', target } = {}) {
+  async loadWorks({ trending = 0, type = '', search = '', target, variant = 'default', limit = 0, emptyCopy = '' } = {}) {
     const el = document.querySelector(target);
-    if (!el) return;
+    if (!el) return [];
     try {
       const q = new URLSearchParams();
       if (trending) q.set('trending', '1');
       if (type) q.set('type', type);
       if (search) q.set('search', search);
       const json = await this.get('/works?' + q.toString());
-      const items = json.data ?? [];
+      const items = (json.data ?? []).slice(0, limit || undefined);
       if (!items.length) {
         el.innerHTML = search
           ? `<div class="state" style="grid-column:1/-1">
               <div class="emoji">🔍</div><h3>Belum ketemu</h3>
               <p>Coba ganti kata kunci atau pilih tipe karya lain.</p></div>`
-          : `<div class="state" style="grid-column:1/-1">
+          : emptyCopy || `<div class="state" style="grid-column:1/-1">
               <div class="emoji">🖋️</div><h3>Belum ada karya yang tampil di sini</h3>
               <p>Kalau mau, kamu bisa jadi salah satu yang pertama mengisinya.</p>
               <a href="/daftar" class="btn btn-gold">Mulai Upload Karya</a></div>`;
-        return;
+        return [];
       }
-      el.innerHTML = items.map(w => this.workCard(w)).join('');
+      el.innerHTML = items.map(w => this.workCard(w, { variant })).join('');
+      return items;
     } catch (e) {
       el.innerHTML = `<div class="state" style="grid-column:1/-1">
         <div class="emoji">⚠️</div><h3>Karyanya belum bisa dimuat</h3>
         <p>Coba cek koneksi dulu, lalu buka lagi sebentar ya.</p></div>`;
+      return [];
     }
   },
 

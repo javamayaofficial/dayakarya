@@ -73,11 +73,40 @@
 
 @push('scripts')
 <script>
-  let currentType = '';
+  const exploreUrl = new URL(window.location.href);
+  let currentType = exploreUrl.searchParams.get('type') || '';
   const exploreGridTarget = '#explore-grid';
   const searchInput = document.querySelector('#search');
 
+  if (searchInput) {
+    searchInput.value = exploreUrl.searchParams.get('search') || '';
+  }
+
+  function syncExploreQuery() {
+    const url = new URL(window.location.href);
+    if (currentType) {
+      url.searchParams.set('type', currentType);
+    } else {
+      url.searchParams.delete('type');
+    }
+
+    if (searchInput?.value) {
+      url.searchParams.set('search', searchInput.value);
+    } else {
+      url.searchParams.delete('search');
+    }
+
+    window.history.replaceState({}, '', `${url.pathname}${url.search}`);
+  }
+
+  function syncExploreChips() {
+    document.querySelectorAll('#type-chips .chip').forEach((chip) => {
+      chip.classList.toggle('active', chip.dataset.type === currentType);
+    });
+  }
+
   function renderExplore() {
+    syncExploreQuery();
     DK.loadWorks({
       type: currentType,
       target: exploreGridTarget,
@@ -85,13 +114,13 @@
     });
   }
 
+  syncExploreChips();
   renderExplore();
 
   document.querySelectorAll('#type-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('#type-chips .chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
       currentType = chip.dataset.type;
+      syncExploreChips();
       renderExplore();
     });
   });
