@@ -2571,6 +2571,9 @@ body.is-member-area .bottom-nav a.fab .ic {
 }
 #editor-publish[data-readiness="needs-review"] {
   box-shadow: 0 0 0 3px rgba(224,161,51,.16);
+  opacity: .56;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .creator-card-note {
   margin-bottom: 12px;
