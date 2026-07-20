@@ -61,7 +61,7 @@
         topupDoneTitle.textContent = 'Top up berhasil masuk';
         topupDoneCopy.textContent = `Credit ${Number(status.credit_amount || pendingTopup.credit_amount || 0).toLocaleString('id-ID')} sudah masuk ke akun Anda.`;
         setStatusNote(paidAt ? `Pembayaran terkonfirmasi pada ${paidAt}.` : 'Pembayaran sudah terkonfirmasi dan saldo akan langsung bisa dipakai.', true);
-        topupDonePrimary.textContent = returnTarget !== '/wallet' ? 'Lanjut ke Cerita' : 'Buka Wallet';
+        topupDonePrimary.textContent = returnTarget !== '/wallet' ? 'Lanjut Buka Bagian' : 'Buka Wallet';
         topupDoneSecondary.hidden = false;
         topupDoneSecondary.textContent = returnTarget !== '/wallet' ? 'Lihat Wallet' : 'Kembali ke Explore';
         if (returnTarget === '/wallet') {
@@ -94,7 +94,7 @@
       setStatusNote('Status pembayaran belum berhasil dicek otomatis. Anda tetap bisa cek ulang dari wallet beberapa saat lagi.', true);
     }
 
-    if (attempt < 5) {
+    if (attempt < 10) {
       statusPollHandle = setTimeout(() => refreshPendingTopupStatus(attempt + 1), 3000);
     }
   }

@@ -25,6 +25,7 @@
                 <p>Dari isi saldo sampai cek riwayat, semuanya ada di satu tempat.</p>
             </div>
         </div>
+        <div class="wallet-context-banner" id="wallet-context-banner" hidden></div>
 
         <div class="wallet-balance-grid">
             <div class="balance-card balance-card-credit">
@@ -52,7 +53,12 @@
                         <h2>Isi credit sesuai kebutuhan</h2>
                     </div>
                 </div>
-                <p class="wallet-copy">Pilih paket yang paling pas. Paket menengah biasanya terasa lebih nyaman karena biaya transaksi tidak terlalu terasa.</p>
+                <p class="wallet-copy" id="wallet-copy">Pilih paket yang paling pas. Paket menengah biasanya terasa lebih nyaman karena biaya transaksi tidak terlalu terasa.</p>
+                <div class="wallet-guest-gate" id="wallet-guest-gate" hidden>
+                    <strong>Masuk dulu untuk membuka wallet pribadi Anda.</strong>
+                    <p>Setelah login, saldo, paket, metode pembayaran, dan riwayat langsung muncul sesuai akun yang sama.</p>
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-block" id="wallet-login-cta">Masuk Untuk Lanjut Top Up</a>
+                </div>
                 <div class="wallet-package-grid" id="topup-options">
                     <button type="button" class="wallet-package-card" data-credit="50">
                         <span class="wallet-package-value">50 Credit</span>
@@ -88,7 +94,7 @@
                     <p id="wallet-package-note">Pilihan yang lebih efisien untuk lanjut baca beberapa karya tanpa terlalu sering top up.</p>
                 </div>
                 @if ($paymentProvider === 'duitku')
-                    <div class="wallet-payment-method-box">
+                    <div class="wallet-payment-method-box" id="wallet-payment-method-box">
                         <span class="wallet-payment-method-label">Metode Pembayaran</span>
                         <div class="wallet-method-grid" id="duitku-method-grid" aria-live="polite">
                             <div class="wallet-method-skeleton">Memuat metode pembayaran...</div>
@@ -149,6 +155,8 @@
   const walletReturnParam = walletUrl.searchParams.get('return');
   const walletReturnTarget = walletReturnParam ? DK.setTopupReturnUrl(walletReturnParam) : null;
   const hasTopupReturnTarget = Boolean(walletReturnTarget && walletReturnTarget !== '/wallet');
+  const unlockNeed = Number(walletUrl.searchParams.get('need') || 0);
+  const isUnlockContext = walletUrl.searchParams.get('source') === 'unlock' && unlockNeed > 0;
   const PACKAGE_COPY = {
     50: 'Paket kecil untuk coba dulu. Cocok kalau hanya ingin buka 1 karya premium.',
     100: 'Paket awal yang aman untuk isi saldo tanpa terasa terlalu besar.',
@@ -166,9 +174,45 @@
   const methodCurrentName = document.querySelector('#duitku-method-current-name');
   const methodCurrentMeta = document.querySelector('#duitku-method-current-meta');
   const methodNote = document.querySelector('#duitku-method-note');
+  const walletCopy = document.querySelector('#wallet-copy');
+  const walletGuestGate = document.querySelector('#wallet-guest-gate');
+  const walletLoginCta = document.querySelector('#wallet-login-cta');
+  const walletContextBanner = document.querySelector('#wallet-context-banner');
+  const walletPaymentMethodBox = document.querySelector('#wallet-payment-method-box');
   let selectedPaymentMethod = null;
   let duitkuMethodsLoaded = PAYMENT_PROVIDER !== 'duitku';
   let availableDuitkuMethods = [];
+
+  function recommendedPackageForNeed(need = 0) {
+    const packages = [50, 100, 250, 500, 1000];
+    if (!need) return 250;
+    return packages.find((amount) => amount >= need) || packages[packages.length - 1];
+  }
+
+  function setActivePackage(value, { renderMethods = false } = {}) {
+    selected = Number(value) || 250;
+    chips.forEach((chip) => chip.classList.toggle('is-active', Number(chip.dataset.credit) === selected));
+    renderTotal();
+    if (renderMethods && PAYMENT_PROVIDER === 'duitku' && DK.token()) {
+      loadDuitkuPaymentMethods();
+    }
+  }
+
+  function updateWalletContextBanner() {
+    if (!walletContextBanner) return;
+
+    if (!isUnlockContext) {
+      walletContextBanner.hidden = true;
+      walletContextBanner.innerHTML = '';
+      return;
+    }
+
+    walletContextBanner.hidden = false;
+    walletContextBanner.innerHTML = `
+      <strong>Anda sedang menyiapkan ${unlockNeed.toLocaleString('id-ID')} Credit untuk membuka bagian premium.</strong>
+      <span>Top up sekarang, lalu kembali ke karya yang tadi dipilih tanpa mencari ulang bagiannya.</span>
+    `;
+  }
 
   function contextualTopupMessage(baseMessage = '') {
     const returnMessage = hasTopupReturnTarget
@@ -256,6 +300,14 @@
   function renderTotal() {
     document.querySelector('#total-rp').textContent = 'Rp' + (selected * RATE).toLocaleString('id-ID');
     if (packageNote) {
+      if (isUnlockContext && unlockNeed > 0) {
+        const extraCredit = Math.max(selected - unlockNeed, 0);
+        packageNote.textContent = extraCredit > 0
+          ? `Cukup untuk buka bagian yang butuh ${unlockNeed.toLocaleString('id-ID')} Credit, masih sisa ${extraCredit.toLocaleString('id-ID')} Credit untuk lanjut nanti.`
+          : `Pas untuk membuka bagian yang butuh ${unlockNeed.toLocaleString('id-ID')} Credit.`;
+        return;
+      }
+
       packageNote.textContent = PACKAGE_COPY[selected] || `Top up ${selected.toLocaleString('id-ID')} credit siap dipakai sesuai kebutuhan Anda.`;
     }
   }
@@ -366,13 +418,7 @@
 
   chips.forEach(c => c.addEventListener('click', () => {
     if (!DK.token()) return;
-    chips.forEach(x => x.classList.remove('is-active'));
-    c.classList.add('is-active');
-    selected = +c.dataset.credit;
-    renderTotal();
-    if (PAYMENT_PROVIDER === 'duitku') {
-      loadDuitkuPaymentMethods();
-    }
+    setActivePackage(c.dataset.credit, { renderMethods: true });
   }));
   methodGrid?.addEventListener('click', (event) => {
     const card = event.target.closest('.wallet-method-card[data-code]');
@@ -380,26 +426,43 @@
     selectedPaymentMethod = card.dataset.code || null;
     renderMethodOptions(availableDuitkuMethods);
   });
-  renderTotal();
+  setActivePackage(isUnlockContext ? recommendedPackageForNeed(unlockNeed) : 250);
+  updateWalletContextBanner();
 
   function renderGuestWalletState(){
     const loginHref = DK.loginUrl(DK.currentUrl());
+    const recommendation = isUnlockContext ? recommendedPackageForNeed(unlockNeed) : selected;
     document.querySelector('#credit-balance').textContent = '0';
     document.querySelector('#rupiah-balance').textContent = 'Rp0';
     topupButton.disabled = true;
-    topupButton.textContent = 'Masuk Untuk Membuka Wallet';
+    topupButton.textContent = isUnlockContext ? 'Masuk Untuk Buka Bagian Ini' : 'Masuk Untuk Membuka Wallet';
+    walletCopy.textContent = isUnlockContext
+      ? `Masuk dulu agar sistem tahu wallet mana yang akan dipakai untuk membuka bagian premium ${unlockNeed.toLocaleString('id-ID')} Credit.`
+      : 'Wallet ini memakai akun pengguna. Setelah masuk, saldo, top up, dan riwayat akan langsung tampil untuk akun yang sama.';
+    walletGuestGate.hidden = false;
+    walletLoginCta.href = loginHref;
+    walletLoginCta.textContent = isUnlockContext ? 'Masuk Lalu Lanjut Buka Bagian' : 'Masuk Untuk Membuka Wallet';
+    if (walletPaymentMethodBox) {
+      walletPaymentMethodBox.hidden = true;
+    }
+    chips.forEach((chip) => {
+      chip.disabled = true;
+      chip.classList.toggle('is-active', Number(chip.dataset.credit) === recommendation);
+    });
+    selected = recommendation;
+    renderTotal();
     topupMessage.innerHTML = `
       <div class="alert alert-success">
-        Wallet ini pakai login akun pengguna, bukan session admin.
-        <a href="${loginHref}" style="font-weight:700;text-decoration:underline">Masuk sekarang</a>
-        untuk melihat saldo, histori, dan top up.
+        ${isUnlockContext
+          ? `Begitu login, Anda bisa langsung lanjut top up ${recommendation.toLocaleString('id-ID')} Credit lalu kembali ke bagian premium yang tadi dipilih.`
+          : 'Masuk dulu untuk melihat saldo, memilih metode bayar, dan menjalankan top up dari wallet pribadi Anda.'}
       </div>`;
     document.querySelector('#trx-list').innerHTML = `
       <div class="state">
         <div class="emoji">🔐</div>
-        <h3>Wallet baru terbuka setelah kamu masuk</h3>
-        <p>Masuk untuk melihat saldo, histori, dan top up.</p>
-        <a href="${loginHref}" class="btn btn-primary">Masuk ke Akun</a>
+        <h3>${isUnlockContext ? 'Masuk dulu, lalu lanjut buka bagian premium' : 'Wallet baru terbuka setelah Anda masuk'}</h3>
+        <p>${isUnlockContext ? 'Kami simpan jalur baliknya, jadi setelah login dan top up Anda bisa kembali ke bagian karya yang tadi dipilih.' : 'Masuk untuk melihat saldo, histori, dan top up sesuai akun yang sama.'}</p>
+        <a href="${loginHref}" class="btn btn-primary">${isUnlockContext ? 'Masuk dan Lanjutkan' : 'Masuk ke Akun'}</a>
       </div>`;
   }
 
@@ -413,6 +476,13 @@
       const w = await DK.get('/wallet');
       document.querySelector('#credit-balance').textContent = (w.credit_balance||0).toLocaleString('id-ID');
       document.querySelector('#rupiah-balance').textContent = 'Rp'+(w.rupiah_balance||0).toLocaleString('id-ID');
+      walletGuestGate.hidden = true;
+      if (walletPaymentMethodBox) {
+        walletPaymentMethodBox.hidden = PAYMENT_PROVIDER !== 'duitku' ? true : false;
+      }
+      chips.forEach((chip) => {
+        chip.disabled = false;
+      });
       topupButton.disabled = false;
       topupButton.textContent = PAYMENT_LABEL;
       const helperMessage = defaultTopupMessage();

@@ -1274,6 +1274,25 @@ body.is-member-area .bottom-nav a.fab .ic {
   gap: 14px;
   margin-top: 18px;
 }
+.wallet-context-banner {
+  display: grid;
+  gap: 4px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(20,34,60,.94), rgba(28,44,74,.94));
+  color: #f7efde;
+  border: 1px solid rgba(231,221,202,.18);
+  box-shadow: 0 14px 30px rgba(20,34,60,.18);
+}
+.wallet-context-banner strong {
+  font-size: .98rem;
+}
+.wallet-context-banner span {
+  color: rgba(247,239,222,.82);
+  font-size: .88rem;
+  line-height: 1.6;
+}
 .balance-card {
   padding: 20px 18px;
   border-radius: 24px;
@@ -1338,6 +1357,23 @@ body.is-member-area .bottom-nav a.fab .ic {
   margin: 10px 0 16px;
   color: var(--ink-soft);
 }
+.wallet-guest-gate {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20,34,60,.06), rgba(255,255,255,.88));
+  border: 1px solid rgba(231,221,202,.95);
+}
+.wallet-guest-gate strong {
+  font-size: .98rem;
+}
+.wallet-guest-gate p {
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.6;
+}
 .wallet-package-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1369,6 +1405,15 @@ body.is-member-area .bottom-nav a.fab .ic {
 }
 .wallet-package-card.is-featured {
   border-color: rgba(224,161,51,.3);
+}
+.wallet-package-card:disabled {
+  opacity: .72;
+  cursor: default;
+  transform: none;
+}
+.wallet-package-card:disabled:hover {
+  transform: none;
+  border-color: rgba(231,221,202,.95);
 }
 .wallet-package-badge {
   display: inline-flex;

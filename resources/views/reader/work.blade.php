@@ -7,9 +7,23 @@
 @php
     $chapters = $work->chapters;
     $chapterCount = $chapters->count();
+    $freeChapterCount = $chapters->where('is_premium', false)->count();
+    $premiumChapterCount = $chapters->where('is_premium', true)->count();
     $isAudioWork = $work->isAudio();
     $isVideoWork = $work->isVideo();
     $selectedStatusLabel = $selectedChapter?->is_premium ? 'Perlu dibuka dengan Credit' : 'Bisa langsung dinikmati';
+    $workAvailabilityTitle = match (true) {
+        $chapterCount === 0 => 'Karya ini belum punya bagian yang tayang.',
+        $premiumChapterCount === 0 => "Semua {$chapterCount} bagian sudah bisa langsung dinikmati.",
+        $freeChapterCount === 0 => "Semua {$chapterCount} bagian perlu Credit untuk dibuka.",
+        default => "{$freeChapterCount} bagian bisa dinikmati langsung, {$premiumChapterCount} bagian siap dibuka dengan Credit.",
+    };
+    $workAvailabilityCopy = match (true) {
+        $chapterCount === 0 => 'Begitu ada bagian yang terbit, pembaca atau pendengar bisa langsung menikmati dari halaman ini.',
+        $premiumChapterCount === 0 => 'Kamu bisa pilih bagian mana pun tanpa perlu unlock. Tinggal masuk ke bagian yang paling ingin dinikmati.',
+        $freeChapterCount === 0 => 'Pilih bagian yang paling ingin kamu lanjutkan. Setelah dibuka, akses premium tetap menempel di akun yang sama.',
+        default => 'Mulai dari bagian gratis dulu, lalu lanjut buka bagian premium saat kamu sudah yakin ingin meneruskan karya ini.',
+    };
     $chapterPayloads = $chapters->mapWithKeys(function ($chapter) use ($isAudioWork, $isVideoWork) {
         return [
             $chapter->id => [
@@ -50,6 +64,11 @@
                 <div class="work-badges">
                     <span class="work-badge">{{ $isVideoWork ? 'Mode nonton yang lebih fokus' : ($isAudioWork ? 'Mode dengar yang lebih fokus' : 'Mode baca yang lebih fokus') }}</span>
                     <span class="work-badge">Pilih bagian, lalu nikmati tanpa terdistraksi</span>
+                    @if($premiumChapterCount > 0)
+                        <span class="work-badge">{{ $premiumChapterCount }} bagian premium siap dibuka saat kamu lanjut</span>
+                    @else
+                        <span class="work-badge">Semua bagian bisa langsung dinikmati tanpa unlock</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -63,16 +82,16 @@
                 </div>
                 <div class="context-card context-card-soft">
                     <span class="mini-label mini-label-dark">Status Karya</span>
-                    <h3>{{ $chapterCount }} bagian siap dinikmati, dari pembuka gratis sampai bagian premium.</h3>
-                    <p>Kalau ada bagian yang terkunci, kamu bisa buka saat itu juga lalu langsung lanjut menikmati karya yang sedang dipilih.</p>
+                    <h3>{{ $workAvailabilityTitle }}</h3>
+                    <p>{{ $workAvailabilityCopy }}</p>
                 </div>
             </div>
         </div>
 
         @if($selectedChapter)
             <div class="work-comfort-strip">
-                <div class="comfort-pill">Akses dibuka tetap di tempat yang sama</div>
-                <div class="comfort-pill">Pindah bagian gratis tanpa reload berulang</div>
+                <div class="comfort-pill">{{ $freeChapterCount > 0 ? $freeChapterCount . ' bagian bisa dicoba langsung' : 'Pilih bagian lalu buka saat siap lanjut' }}</div>
+                <div class="comfort-pill">{{ $premiumChapterCount > 0 ? 'Akses premium tetap di bagian yang sama' : 'Semua bagian bisa pindah tanpa unlock' }}</div>
                 <div class="comfort-pill">Fokus tetap ke karya yang sedang kamu pilih</div>
             </div>
             <div class="work-focus-shell" id="fokus-karya">
@@ -336,6 +355,7 @@
       DK.redirectToWallet(getChapterReturnUrl(chapterId), {
         source: 'unlock',
         chapter: chapterId,
+        need: chapter.price_credit,
       });
       return;
     }
