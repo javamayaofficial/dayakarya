@@ -260,13 +260,12 @@
 
     spotlight.innerHTML = items.map((creator, index) => {
       const typeList = Array.from(creator.types).slice(0, 2).join(' • ') || 'Karya pilihan';
-      return `
       const featuredTitle = Array.from(creator.titles)[0] || 'Karya pilihan di Dayakarya';
       const avatarMarkup = creator.avatar
         ? `<img src="${creator.avatar}" alt="${creator.name}" class="home-creator-avatar">`
         : `<span class="home-creator-avatar home-creator-avatar-fallback">${creator.name.slice(0, 1).toUpperCase()}</span>`;
+      return `
         <article class="home-creator-card">
-          <span class="home-creator-rank">Spotlight ${index + 1}</span>
           <div class="home-creator-head">
             ${avatarMarkup}
             <div>
