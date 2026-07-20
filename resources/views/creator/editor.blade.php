@@ -350,6 +350,9 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                     <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Karya</button>
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Nanti Lanjut Lagi</a>
                 </div>
+                <div class="creator-publish-cta-note" id="creator-publish-cta-note" hidden>
+                    Tombol tayang akan aktif otomatis setelah semua poin checklist siap.
+                </div>
                 <div class="creator-autosave-status-wrap">
                     <div class="creator-autosave-status" id="creator-autosave-status">Semua perubahan sudah tersimpan.</div>
                     <div class="creator-autosave-meta" id="creator-autosave-meta">Belum ada riwayat simpan.</div>
@@ -829,7 +832,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
   function markLastSaved(value = null, source = 'save') {
     editorState.lastSavedAt = value || new Date().toISOString();
-    const sourceLabel = source === 'publish' ? 'Terakhir ditayangkan' : 'Terakhir tersimpan';
+    const sourceLabel = source === 'publish' ? 'Update tayang terakhir' : 'Terakhir tersimpan';
     setAutosaveMeta(`${sourceLabel} ${formatSavedTime(editorState.lastSavedAt)}.`);
   }
 
@@ -1003,11 +1006,13 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     const container = document.querySelector('#creator-publish-checklist');
     const summary = document.querySelector('#creator-publish-summary');
     const button = document.querySelector('#editor-publish');
+    const ctaNote = document.querySelector('#creator-publish-cta-note');
     if (!container || !summary) return;
 
     const items = getPublishChecklist();
     const readyCount = items.filter((item) => item.ok).length;
     const missingItems = items.filter((item) => !item.ok);
+    const isBusy = button?.getAttribute('data-busy') === 'true';
 
     container.innerHTML = items
       .map((item) => `<span class="creator-publish-item ${item.ok ? 'is-ready' : 'is-pending'}">${item.label}</span>`)
@@ -1015,14 +1020,32 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
 
     if (!missingItems.length) {
       summary.textContent = 'Semua poin penting sudah siap. Karya bisa ditayangkan kapan saja.';
-      button?.removeAttribute('data-readiness');
+      if (button) {
+        button.removeAttribute('data-readiness');
+        button.disabled = isBusy;
+        button.removeAttribute('aria-disabled');
+        button.title = 'Semua checklist sudah siap. Karya bisa ditayangkan.';
+      }
+      if (ctaNote) {
+        ctaNote.hidden = true;
+        ctaNote.textContent = 'Tombol tayang akan aktif otomatis setelah semua poin checklist siap.';
+      }
       syncPublishChecklistVisibility();
       updateEditorCommandCenter();
       return;
     }
 
     summary.textContent = `${readyCount}/${items.length} poin sudah siap. Lengkapi dulu yang masih kurang sebelum tayang.`;
-    button?.setAttribute('data-readiness', 'needs-review');
+    if (button) {
+      button.setAttribute('data-readiness', 'needs-review');
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+      button.title = `Lengkapi dulu: ${missingItems.map((item) => item.label.toLowerCase()).join(', ')}.`;
+    }
+    if (ctaNote) {
+      ctaNote.hidden = false;
+      ctaNote.textContent = `Tayang belum aktif. Lengkapi dulu: ${missingItems.map((item) => item.label.toLowerCase()).join(', ')}.`;
+    }
     syncPublishChecklistVisibility();
     updateEditorCommandCenter();
   }
@@ -1871,6 +1894,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
     }
 
     button.disabled = true;
+    button.setAttribute('data-busy', 'true');
     msg.innerHTML = '';
 
     try {
@@ -1900,12 +1924,14 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
         synopsis: data.work?.synopsis || document.querySelector('#editor-synopsis').value,
         cover: data.work?.cover || editorState.cover,
       }, data.editor || {}, data.chapters || editorState.chapters);
-      markLastSaved(data.work?.published_at || data.editor?.published_at || new Date().toISOString(), 'publish');
+      renderPublishChecklist();
+      markLastSaved(new Date().toISOString(), 'publish');
       msg.innerHTML = '<div class="alert alert-success">Karya sudah tayang. Sekarang akun lain seharusnya bisa melihatnya di katalog karya.</div>';
     } catch (error) {
       msg.innerHTML = '<div class="alert alert-error">Karya belum berhasil ditayangkan. Coba lagi sebentar.</div>';
     } finally {
-      button.disabled = false;
+      button.removeAttribute('data-busy');
+      renderPublishChecklist();
     }
   }
 

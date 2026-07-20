@@ -165,6 +165,11 @@
 
 @push('scripts')
 <script>
+  const dashboardState = {
+    isLoading: false,
+    lastLoadedAt: 0,
+  };
+
   async function ensureMemberSession() {
     if (!DK.token()) {
       location.href = '/masuk';
@@ -376,9 +381,23 @@
     `;
   }
 
-  async function loadCreatorDashboard() {
+  async function loadCreatorDashboard(options = {}) {
+    const { force = false } = options;
+    if (dashboardState.isLoading) {
+      return;
+    }
+
+    const now = Date.now();
+    if (!force && dashboardState.lastLoadedAt && (now - dashboardState.lastLoadedAt) < 15000) {
+      return;
+    }
+
+    dashboardState.isLoading = true;
     const session = await ensureMemberSession();
-    if (!session) return;
+    if (!session) {
+      dashboardState.isLoading = false;
+      return;
+    }
 
     try {
       const data = await DK.get('/creator/dashboard');
@@ -395,6 +414,7 @@
       }
 
       document.querySelector('#my-works').innerHTML = works.map(creatorCard).join('');
+      dashboardState.lastLoadedAt = Date.now();
     } catch (error) {
       document.querySelector('#creator-msg').innerHTML = '<div class="alert alert-error">Dashboard member belum berhasil dimuat. Silakan masuk ulang lalu coba lagi.</div>';
       document.querySelector('#my-works').innerHTML = `
@@ -403,6 +423,8 @@
           <h3>Dashboard belum berhasil dimuat</h3>
           <p>Data karya dan statistik belum bisa ditampilkan saat ini. Coba muat ulang halaman atau masuk kembali ke akun kamu.</p>
         </div>`;
+    } finally {
+      dashboardState.isLoading = false;
     }
   }
 
@@ -444,6 +466,16 @@
   }
 
   updateProductionHint();
-  loadCreatorDashboard();
+  loadCreatorDashboard({ force: true });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      loadCreatorDashboard();
+    }
+  });
+
+  window.addEventListener('pageshow', () => {
+    loadCreatorDashboard({ force: true });
+  });
 </script>
 @endpush
