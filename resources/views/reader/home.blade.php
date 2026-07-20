@@ -10,7 +10,7 @@
             <div class="hero-copy home-hero-copy">
                 <span class="eyebrow">Homepage Baru Dayakarya</span>
                 <h1>Etalase karya yang terasa <em>hidup</em>, ramai, dan bikin orang ingin lanjut baca.</h1>
-                <p>Beranda Dayakarya saya arahkan seperti marketplace bacaan modern: karya unggulan langsung terlihat, rak genre lebih cepat dipindai, dan pembaca bisa segera menemukan cerita yang layak dibuka.</p>
+                <p>Beranda saya padatkan agar pembaca lebih cepat menemukan karya yang layak dicoba, dilanjutkan, atau langsung dijelajahi.</p>
                 <div class="hero-actions">
                     <a href="{{ route('explore') }}" class="btn btn-gold">Jelajahi Cerita</a>
                     <a href="{{ route('register') }}" class="btn btn-ghost">Mulai Berkarya</a>
@@ -23,34 +23,30 @@
                 <div class="home-genre-rail">
                     <a href="#home-trending" class="home-genre-pill">Sedang Ramai</a>
                     <a href="#home-latest" class="home-genre-pill">Baru Terbit</a>
-                    <a href="#home-cerpen" class="home-genre-pill">Cerpen</a>
-                    <a href="#home-novel" class="home-genre-pill">Novel Berseri</a>
+                    <a href="#home-free-start" class="home-genre-pill">Gratis Dulu</a>
+                    <a href="#home-continue" class="home-genre-pill">Lanjut Baca</a>
                     <a href="#home-creator" class="home-genre-pill">Kreator</a>
                 </div>
                 <div class="hero-proof home-hero-proof">
                     <div class="proof-item">
                         <strong>Lebih content-first</strong>
-                        <span>Karya populer, rak genre, dan pilihan editor tampil lebih dominan daripada copy promosi yang panjang.</span>
+                        <span>Rak karya saya dorong lebih depan agar alasan untuk klik muncul lebih cepat daripada narasi promosi.</span>
                     </div>
                     <div class="proof-item">
                         <strong>Lebih cepat dipindai</strong>
-                        <span>Pembaca bisa langsung melihat apa yang sedang ramai, apa yang gratis, dan karya mana yang layak dicoba dulu.</span>
-                    </div>
-                    <div class="proof-item">
-                        <strong>Lebih siap dikonversi</strong>
-                        <span>Saat karya premium makin banyak, homepage ini sudah lebih siap mendorong explore, unlock, top up, dan balik baca.</span>
+                        <span>Pembaca bisa langsung melihat apa yang ramai, apa yang gratis, dan cerita mana yang enak dilanjutkan.</span>
                     </div>
                 </div>
             </div>
             <div class="hero-showcase home-hero-showcase">
                 <div class="hero-card hero-card-primary home-spotlight-card">
                     <span class="mini-label">Pilihan Cepat</span>
-                    <h2>Begitu mendarat, pembaca langsung melihat rak yang hidup, bukan dibiarkan menebak ada apa di Dayakarya.</h2>
-                    <p>Saya padatkan home ini seperti bookshelf modern: ada rak ramai, rak baru terbit, rak genre, lalu pintu masuk ke kreator.</p>
+                    <h2>Begitu mendarat, pembaca langsung melihat rak yang hidup dan tahu harus masuk dari mana.</h2>
+                    <p>Strukturnya saya sederhanakan: yang ramai dulu, yang baru terbit sesudahnya, lalu rak yang membantu pembaca mulai dan lanjut baca.</p>
                     <div class="home-quick-links">
                         <a href="{{ route('explore', ['trending' => 1]) }}" class="home-quick-link">Lihat yang lagi ramai</a>
-                        <a href="{{ route('explore', ['type' => 'cerpen']) }}" class="home-quick-link">Masuk rak cerpen</a>
-                        <a href="{{ route('explore', ['type' => 'novel']) }}" class="home-quick-link">Masuk rak novel</a>
+                        <a href="#home-free-start" class="home-quick-link">Mulai dari yang gratis</a>
+                        <a href="#home-continue" class="home-quick-link">Cari bacaan lanjut</a>
                     </div>
                 </div>
                 <div class="hero-stats home-hero-stats">
@@ -117,50 +113,36 @@
 <section class="section">
     <div class="container">
         <div class="home-shelf-stack">
-            <div class="showcase-panel home-showcase-panel" id="home-cerpen">
+            <div class="showcase-panel home-showcase-panel" id="home-free-start">
                 <div class="section-head">
                     <div>
-                        <span class="section-kicker">Cerpen Pilihan</span>
-                        <h2>Bacaan singkat yang cepat memancing klik dan rasa penasaran.</h2>
+                        <span class="section-kicker">Mulai Gratis</span>
+                        <h2>Rak untuk pembaca yang ingin mencoba dulu tanpa banyak mikir.</h2>
                     </div>
-                    <a href="{{ route('explore', ['type' => 'cerpen']) }}">Lihat semua</a>
+                    <a href="{{ route('explore') }}">Buka explore</a>
                 </div>
-                <div class="work-grid work-grid-premium home-work-grid" id="home-cerpen-grid">
+                <p class="home-section-copy">Saya kumpulkan karya yang punya akses gratis agar pembaca baru bisa masuk lebih ringan sebelum memutuskan lanjut lebih jauh.</p>
+                <div class="work-grid work-grid-premium home-work-grid" id="home-free-start-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">✍️</div>
-                        <p>Memuat cerpen pilihan…</p>
+                        <p>Memuat karya yang bisa dicoba dulu…</p>
                     </div>
                 </div>
             </div>
 
-            <div class="showcase-panel home-showcase-panel" id="home-novel">
+            <div class="showcase-panel home-showcase-panel" id="home-continue">
                 <div class="section-head">
                     <div>
-                        <span class="section-kicker">Novel Berseri</span>
-                        <h2>Rak untuk cerita yang paling pas dibangun jadi kebiasaan balik baca.</h2>
+                        <span class="section-kicker">Enak Buat Lanjut</span>
+                        <h2>Rak untuk cerita yang paling berpotensi bikin pembaca balik lagi.</h2>
                     </div>
-                    <a href="{{ route('explore', ['type' => 'novel']) }}">Lihat semua</a>
+                    <a href="{{ route('explore') }}">Lihat karya lain</a>
                 </div>
-                <div class="work-grid work-grid-premium home-work-grid" id="home-novel-grid">
+                <p class="home-section-copy">Rak ini saya isi dengan karya yang paling terasa punya momentum lanjut, baik karena bagiannya sudah lebih dari satu atau karena ritmenya sudah enak diikuti.</p>
+                <div class="work-grid work-grid-premium home-work-grid" id="home-continue-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">📖</div>
-                        <p>Memuat novel berseri…</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="showcase-panel home-showcase-panel" id="home-audio">
-                <div class="section-head">
-                    <div>
-                        <span class="section-kicker">Audio & Dongeng</span>
-                        <h2>Rak untuk karya yang nyaman dikonsumsi sambil bergerak, santai, atau sebelum tidur.</h2>
-                    </div>
-                    <a href="{{ route('explore', ['type' => 'dongeng']) }}">Lihat semua</a>
-                </div>
-                <div class="work-grid work-grid-premium home-work-grid" id="home-audio-grid">
-                    <div class="state" style="grid-column:1/-1">
-                        <div class="emoji">🎧</div>
-                        <p>Memuat karya audio pilihan…</p>
+                        <p>Memuat bacaan yang enak diikuti…</p>
                     </div>
                 </div>
             </div>
@@ -210,6 +192,7 @@
 <script>
   const homeCreatorMap = new Map();
   const homeSeenWorkIds = new Set();
+  const homeSourceCache = new Map();
 
   function collectHomeWorkIds(items = []) {
     items.forEach((work) => {
@@ -302,83 +285,144 @@
     stackSection.hidden = !hasVisiblePanels;
   }
 
-  async function loadUniqueShelf({
-    minItems = 0,
-    allowDuplicateFallback = false,
-    sectionSelector = '',
-    ...options
-  } = {}) {
-    let items = await DK.loadWorks({
-      ...options,
-      excludeIds: Array.from(homeSeenWorkIds),
-    });
+  function uniqueHomeWorks(items = []) {
+    const seen = new Set();
 
-    if (allowDuplicateFallback && items.length < minItems) {
-      items = await DK.loadWorks(options);
+    return items.filter((work) => {
+      const id = Number(work?.id);
+      if (!id || seen.has(id)) return false;
+
+      seen.add(id);
+      return true;
+    });
+  }
+
+  function buildHomeQuery({ trending = 0, type = '', search = '' } = {}) {
+    const query = new URLSearchParams();
+    if (trending) query.set('trending', '1');
+    if (type) query.set('type', type);
+    if (search) query.set('search', search);
+    return query.toString();
+  }
+
+  async function getHomePool(options = {}) {
+    const cacheKey = buildHomeQuery(options);
+    if (homeSourceCache.has(cacheKey)) {
+      return homeSourceCache.get(cacheKey);
     }
 
+    try {
+      const query = buildHomeQuery(options);
+      const json = await DK.get('/works' + (query ? `?${query}` : ''));
+      const items = Array.isArray(json.data) ? json.data : [];
+      const uniqueItems = uniqueHomeWorks(items);
+      homeSourceCache.set(cacheKey, uniqueItems);
+      return uniqueItems;
+    } catch (_) {
+      homeSourceCache.set(cacheKey, []);
+      return [];
+    }
+  }
+
+  function renderHomeShelf({ target, items = [], variant = 'compact-home', sectionSelector = '' } = {}) {
+    const grid = document.querySelector(target);
+    if (!grid) return [];
+
     if (!items.length) {
+      grid.innerHTML = '';
       setHomeShelfVisibility(sectionSelector, false);
       return [];
     }
 
+    grid.innerHTML = items.map((work) => DK.workCard(work, { variant })).join('');
     collectHomeWorkIds(items);
     rememberCreators(items);
     setHomeShelfVisibility(sectionSelector, true);
     return items;
   }
 
+  function pickHomeShelfItems(sourceItems = [], {
+    limit = 4,
+    primaryFilter = () => true,
+    secondaryFilter = null,
+    allowSeenFallback = false,
+  } = {}) {
+    const picked = [];
+    const pickedIds = new Set();
+    const unseenItems = sourceItems.filter((work) => !homeSeenWorkIds.has(Number(work?.id)));
+
+    function appendFrom(items, filterFn = () => true) {
+      items.forEach((work) => {
+        const id = Number(work?.id);
+        if (!id || pickedIds.has(id) || picked.length >= limit) return;
+        if (!filterFn(work)) return;
+
+        picked.push(work);
+        pickedIds.add(id);
+      });
+    }
+
+    appendFrom(unseenItems, primaryFilter);
+
+    if (picked.length < limit && secondaryFilter) {
+      appendFrom(unseenItems, secondaryFilter);
+    }
+
+    if (picked.length < limit && allowSeenFallback) {
+      appendFrom(sourceItems, primaryFilter);
+    }
+
+    if (picked.length < limit && secondaryFilter && allowSeenFallback) {
+      appendFrom(sourceItems, secondaryFilter);
+    }
+
+    return picked.slice(0, limit);
+  }
+
   async function loadHomeShelves() {
-    await loadUniqueShelf({
-      trending: 1,
+    const trendingPool = await getHomePool({ trending: 1 });
+    const latestPool = await getHomePool();
+    const discoveryPool = uniqueHomeWorks([...latestPool, ...trendingPool]);
+
+    renderHomeShelf({
       target: '#home-trending-grid',
-      variant: 'compact-home',
-      limit: 6,
+      items: pickHomeShelfItems(trendingPool, {
+        limit: 6,
+        primaryFilter: () => true,
+      }),
+      sectionSelector: '#home-trending .home-showcase-panel',
     });
 
-    await loadUniqueShelf({
+    renderHomeShelf({
       target: '#home-latest-grid',
-      variant: 'compact-home',
-      limit: 6,
-      minItems: 4,
-      allowDuplicateFallback: true,
+      items: pickHomeShelfItems(latestPool, {
+        limit: 6,
+        primaryFilter: () => true,
+        allowSeenFallback: true,
+      }),
       sectionSelector: '#home-latest .home-showcase-panel',
     });
 
-    await loadUniqueShelf({
-      type: 'cerpen',
-      target: '#home-cerpen-grid',
-      variant: 'compact-home',
-      limit: 4,
-      minItems: 3,
-      allowDuplicateFallback: true,
-      sectionSelector: '#home-cerpen',
+    renderHomeShelf({
+      target: '#home-free-start-grid',
+      items: pickHomeShelfItems(discoveryPool, {
+        limit: 4,
+        primaryFilter: (work) => Number(work?.chapters_free_count ?? 0) > 0,
+        secondaryFilter: (work) => Number(work?.published_chapters_count ?? 0) > 0,
+        allowSeenFallback: true,
+      }),
+      sectionSelector: '#home-free-start',
     });
 
-    await loadUniqueShelf({
-      type: 'novel',
-      target: '#home-novel-grid',
-      variant: 'compact-home',
-      limit: 4,
-      minItems: 3,
-      allowDuplicateFallback: true,
-      sectionSelector: '#home-novel',
-      emptyCopy: `<div class="state" style="grid-column:1/-1">
-        <div class="emoji">📖</div><h3>Rak novel belum seramai yang lain</h3>
-        <p>Begitu novel berseri mulai bertambah, rak ini akan jadi ruang balik baca paling penting.</p></div>`,
-    });
-
-    await loadUniqueShelf({
-      type: 'dongeng',
-      target: '#home-audio-grid',
-      variant: 'compact-home',
-      limit: 4,
-      minItems: 3,
-      allowDuplicateFallback: true,
-      sectionSelector: '#home-audio',
-      emptyCopy: `<div class="state" style="grid-column:1/-1">
-        <div class="emoji">🎧</div><h3>Rak audio masih menunggu isi</h3>
-        <p>Area ini sudah disiapkan untuk dongeng, audio story, dan karya dengar lainnya.</p></div>`,
+    renderHomeShelf({
+      target: '#home-continue-grid',
+      items: pickHomeShelfItems(discoveryPool, {
+        limit: 4,
+        primaryFilter: (work) => Number(work?.published_chapters_count ?? 0) > 1,
+        secondaryFilter: (work) => Number(work?.views ?? 0) > 0 || Number(work?.chapters_free_count ?? 0) > 0,
+        allowSeenFallback: true,
+      }),
+      sectionSelector: '#home-continue',
     });
 
     renderHomeCreators();
