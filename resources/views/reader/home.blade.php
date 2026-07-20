@@ -8,18 +8,13 @@
     <div class="container">
         <div class="hero-shell home-hero-shell">
             <div class="hero-copy home-hero-copy">
-                <span class="eyebrow">Homepage Baru Dayakarya</span>
-                <h1>Etalase karya yang terasa <em>hidup</em>, ramai, dan bikin orang ingin lanjut baca.</h1>
-                <p>Beranda saya padatkan agar pembaca lebih cepat menemukan karya yang layak dicoba, dilanjutkan, atau langsung dijelajahi.</p>
+                <span class="eyebrow">Kurasi Pilihan Dayakarya</span>
+                <h1>Rak pilihan untuk pembaca yang mencari rasa, bukan kebisingan.</h1>
+                <p>Dayakarya saya arahkan menjadi etalase karya digital yang lebih tenang, lebih rapi, dan lebih layak disinggahi lama.</p>
                 <div class="hero-actions">
                     <a href="{{ route('explore') }}" class="btn btn-gold">Jelajahi Cerita</a>
                     <a href="{{ route('register') }}" class="btn btn-ghost">Mulai Berkarya</a>
-                    <button type="button" class="btn btn-install" data-install-app>
-                        <span class="btn-install-ic">↓</span>
-                        <span data-install-label>Install App</span>
-                    </button>
                 </div>
-                <p class="install-note" data-install-note>Pasang Dayakarya biar bukanya lebih cepat dan nyaman, seperti aplikasi.</p>
                 <div class="home-genre-rail">
                     <a href="#home-trending" class="home-genre-pill">Sedang Ramai</a>
                     <a href="#home-latest" class="home-genre-pill">Baru Terbit</a>
@@ -27,41 +22,31 @@
                     <a href="#home-continue" class="home-genre-pill">Enak Buat Lanjut</a>
                     <a href="#home-creator" class="home-genre-pill">Kreator</a>
                 </div>
-                <div class="hero-proof home-hero-proof">
-                    <div class="proof-item">
-                        <strong>Lebih content-first</strong>
-                        <span>Rak karya saya dorong lebih depan agar alasan untuk klik muncul lebih cepat daripada narasi promosi.</span>
-                    </div>
-                    <div class="proof-item">
-                        <strong>Lebih cepat dipindai</strong>
-                        <span>Pembaca bisa langsung melihat apa yang ramai, apa yang gratis, dan cerita mana yang enak dilanjutkan.</span>
-                    </div>
-                </div>
             </div>
             <div class="hero-showcase home-hero-showcase">
-                <div class="hero-card hero-card-primary home-spotlight-card">
-                    <span class="mini-label">Pilihan Cepat</span>
-                    <h2>Begitu mendarat, pembaca langsung melihat rak yang hidup dan tahu harus masuk dari mana.</h2>
-                    <p>Strukturnya saya sederhanakan: yang ramai dulu, yang baru terbit sesudahnya, lalu rak yang membantu pembaca mulai dan lanjut baca.</p>
-                    <div class="home-quick-links">
-                        <a href="{{ route('explore', ['trending' => 1]) }}" class="home-quick-link">Lihat yang lagi ramai</a>
-                        <a href="#home-free-start" class="home-quick-link">Masuk rak gratis</a>
-                        <a href="#home-continue" class="home-quick-link">Cari yang lanjut</a>
+                <div class="hero-card hero-card-primary home-editorial-card">
+                    <span class="mini-label">Pilihan Redaksi</span>
+                    <h2>Judul yang baik tidak perlu banyak teriak untuk membuat orang kembali.</h2>
+                    <p class="home-editorial-quote">Yang saya utamakan di beranda ini bukan banyaknya panel, tetapi rasa kurasi: karya yang sedang dibicarakan, karya yang mudah dimulai, dan karya yang enak diteruskan.</p>
+                    <div class="home-editorial-links">
+                        <a href="{{ route('explore', ['trending' => 1]) }}" class="home-editorial-link">Sedang dibicarakan</a>
+                        <a href="#home-free-start" class="home-editorial-link">Mulai yang gratis</a>
+                        <a href="#home-continue" class="home-editorial-link">Pilih untuk lanjut</a>
                     </div>
                 </div>
-                <div class="hero-stats home-hero-stats">
-                    <div class="stat-tile">
-                        <span class="label">Rak 01</span>
-                        <strong>Sedang Ramai untuk karya yang paling cepat menarik klik pertama.</strong>
-                    </div>
-                    <div class="stat-tile">
-                        <span class="label">Rak 02</span>
-                        <strong>Baru Terbit untuk memberi rasa stok karya aktif dan terus bertambah.</strong>
-                    </div>
-                    <div class="stat-tile">
-                        <span class="label">Rak 03</span>
-                        <strong>Kreator Spotlight untuk membuat nama kreator ikut hidup di homepage.</strong>
-                    </div>
+                <div class="home-editorial-points">
+                    <article class="home-editorial-point">
+                        <strong>Sedang Ramai</strong>
+                        <p>Karya yang paling cepat memancing klik pertama dan percakapan.</p>
+                    </article>
+                    <article class="home-editorial-point">
+                        <strong>Mulai Gratis</strong>
+                        <p>Pintu masuk paling ringan untuk pembaca yang baru singgah.</p>
+                    </article>
+                    <article class="home-editorial-point">
+                        <strong>Enak Buat Lanjut</strong>
+                        <p>Judul yang terasa cukup kuat untuk dibawa sampai malam berikutnya.</p>
+                    </article>
                 </div>
             </div>
         </div>
@@ -74,11 +59,11 @@
             <div class="section-head">
                 <div>
                     <span class="section-kicker">Sedang Ramai</span>
-                    <h2>Rak utama yang langsung menunjukkan karya paling cepat menarik perhatian.</h2>
+                    <h2>Judul yang paling cepat menarik perhatian tanpa perlu banyak pengantar.</h2>
                 </div>
                 <a href="{{ route('explore', ['trending' => 1]) }}">Buka explore</a>
             </div>
-            <p class="home-section-copy">Rak pembuka untuk menunjukkan karya yang paling cepat menarik klik pertama.</p>
+            <p class="home-section-copy">Rak pembuka yang langsung menunjukkan apa yang sedang disinggahi pembaca.</p>
             <div class="work-grid work-grid-premium home-work-grid" id="home-trending-grid">
                 <div class="state" style="grid-column:1/-1">
                     <div class="emoji">📚</div>
@@ -95,11 +80,11 @@
             <div class="section-head">
                 <div>
                     <span class="section-kicker">Baru Terbit</span>
-                    <h2>Rak ini bikin homepage terasa terus bergerak, bukan katalog yang diam.</h2>
+                    <h2>Karya segar yang baru naik ke rak dan masih terasa hangat.</h2>
                 </div>
                 <a href="{{ route('explore') }}">Lihat yang terbaru</a>
             </div>
-            <p class="home-section-copy">Begitu karya baru tayang, pembaca langsung melihat stok yang segar dan aktif.</p>
+            <p class="home-section-copy">Stok baru yang menjaga beranda tetap hidup tanpa terasa gaduh.</p>
             <div class="work-grid work-grid-premium home-work-grid" id="home-latest-grid">
                 <div class="state" style="grid-column:1/-1">
                     <div class="emoji">✨</div>
@@ -117,11 +102,11 @@
                 <div class="section-head">
                     <div>
                         <span class="section-kicker">Mulai Gratis</span>
-                        <h2>Rak untuk pembaca yang ingin mencoba dulu tanpa banyak mikir.</h2>
+                        <h2>Pintu masuk paling ringan untuk mengenal selera Dayakarya.</h2>
                     </div>
                     <a href="{{ route('explore') }}">Buka explore</a>
                 </div>
-                <p class="home-section-copy">Karya dengan akses gratis saya kumpulkan di sini agar pembaca bisa masuk lebih ringan.</p>
+                <p class="home-section-copy">Karya dengan akses gratis yang paling mudah membuat orang betah tinggal lebih lama.</p>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-free-start-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">✍️</div>
@@ -134,11 +119,11 @@
                 <div class="section-head">
                     <div>
                         <span class="section-kicker">Enak Buat Lanjut</span>
-                        <h2>Rak untuk cerita yang paling berpotensi bikin pembaca balik lagi.</h2>
+                        <h2>Cerita yang punya ritme dan alasan kuat untuk diikuti terus.</h2>
                     </div>
                     <a href="{{ route('explore') }}">Lihat karya lain</a>
                 </div>
-                <p class="home-section-copy">Rak ini menonjolkan karya yang terasa punya momentum lanjut dan layak diikuti lebih lama.</p>
+                <p class="home-section-copy">Rak untuk judul yang tidak berhenti di klik pertama, tetapi mengundang orang kembali.</p>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-continue-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">📖</div>
@@ -156,11 +141,11 @@
             <div class="section-head">
                 <div>
                     <span class="section-kicker">Kreator Spotlight</span>
-                    <h2>Nama kreator ikut saya hidupkan, supaya homepage terasa seperti ekosistem karya, bukan rak anonim.</h2>
+                    <h2>Nama-nama yang mulai membentuk selera dan arah rak Dayakarya.</h2>
                 </div>
                 <a href="{{ route('register') }}">Jadi kreator</a>
             </div>
-            <p class="home-section-copy">Saya ambil kreator yang muncul dari rak-rak di atas lalu tampilkan lagi sebagai spotlight ringan. Tujuannya sederhana: pembaca mulai mengingat orang di balik karya, bukan cuma judulnya.</p>
+            <p class="home-section-copy">Bukan sekadar judul, tetapi orang-orang di balik karya yang mulai layak diingat.</p>
             <div class="home-creator-spotlight" id="home-creator-spotlight">
                 <div class="state" style="grid-column:1/-1">
                     <div class="emoji">🪄</div>
@@ -175,12 +160,12 @@
     <div class="container">
         <div class="cta-panel">
             <div>
-                <span class="section-kicker">Langkah Berikutnya</span>
-                <h2>Homepage Dayakarya sekarang saya arahkan jadi perpaduan antara brand premium dan shelf discovery seperti aplikasi bacaan modern.</h2>
-                <p>Hasil akhirnya bukan meniru KBM mentah-mentah, tetapi mengambil logika yang paling kuat: karya duluan, genre jelas, momentum terasa, dan jalur ke explore lebih cepat.</p>
+                <span class="section-kicker">Masuk ke Rak Dayakarya</span>
+                <h2>Dayakarya saya dorong menjadi ruang karya digital yang terasa rapi, tenang, dan bernilai untuk disinggahi.</h2>
+                <p>Baca karya yang dipilih dengan lebih baik, lalu isi rak ini dengan karya yang layak tinggal lebih lama.</p>
             </div>
             <div class="cta-actions">
-                <a href="{{ route('explore') }}" class="btn btn-gold">Lihat Beranda Baru</a>
+                <a href="{{ route('explore') }}" class="btn btn-gold">Jelajahi Karya</a>
                 <a href="{{ route('register') }}" class="btn btn-primary">Mulai Isi Rak Karyamu</a>
             </div>
         </div>

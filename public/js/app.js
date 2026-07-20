@@ -251,10 +251,9 @@ const DK = {
       const socialProof = viewCount > 0
         ? `${views} pembaca`
         : (publishedChapters > 1 ? `${publishedChapters} bagian siap dibaca` : 'Baru tayang di Dayakarya');
-      const accessLabel = hasFreeAccess
-        ? (publishedChapters > 1 ? `${w.chapters_free_count} bagian gratis` : 'Coba gratis dulu')
-        : 'Siap premium';
-      const bodyMeta = [this.typeLabel(w.type), socialProof].filter(Boolean).join(' • ');
+      const accessLabel = hasFreeAccess ? 'Akses gratis tersedia' : 'Akses premium';
+      const cadenceLabel = publishedChapters > 1 ? `${publishedChapters} bagian tayang` : '1 bagian tayang';
+      const bodyMeta = [`Oleh ${creator}`, this.typeLabel(w.type)].filter(Boolean).join(' • ');
 
       return `
         <a class="work-card work-card-premium work-card-home-compact" href="/karya/${w.slug}">
@@ -269,12 +268,12 @@ const DK = {
             <div class="work-home-kicker">${bodyMeta}</div>
             <h3>${w.title}</h3>
             <div class="work-meta work-meta-home">
-              <span>${publishedChapters > 1 ? `${publishedChapters} bagian tayang` : 'Format ringkas'}</span>
+              <span>${cadenceLabel}</span>
               <span>${accessLabel}</span>
             </div>
             <div class="work-card-footer">
-              <span class="read-link">Baca detailnya</span>
-              <span class="read-stat">${hasFreeAccess ? 'Mulai sekarang' : 'Lihat akses'}</span>
+              <span class="read-link">Buka karya</span>
+              <span class="read-stat">${socialProof}</span>
             </div>
           </div>
         </a>`;
