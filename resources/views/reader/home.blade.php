@@ -285,14 +285,46 @@
     }).join('');
   }
 
-  async function loadUniqueShelf(options) {
-    const items = await DK.loadWorks({
+  function setHomeShelfVisibility(sectionSelector, isVisible) {
+    if (!sectionSelector) return;
+
+    const section = document.querySelector(sectionSelector);
+    if (!section) return;
+
+    section.hidden = !isVisible;
+
+    const stack = section.closest('.home-shelf-stack');
+    const stackSection = stack?.closest('.section');
+
+    if (!stack || !stackSection) return;
+
+    const hasVisiblePanels = Array.from(stack.children).some((panel) => !panel.hidden);
+    stackSection.hidden = !hasVisiblePanels;
+  }
+
+  async function loadUniqueShelf({
+    minItems = 0,
+    allowDuplicateFallback = false,
+    sectionSelector = '',
+    ...options
+  } = {}) {
+    let items = await DK.loadWorks({
       ...options,
       excludeIds: Array.from(homeSeenWorkIds),
     });
 
+    if (allowDuplicateFallback && items.length < minItems) {
+      items = await DK.loadWorks(options);
+    }
+
+    if (!items.length) {
+      setHomeShelfVisibility(sectionSelector, false);
+      return [];
+    }
+
     collectHomeWorkIds(items);
     rememberCreators(items);
+    setHomeShelfVisibility(sectionSelector, true);
     return items;
   }
 
@@ -308,6 +340,9 @@
       target: '#home-latest-grid',
       variant: 'compact-home',
       limit: 6,
+      minItems: 4,
+      allowDuplicateFallback: true,
+      sectionSelector: '#home-latest .home-showcase-panel',
     });
 
     await loadUniqueShelf({
@@ -315,6 +350,9 @@
       target: '#home-cerpen-grid',
       variant: 'compact-home',
       limit: 4,
+      minItems: 3,
+      allowDuplicateFallback: true,
+      sectionSelector: '#home-cerpen',
     });
 
     await loadUniqueShelf({
@@ -322,6 +360,9 @@
       target: '#home-novel-grid',
       variant: 'compact-home',
       limit: 4,
+      minItems: 3,
+      allowDuplicateFallback: true,
+      sectionSelector: '#home-novel',
       emptyCopy: `<div class="state" style="grid-column:1/-1">
         <div class="emoji">📖</div><h3>Rak novel belum seramai yang lain</h3>
         <p>Begitu novel berseri mulai bertambah, rak ini akan jadi ruang balik baca paling penting.</p></div>`,
@@ -332,6 +373,9 @@
       target: '#home-audio-grid',
       variant: 'compact-home',
       limit: 4,
+      minItems: 3,
+      allowDuplicateFallback: true,
+      sectionSelector: '#home-audio',
       emptyCopy: `<div class="state" style="grid-column:1/-1">
         <div class="emoji">🎧</div><h3>Rak audio masih menunggu isi</h3>
         <p>Area ini sudah disiapkan untuk dongeng, audio story, dan karya dengar lainnya.</p></div>`,
