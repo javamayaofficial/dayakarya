@@ -4,7 +4,7 @@
  * - CSS/JS/font: stale-while-revalidate
  * - Image/icon: cache-first
  */
-const VERSION = 'dayakarya-v5';
+const VERSION = 'dayakarya-v6';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 const ASSET_CACHE = `${VERSION}-assets`;
