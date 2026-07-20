@@ -347,7 +347,7 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
                         <span>Auto-save tetap aktif, tapi simpan manual saat kamu selesai blok kerja penting.</span>
                     </div>
                     <button class="btn btn-gold" id="editor-save" onclick="saveDraft()">Simpan Draft</button>
-                    <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()">Tayangkan Karya</button>
+                    <button class="btn btn-primary" id="editor-publish" type="button" onclick="publishWork()" disabled aria-disabled="true">Tayangkan Karya</button>
                     <a href="{{ route('creator.dashboard') }}" class="btn btn-ghost">Nanti Lanjut Lagi</a>
                 </div>
                 <div class="creator-publish-cta-note" id="creator-publish-cta-note" hidden>
@@ -2013,9 +2013,20 @@ Damar menoleh sebentar, lalu menggeleng.</pre>
   }, true);
 
   document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      renderPublishChecklist();
+      updateEditorCommandCenter();
+      return;
+    }
+
     if (document.visibilityState !== 'visible') {
       setTypingFocusMode(false);
     }
+  });
+
+  window.addEventListener('pageshow', () => {
+    renderPublishChecklist();
+    updateEditorCommandCenter();
   });
 
   loadDraftEditor();
