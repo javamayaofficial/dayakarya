@@ -7,6 +7,16 @@ use App\Http\Controllers\Web\GoogleAuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+$memberShellHeaders = [
+    'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
+    'Pragma' => 'no-cache',
+    'Expires' => 'Fri, 01 Jan 1990 00:00:00 GMT',
+];
+
+$creatorEditorVersion = file_exists(resource_path('views/creator/editor.blade.php'))
+    ? filemtime(resource_path('views/creator/editor.blade.php'))
+    : time();
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes — Frontend Pengguna (PWA, mobile-first)
@@ -73,14 +83,18 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 // Wallet & top up
-Route::view('/wallet', 'reader.wallet')->name('wallet');
+Route::get('/wallet', fn () => response()->view('reader.wallet', [], 200, $memberShellHeaders))->name('wallet');
 Route::view('/wallet/topup/selesai', 'reader.topup-done')->name('wallet.topup.done');
 Route::get('/wallet/topup/manual/{payment}', fn (Payment $payment) => view('reader.topup-manual', compact('payment')))
     ->name('wallet.topup.manual');
 
 // Dashboard creator (shell)
-Route::view('/creator', 'creator.dashboard')->name('creator.dashboard');
-Route::view('/creator/works/{work}', 'creator.editor')->name('creator.work.edit');
+Route::get('/creator', fn () => response()->view('creator.dashboard', [
+    'editorVersion' => $creatorEditorVersion,
+], 200, $memberShellHeaders))->name('creator.dashboard');
+Route::get('/creator/works/{work}', fn () => response()->view('creator.editor', [
+    'editorVersion' => $creatorEditorVersion,
+], 200, $memberShellHeaders))->name('creator.work.edit');
 
 // Halaman statis (CMS)
 Route::view('/tentang', 'reader.page')->name('about');

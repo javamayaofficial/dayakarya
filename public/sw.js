@@ -4,11 +4,12 @@
  * - CSS/JS/font: stale-while-revalidate
  * - Image/icon: cache-first
  */
-const VERSION = 'dayakarya-v6';
+const VERSION = 'dayakarya-v7';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 const ASSET_CACHE = `${VERSION}-assets`;
 const OFFLINE_URL = '/offline.html';
+const NON_CACHEABLE_NAVIGATION_PREFIXES = ['/creator', '/wallet', '/masuk', '/daftar'];
 const APP_SHELL = [
   '/',
   '/explore',
@@ -54,6 +55,11 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.startsWith('/api/')) return;
 
   if (request.mode === 'navigate') {
+    if (NON_CACHEABLE_NAVIGATION_PREFIXES.some((prefix) => url.pathname === prefix || url.pathname.startsWith(`${prefix}/`))) {
+      event.respondWith(fetch(request, { cache: 'no-store' }).catch(() => Response.error()));
+      return;
+    }
+
     event.respondWith(handleNavigation(request, event));
     return;
   }

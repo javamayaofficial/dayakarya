@@ -165,6 +165,7 @@
 
 @push('scripts')
 <script>
+  const CREATOR_EDITOR_VERSION = @json($editorVersion ?? null);
   const dashboardState = {
     isLoading: false,
     lastLoadedAt: 0,
@@ -193,6 +194,15 @@
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#039;');
+  }
+
+  function creatorEditorUrl(workId, { hash = '' } = {}) {
+    const url = new URL(`/creator/works/${workId}`, window.location.origin);
+    if (CREATOR_EDITOR_VERSION) {
+      url.searchParams.set('v', CREATOR_EDITOR_VERSION);
+    }
+
+    return `${url.pathname}${url.search}${hash}`;
   }
 
   function creatorCard(work) {
@@ -247,8 +257,8 @@
       `<span class="creator-card-chip">${likeCount.toLocaleString('id-ID')} suka</span>`,
     ].join('');
 
-    const actionHref = `/creator/works/${work.id}`;
-    const previewDraftHref = `/creator/works/${work.id}#creator-preview-card`;
+    const actionHref = creatorEditorUrl(work.id);
+    const previewDraftHref = creatorEditorUrl(work.id, { hash: '#creator-preview-card' });
     const publicHref = work.status === 'published' && work.slug ? `/karya/${work.slug}` : '';
 
     const coverUrl = String(work.cover_url ?? work.cover ?? '').trim();
@@ -461,7 +471,7 @@
 
     msg.innerHTML = '<div class="alert alert-success">Draft karya berhasil dibuat. Sekarang kamu sudah punya titik awal produksi yang bisa terus dirapikan sebelum tayang.</div>';
     setTimeout(() => {
-      location.href = `/creator/works/${data.work.id}`;
+      location.href = creatorEditorUrl(data.work.id);
     }, 450);
   }
 
