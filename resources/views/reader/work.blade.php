@@ -171,8 +171,8 @@
                     <div class="work-access-loading" id="chapter-access-loading" hidden>
                         <span class="work-access-loading-dot" aria-hidden="true"></span>
                         <div>
-                            <strong>Sedang menyiapkan akses bagian ini...</strong>
-                            <p id="chapter-access-loading-copy">Sebentar ya, kami cek dulu apakah bagian premium ini sudah pernah kamu buka.</p>
+                            <strong id="chapter-access-loading-title">{{ $selectedChapter->is_premium ? 'Sedang menyiapkan akses bagian ini...' : 'Sedang menyiapkan bagian yang kamu pilih...' }}</strong>
+                            <p id="chapter-access-loading-copy">{{ $selectedChapter->is_premium ? 'Sebentar ya, kami cek dulu apakah bagian premium ini sudah pernah kamu buka.' : 'Sebentar ya, kami sedang menyiapkan bagian yang kamu pilih.' }}</p>
                         </div>
                     </div>
 
@@ -382,6 +382,7 @@
 
   function setReaderAccessLoading(isLoading, chapter = null) {
     const loadingState = document.querySelector('#chapter-access-loading');
+    const loadingTitle = document.querySelector('#chapter-access-loading-title');
     const loadingCopy = document.querySelector('#chapter-access-loading-copy');
     const lockState = document.querySelector('#chapter-lock-state');
     const textOutput = document.querySelector('#chapter-text-output');
@@ -395,6 +396,11 @@
         updateReaderMeta(chapter, 'Sedang cek akses');
       }
       loadingState.hidden = false;
+      if (loadingTitle) {
+        loadingTitle.textContent = chapter?.is_premium
+          ? 'Sedang menyiapkan akses bagian ini...'
+          : 'Sedang menyiapkan bagian yang kamu pilih...';
+      }
       if (loadingCopy) {
         loadingCopy.textContent = chapter?.is_premium
           ? 'Sebentar ya, kami cek dulu apakah bagian premium ini sudah pernah kamu buka.'
