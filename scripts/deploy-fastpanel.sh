@@ -129,6 +129,31 @@ fi
 "${PHP_CMD[@]}" artisan route:cache
 "${PHP_CMD[@]}" artisan view:cache
 
+if [ -n "${APP_URL_PUBLIC:-}" ]; then
+  echo "==> Meminta reset opcache web"
+  OPCACHE_RESET_URL="$("${PHP_CMD[@]}" artisan deploy:opcache-reset-url --base="${APP_URL_PUBLIC}")"
+
+  if command -v curl >/dev/null 2>&1; then
+    curl --fail --silent --show-error "$OPCACHE_RESET_URL" >/dev/null
+  else
+    "${PHP_CMD[@]}" -r '
+      $url = $argv[1] ?? "";
+      if (!$url) {
+          fwrite(STDERR, "URL reset opcache kosong.\n");
+          exit(1);
+      }
+      $context = stream_context_create(["http" => ["timeout" => 20]]);
+      $response = @file_get_contents($url, false, $context);
+      if ($response === false) {
+          fwrite(STDERR, "Reset opcache web gagal dipanggil.\n");
+          exit(1);
+      }
+    ' "$OPCACHE_RESET_URL"
+  fi
+else
+  echo "==> APP_URL_PUBLIC kosong, reset opcache web dilewati"
+fi
+
 if [ "$RESTART_QUEUE" = "true" ]; then
   "${PHP_CMD[@]}" artisan queue:restart || true
 fi

@@ -29,6 +29,16 @@ Route::get('/manifest.webmanifest', function () {
 })->name('pwa.manifest');
 Route::get('/manifest.json', fn () => redirect()->route('pwa.manifest', status: 302));
 
+Route::get('/_deploy/opcache-reset', function (Request $request) {
+    abort_unless($request->hasValidSignature(), 403);
+
+    return response()->json([
+        'ok' => true,
+        'opcache_reset' => function_exists('opcache_reset') ? opcache_reset() : false,
+        'timestamp' => now()->toIso8601String(),
+    ]);
+})->name('deploy.opcache-reset');
+
 Route::get('/karya/{work:slug}', function (Request $request, Work $work) {
     abort_unless($work->status === 'published', 404);
 
