@@ -23,8 +23,8 @@
                 <div class="home-genre-rail">
                     <a href="#home-trending" class="home-genre-pill">Sedang Ramai</a>
                     <a href="#home-latest" class="home-genre-pill">Baru Terbit</a>
-                    <a href="#home-free-start" class="home-genre-pill">Gratis Dulu</a>
-                    <a href="#home-continue" class="home-genre-pill">Lanjut Baca</a>
+                    <a href="#home-free-start" class="home-genre-pill">Mulai Gratis</a>
+                    <a href="#home-continue" class="home-genre-pill">Enak Buat Lanjut</a>
                     <a href="#home-creator" class="home-genre-pill">Kreator</a>
                 </div>
                 <div class="hero-proof home-hero-proof">
@@ -45,8 +45,8 @@
                     <p>Strukturnya saya sederhanakan: yang ramai dulu, yang baru terbit sesudahnya, lalu rak yang membantu pembaca mulai dan lanjut baca.</p>
                     <div class="home-quick-links">
                         <a href="{{ route('explore', ['trending' => 1]) }}" class="home-quick-link">Lihat yang lagi ramai</a>
-                        <a href="#home-free-start" class="home-quick-link">Mulai dari yang gratis</a>
-                        <a href="#home-continue" class="home-quick-link">Cari bacaan lanjut</a>
+                        <a href="#home-free-start" class="home-quick-link">Masuk rak gratis</a>
+                        <a href="#home-continue" class="home-quick-link">Cari yang lanjut</a>
                     </div>
                 </div>
                 <div class="hero-stats home-hero-stats">
@@ -78,7 +78,7 @@
                 </div>
                 <a href="{{ route('explore', ['trending' => 1]) }}">Buka explore</a>
             </div>
-            <p class="home-section-copy">Bagian ini saya posisikan seperti shelf populer di aplikasi baca: begitu landing, pembaca langsung tahu apa yang sedang aktif dibaca dan layak diklik duluan.</p>
+            <p class="home-section-copy">Rak pembuka untuk menunjukkan karya yang paling cepat menarik klik pertama.</p>
             <div class="work-grid work-grid-premium home-work-grid" id="home-trending-grid">
                 <div class="state" style="grid-column:1/-1">
                     <div class="emoji">📚</div>
@@ -99,7 +99,7 @@
                 </div>
                 <a href="{{ route('explore') }}">Lihat yang terbaru</a>
             </div>
-            <p class="home-section-copy">Begitu karya baru tayang, pembaca bisa langsung melihat stok yang segar. Ini membantu Dayakarya terasa aktif walau jumlah katalog belum sebesar marketplace besar.</p>
+            <p class="home-section-copy">Begitu karya baru tayang, pembaca langsung melihat stok yang segar dan aktif.</p>
             <div class="work-grid work-grid-premium home-work-grid" id="home-latest-grid">
                 <div class="state" style="grid-column:1/-1">
                     <div class="emoji">✨</div>
@@ -121,7 +121,7 @@
                     </div>
                     <a href="{{ route('explore') }}">Buka explore</a>
                 </div>
-                <p class="home-section-copy">Saya kumpulkan karya yang punya akses gratis agar pembaca baru bisa masuk lebih ringan sebelum memutuskan lanjut lebih jauh.</p>
+                <p class="home-section-copy">Karya dengan akses gratis saya kumpulkan di sini agar pembaca bisa masuk lebih ringan.</p>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-free-start-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">✍️</div>
@@ -138,7 +138,7 @@
                     </div>
                     <a href="{{ route('explore') }}">Lihat karya lain</a>
                 </div>
-                <p class="home-section-copy">Rak ini saya isi dengan karya yang paling terasa punya momentum lanjut, baik karena bagiannya sudah lebih dari satu atau karena ritmenya sudah enak diikuti.</p>
+                <p class="home-section-copy">Rak ini menonjolkan karya yang terasa punya momentum lanjut dan layak diikuti lebih lama.</p>
                 <div class="work-grid work-grid-premium home-work-grid" id="home-continue-grid">
                     <div class="state" style="grid-column:1/-1">
                         <div class="emoji">📖</div>
