@@ -209,6 +209,15 @@
 @push('scripts')
 <script>
   const homeCreatorMap = new Map();
+  const homeSeenWorkIds = new Set();
+
+  function collectHomeWorkIds(items = []) {
+    items.forEach((work) => {
+      if (work?.id) {
+        homeSeenWorkIds.add(Number(work.id));
+      }
+    });
+  }
 
   function rememberCreators(items = []) {
     items.forEach((work) => {
@@ -217,12 +226,18 @@
 
       const current = homeCreatorMap.get(creatorId) || {
         name: work.creator.name,
+        avatar: work.creator?.avatar || '',
         workCount: 0,
         types: new Set(),
+        titles: new Set(),
       };
 
       current.workCount += 1;
+      if (!current.avatar && work.creator?.avatar) {
+        current.avatar = work.creator.avatar;
+      }
       if (work.type) current.types.add(DK.typeLabel(work.type));
+      if (work.title) current.titles.add(work.title);
       homeCreatorMap.set(creatorId, current);
     });
   }
@@ -246,10 +261,21 @@
     spotlight.innerHTML = items.map((creator, index) => {
       const typeList = Array.from(creator.types).slice(0, 2).join(' • ') || 'Karya pilihan';
       return `
+      const featuredTitle = Array.from(creator.titles)[0] || 'Karya pilihan di Dayakarya';
+      const avatarMarkup = creator.avatar
+        ? `<img src="${creator.avatar}" alt="${creator.name}" class="home-creator-avatar">`
+        : `<span class="home-creator-avatar home-creator-avatar-fallback">${creator.name.slice(0, 1).toUpperCase()}</span>`;
         <article class="home-creator-card">
           <span class="home-creator-rank">Spotlight ${index + 1}</span>
-          <h3>${creator.name}</h3>
+          <div class="home-creator-head">
+            ${avatarMarkup}
+            <div>
+              <span class="home-creator-rank">Spotlight ${index + 1}</span>
+              <h3>${creator.name}</h3>
+            </div>
+          </div>
           <p>${typeList}</p>
+          <p class="home-creator-featured">Sering muncul lewat <strong>${featuredTitle}</strong>.</p>
           <div class="home-creator-meta">
             <span>${creator.workCount} karya tampil di homepage</span>
             <span>Siap dijelajahi pembaca</span>
@@ -260,28 +286,39 @@
     }).join('');
   }
 
+  async function loadUniqueShelf(options) {
+    const items = await DK.loadWorks({
+      ...options,
+      excludeIds: Array.from(homeSeenWorkIds),
+    });
+
+    collectHomeWorkIds(items);
+    rememberCreators(items);
+    return items;
+  }
+
   async function loadHomeShelves() {
-    rememberCreators(await DK.loadWorks({
+    await loadUniqueShelf({
       trending: 1,
       target: '#home-trending-grid',
       variant: 'compact-home',
       limit: 6,
-    }));
+    });
 
-    rememberCreators(await DK.loadWorks({
+    await loadUniqueShelf({
       target: '#home-latest-grid',
       variant: 'compact-home',
       limit: 6,
-    }));
+    });
 
-    rememberCreators(await DK.loadWorks({
+    await loadUniqueShelf({
       type: 'cerpen',
       target: '#home-cerpen-grid',
       variant: 'compact-home',
       limit: 4,
-    }));
+    });
 
-    rememberCreators(await DK.loadWorks({
+    await loadUniqueShelf({
       type: 'novel',
       target: '#home-novel-grid',
       variant: 'compact-home',
@@ -289,9 +326,9 @@
       emptyCopy: `<div class="state" style="grid-column:1/-1">
         <div class="emoji">📖</div><h3>Rak novel belum seramai yang lain</h3>
         <p>Begitu novel berseri mulai bertambah, rak ini akan jadi ruang balik baca paling penting.</p></div>`,
-    }));
+    });
 
-    rememberCreators(await DK.loadWorks({
+    await loadUniqueShelf({
       type: 'dongeng',
       target: '#home-audio-grid',
       variant: 'compact-home',
@@ -299,12 +336,12 @@
       emptyCopy: `<div class="state" style="grid-column:1/-1">
         <div class="emoji">🎧</div><h3>Rak audio masih menunggu isi</h3>
         <p>Area ini sudah disiapkan untuk dongeng, audio story, dan karya dengar lainnya.</p></div>`,
-    }));
+    });
 
     renderHomeCreators();
   }
-
-  loadHomeShelves();
   DK.refreshCredit();
+</script>
+@endpush
 </script>
 @endpush

@@ -20,7 +20,7 @@ class WorkController extends \App\Http\Controllers\Controller
     {
         $q = Work::published()
             ->whereHas('chapters', fn ($chapterQuery) => $chapterQuery->where('status', 'published'))
-            ->with('creator:id,name', 'category:id,name')
+            ->with('creator:id,name,avatar', 'category:id,name')
             ->withCount([
                 'chapters as published_chapters_count' => fn ($chapterQuery) => $chapterQuery->where('status', 'published'),
                 'chapters as chapters_free_count' => fn ($chapterQuery) => $chapterQuery

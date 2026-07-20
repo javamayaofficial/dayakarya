@@ -75,6 +75,7 @@
 <script>
   const exploreUrl = new URL(window.location.href);
   let currentType = exploreUrl.searchParams.get('type') || '';
+  let currentTrending = exploreUrl.searchParams.get('trending') === '1';
   const exploreGridTarget = '#explore-grid';
   const searchInput = document.querySelector('#search');
 
@@ -88,6 +89,12 @@
       url.searchParams.set('type', currentType);
     } else {
       url.searchParams.delete('type');
+    }
+
+    if (currentTrending) {
+      url.searchParams.set('trending', '1');
+    } else {
+      url.searchParams.delete('trending');
     }
 
     if (searchInput?.value) {
@@ -109,6 +116,7 @@
     syncExploreQuery();
     DK.loadWorks({
       type: currentType,
+      trending: currentTrending ? 1 : 0,
       target: exploreGridTarget,
       search: searchInput?.value || '',
     });
@@ -120,6 +128,7 @@
   document.querySelectorAll('#type-chips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       currentType = chip.dataset.type;
+      currentTrending = false;
       syncExploreChips();
       renderExplore();
     });

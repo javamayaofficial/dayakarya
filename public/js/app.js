@@ -300,7 +300,7 @@ const DK = {
       </a>`;
   },
 
-  async loadWorks({ trending = 0, type = '', search = '', target, variant = 'default', limit = 0, emptyCopy = '' } = {}) {
+  async loadWorks({ trending = 0, type = '', search = '', target, variant = 'default', limit = 0, emptyCopy = '', excludeIds = [] } = {}) {
     const el = document.querySelector(target);
     if (!el) return [];
     try {
@@ -309,7 +309,10 @@ const DK = {
       if (type) q.set('type', type);
       if (search) q.set('search', search);
       const json = await this.get('/works?' + q.toString());
-      const items = (json.data ?? []).slice(0, limit || undefined);
+      const blockedIds = new Set((excludeIds || []).map((id) => Number(id)));
+      const items = (json.data ?? [])
+        .filter((item) => !blockedIds.has(Number(item.id)))
+        .slice(0, limit || undefined);
       if (!items.length) {
         el.innerHTML = search
           ? `<div class="state" style="grid-column:1/-1">
