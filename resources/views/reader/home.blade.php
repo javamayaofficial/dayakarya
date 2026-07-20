@@ -339,8 +339,7 @@
 
     renderHomeCreators();
   }
+  loadHomeShelves();
   DK.refreshCredit();
-</script>
-@endpush
 </script>
 @endpush
