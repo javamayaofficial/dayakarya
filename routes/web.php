@@ -25,7 +25,7 @@ $creatorEditorVersion = file_exists(resource_path('views/creator/editor.blade.ph
 | (routes/api.php) sehingga struktur siap dipakai ulang oleh aplikasi mobile.
 */
 
-Route::view('/', 'reader.home')->name('home');
+Route::get('/', fn () => response()->view('reader.home', [], 200, $memberShellHeaders))->name('home');
 Route::view('/explore', 'reader.explore')->name('explore');
 Route::view('/leaderboard', 'reader.leaderboard')->name('leaderboard');
 Route::get('/manifest.webmanifest', function () {
